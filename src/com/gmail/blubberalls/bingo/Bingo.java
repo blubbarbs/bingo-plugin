@@ -11,9 +11,16 @@ import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
 public class Bingo extends JavaPlugin {
+    private static Bingo instance;
+
+    public static Bingo getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
+        instance = this;
+
         CommandAPICommand testCommand = new CommandAPICommand("printboard")
             .executesPlayer((Player p, Object[] args) -> {
                 p.spigot().sendMessage(this.getSpaceComponents());
