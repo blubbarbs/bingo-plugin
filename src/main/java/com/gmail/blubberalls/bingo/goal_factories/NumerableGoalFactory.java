@@ -11,13 +11,13 @@ public class NumerableGoalFactory<T extends Goal> extends GoalFactory<T> {
         super(name, productClass);
     }
     
-    public NumerableGoalFactory<T> setMinimumGoal(int min) {
+    public NumerableGoalFactory<T> withMinimum(int min) {
         this.min = min;
 
         return this;
     }
 
-    public NumerableGoalFactory<T> setMaximumGoal(int max) {
+    public NumerableGoalFactory<T> withMaximum(int max) {
         this.max = max;
 
         return this;

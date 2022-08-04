@@ -1,9 +1,7 @@
 package com.gmail.blubberalls.bingo;
 
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import dev.jorel.commandapi.CommandAPICommand;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -11,22 +9,28 @@ import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
 public class Bingo extends JavaPlugin {
-    private static Bingo instance;
+    private static Bingo INSTANCE;
+    private static Game GAME;
 
     public static Bingo getInstance() {
-        return instance;
+        return INSTANCE;
+    }
+
+    public static Game getGame() {
+        return GAME;
     }
 
     @Override
-    public void onEnable() {
-        instance = this;
+    public void onEnable() {        
+        INSTANCE = this;
+        GAME = new Game();
 
-        CommandAPICommand testCommand = new CommandAPICommand("printboard")
-            .executesPlayer((Player p, Object[] args) -> {
-                p.spigot().sendMessage(this.getSpaceComponents());
-            });
+        GAME.loadGame();
+    }   
 
-            testCommand.register();
+    @Override
+    public void onDisable() {
+        GAME.saveGame();
     }
 
     public BaseComponent[] getSpaceComponents() {

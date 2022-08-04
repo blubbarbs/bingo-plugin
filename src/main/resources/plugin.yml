@@ -1,0 +1,6 @@
+name: Bingo
+api-version: 1.18
+version: 1.0
+author: Blubberalls
+depend: [NBTAPI]
+main: com.gmail.blubberalls.bingo.Bingo

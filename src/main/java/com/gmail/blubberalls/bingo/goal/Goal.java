@@ -6,7 +6,7 @@ import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.Game;
 
-import dev.jorel.commandapi.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTCompound;
 
 public abstract class Goal implements Listener {
     protected Game game;
@@ -35,8 +35,9 @@ public abstract class Goal implements Listener {
 
     public NBTCompound getTeamData(Player p) {
         Team t = p.getScoreboard().getEntryTeam(p.getName());
+        String teamName = t != null ? t.getName() : p.getUniqueId().toString();
 
-        return data.getOrCreateCompound("team_data").getOrCreateCompound(t.getName());
+        return data.getOrCreateCompound("team_data").getOrCreateCompound(teamName);
     }
 
     public int getCompletion(Player p) {

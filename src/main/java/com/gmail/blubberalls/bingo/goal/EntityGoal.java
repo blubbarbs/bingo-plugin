@@ -6,23 +6,27 @@ import org.bukkit.entity.EntityType;
 
 import com.gmail.blubberalls.bingo.Game;
 
-import dev.jorel.commandapi.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTCompound;
 
 public abstract class EntityGoal extends Goal {        
     public EntityGoal(Game game, NBTCompound data) {
         super(game, data);
     }
 
-    public NamespacedKey getEntityTargetKey() {
+    public NamespacedKey getEntityKey() {
         return NamespacedKey.fromString(data.getString("entity_target"));
     }
 
+    public String getEntityName() {
+        return getEntityKey().getKey();
+    }
+
     public String getIcon() {
-        return "bingo.entity_icons." + this.getEntityTargetKey().getKey();
+        return "bingo.entity_icons." + getEntityName();
     }
 
     public boolean isTargetedEntity(Entity e) {
-        return e.getType().getKey().equals(this.getEntityTargetKey());
+        return e.getType().getKey().equals(getEntityKey());
     }
 
     public void setEntityTargetKey(EntityType type) {

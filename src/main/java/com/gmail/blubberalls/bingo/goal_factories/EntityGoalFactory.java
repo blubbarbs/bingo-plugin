@@ -16,7 +16,7 @@ public class EntityGoalFactory<T extends EntityGoal> extends NumerableGoalFactor
         return type;
     }
 
-    public EntityGoalFactory<T> setEntityType(EntityType type) {
+    public EntityGoalFactory<T> withEntityType(EntityType type) {
         this.type = type;
 
         return this;

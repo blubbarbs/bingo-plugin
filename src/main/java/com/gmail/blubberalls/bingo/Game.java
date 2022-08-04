@@ -1,6 +1,7 @@
 package com.gmail.blubberalls.bingo;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
@@ -9,26 +10,21 @@ import org.bukkit.Bukkit;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 
-import dev.jorel.commandapi.nbtapi.NBTCompound;
-import dev.jorel.commandapi.nbtapi.NBTCompoundList;
-import dev.jorel.commandapi.nbtapi.NBTFile;
+import de.tr7zw.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTCompoundList;
+import de.tr7zw.nbtapi.NBTContainer;
+import de.tr7zw.nbtapi.NBTFile;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Game {
     private File dataFile;
-    private NBTFile data;
+    private NBTCompound data;
     private ArrayList<Goal> goals = new ArrayList<Goal>();
     private Random random = new Random();
     
     public Game() {
         this.dataFile = new File(Bingo.getInstance().getDataFolder(), "data.nbt");
-
-        try {
-            this.data = new NBTFile(dataFile);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.data = new NBTContainer();
     }
 
     public File getDataFile() {
@@ -55,37 +51,49 @@ public class Game {
         return null;
     }
 
-    public void saveGame() {
-        data.getCompoundList("goals").clear();        
-
-        try {
-            for (Goal g : goals) {
-                data.getCompoundList("goals").addCompound(g.getData());
-            }
-
-            data.save();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }        
-    }
-
     public void newGame(int length, int width) {
-        data.clearNBT();
+        data.removeKey("length");
+        data.removeKey("width");
+        data.removeKey("goals");
         data.setInteger("length", length);
         data.setInteger("width", width);
         goals.clear();
 
-        Collection<Goal> goals = Goals.randomGoals(this, length * width);
-        
-        for (Goal g : goals) {
+        Collection<Goal> newGoals = Goals.randomGoals(this, length * width);
+
+        for (Goal g : newGoals) {
             data.getCompoundList("goals").addCompound(g.getData());
             goals.add(g);
             Bukkit.getPluginManager().registerEvents(g, Bingo.getInstance());
         }
     }
 
+    public void saveGame() {
+        try {
+            if (!this.getDataFile().exists()) {
+                this.getDataFile().getParentFile().mkdirs();
+                this.getDataFile().createNewFile();
+            }
+        
+            FileOutputStream oStream = new FileOutputStream(this.getDataFile());
+            data.writeCompound(oStream);
+            oStream.close();            
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void loadGame() {
+        try {
+            NBTFile fileData = new NBTFile(this.getDataFile());
+
+            data.mergeCompound(fileData);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }                
+        
         NBTCompoundList goalDatas = data.getCompoundList("goals");
 
         for (NBTCompound goalData : goalDatas) {
