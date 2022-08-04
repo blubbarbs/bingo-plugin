@@ -1,5 +1,6 @@
 package com.gmail.blubberalls.bingo;
 
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -31,6 +32,7 @@ public class Bingo extends JavaPlugin {
     @Override
     public void onDisable() {
         GAME.saveGame();
+        HandlerList.unregisterAll(INSTANCE);
     }
 
     public BaseComponent[] getSpaceComponents() {
