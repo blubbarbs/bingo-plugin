@@ -1,5 +1,7 @@
 package com.gmail.blubberalls.bingo.goal;
 
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scoreboard.Team;
@@ -7,6 +9,7 @@ import org.bukkit.scoreboard.Team;
 import com.gmail.blubberalls.bingo.Game;
 
 import de.tr7zw.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTList;
 
 public abstract class Goal implements Listener {
     protected Game game;
@@ -17,8 +20,12 @@ public abstract class Goal implements Listener {
         this.data = data;
     }
 
+    public abstract String getIcon();
+    public abstract String getTitle();
+    public abstract String getDescription();
+
     public int getGoalNumber() {
-        return data.getInteger("goal");
+        return 1;
     }
 
     public Game getGame() {
@@ -40,43 +47,39 @@ public abstract class Goal implements Listener {
         return data.getOrCreateCompound("team_data").getOrCreateCompound(teamName);
     }
 
-    public int getCompletion(Player p) {
-        NBTCompound data = getTeamData(p);
+    public boolean isSubscribed(Player p) {
+        return !isCompleted(p) && true;
+        //return data.getUUIDList("subscribers").contains(p.getUniqueId());
+    }
 
-        if (!data.hasKey("completion")) {
-            data.setInteger("completion", 0);
-        }
-
-        return data.getInteger("completion");
+    public String getCompletionStatus(Player p) {
+        return isCompleted(p) ? "TRUE" : "FALSE";
     }
 
     public boolean isCompleted(Player p) {
-        return getCompletion(p) >= getGoalNumber();
+        return getTeamData(p).getBoolean("completion") != null ? getTeamData(p).getBoolean("completion") : false;
     }
 
     public String getTooltip() {
         return this.getTitle() + "\n" + this.getDescription();
     }
 
-    public abstract String getIcon();
-    public abstract String getTitle();
-    public abstract String getDescription();
-    
-    public void setGoalNumber(int number) {
-        data.setInteger("goal", number);
-    }
-
-    public void setCompletion(Player p, int set) {
-        getTeamData(p).setInteger("completion", set);
-    }
-
     public void setCompleted(Player p) {
-        setCompletion(p, getGoalNumber());
+        getTeamData(p).setBoolean("completion", true);
+
+        subscribe(p, false);
     }
 
-    public void addCompletion(Player p, int delta) {
-        int old = getCompletion(p);
+    public void subscribe(Player p, boolean subscribe) {
+        NBTList<UUID> subscribers = data.getUUIDList("subscribers");
 
-        setCompletion(p, old + delta);
+        if (subscribe && !subscribers.contains(p.getUniqueId())) {
+            subscribers.add(p.getUniqueId());
+        }
+        else {
+            subscribers.remove(p.getUniqueId());
+        }
+
+        game.updatePlayerSidebar(p);
     }
 }

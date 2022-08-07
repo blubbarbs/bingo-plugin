@@ -1,8 +1,11 @@
 package com.gmail.blubberalls.bingo;
 
-import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
+import dev.jorel.commandapi.CommandAPI;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -12,6 +15,7 @@ import net.md_5.bungee.api.chat.hover.content.Text;
 public class Bingo extends JavaPlugin {
     private static Bingo INSTANCE;
     private static Game GAME;
+    private static ProtocolManager PROTOCOL_MANAGER;
 
     public static Bingo getInstance() {
         return INSTANCE;
@@ -21,10 +25,20 @@ public class Bingo extends JavaPlugin {
         return GAME;
     }
 
+    public static ProtocolManager getProtocolManager() {
+        return PROTOCOL_MANAGER;
+    }
+
+    @Override
+    public void onLoad() {
+        CommandAPI.registerCommand(BingoCommands.class);
+    }
+
     @Override
     public void onEnable() {        
         INSTANCE = this;
         GAME = new Game();
+        PROTOCOL_MANAGER = ProtocolLibrary.getProtocolManager();
 
         GAME.loadGame();
     }   
@@ -32,7 +46,6 @@ public class Bingo extends JavaPlugin {
     @Override
     public void onDisable() {
         GAME.saveGame();
-        HandlerList.unregisterAll(INSTANCE);
     }
 
     public BaseComponent[] getSpaceComponents() {

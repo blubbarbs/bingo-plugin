@@ -8,7 +8,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import com.gmail.blubberalls.bingo.Bingo;
 import com.gmail.blubberalls.bingo.Game;
 import com.gmail.blubberalls.bingo.goal.EntityGoal;
-import com.gmail.blubberalls.util.TextUtils;
 
 import de.tr7zw.nbtapi.NBTCompound;
 
@@ -19,7 +18,7 @@ public class KillEntityGoal extends EntityGoal {
 
     @Override
     public String getTitle() {
-        return "Kill " + TextUtils.captailizeFirstLetter(getEntityName());
+        return "Kill " + getEntityName() + "s";
     }
 
     @Override
@@ -30,13 +29,13 @@ public class KillEntityGoal extends EntityGoal {
     @EventHandler
     public void onKill(EntityDeathEvent event) {
         if (!isTargetedEntity(event.getEntity())
-            || event.getEntity().getKiller() == null) return;
+            || event.getEntity().getKiller() == null
+            || getTeamData(event.getEntity().getKiller()) == null) return;
 
         LivingEntity e = event.getEntity();
         Player killer = e.getKiller();
 
         addCompletion(killer, 1);
-
         Bingo.getInstance().getLogger().info("Killed " + e.getName() + ". Count: " + getGoalNumber() + " Completed: " + isCompleted(killer));
     }
 

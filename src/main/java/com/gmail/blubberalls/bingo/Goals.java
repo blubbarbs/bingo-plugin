@@ -20,7 +20,14 @@ public enum Goals {
             .withMaximum(10)),
     KILL_SKELETONS(new EntityGoalFactory<KillEntityGoal>("kill_skeletons", KillEntityGoal.class)
             .withEntityType(EntityType.SKELETON)
-            .withMaximum(20));
+            .withMaximum(10)),
+    KILL_VILLAGERS(new EntityGoalFactory<KillEntityGoal>("kill_villagers", KillEntityGoal.class)
+            .withEntityType(EntityType.VILLAGER)
+            .withMaximum(9)
+            .withMinimum(3)),
+    KILL_WITHER_SKELETONS(new EntityGoalFactory<KillEntityGoal>("kill_wither_skeletons", KillEntityGoal.class)
+            .withEntityType(EntityType.WITHER_SKELETON)
+            .withMaximum(10));
 
     private static final HashMap<String, GoalFactory<?>> GOAL_FACTORIES = new HashMap<String, GoalFactory<?>>();
 
@@ -45,8 +52,9 @@ public enum Goals {
     public static Collection<Goal> randomGoals(Game game, int amount) {
         ArrayList<Goal> goals = new ArrayList<Goal>();
 
-        goals.add(KILL_CREEPERS.getFactory().createGoal(game));
-        goals.add(KILL_SKELETONS.getFactory().createGoal(game));
+        for (Goals g : Goals.values()) {
+            goals.add(g.getFactory().createGoal(game));
+        }
 
         return goals;
     }
