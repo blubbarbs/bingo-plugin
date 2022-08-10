@@ -1,5 +1,9 @@
 package com.gmail.blubberalls.bingo;
 
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -12,7 +16,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
-public class Bingo extends JavaPlugin {
+public class Bingo extends JavaPlugin implements Listener {
     private static Bingo INSTANCE;
     private static Game GAME;
     private static ProtocolManager PROTOCOL_MANAGER;
@@ -41,11 +45,18 @@ public class Bingo extends JavaPlugin {
         PROTOCOL_MANAGER = ProtocolLibrary.getProtocolManager();
 
         GAME.loadGame();
+        Bukkit.getPluginManager().registerEvents(this, this);
     }   
 
     @Override
     public void onDisable() {
         GAME.saveGame();
+        GAME.unregisterGoalEvents();
+    }
+
+    @EventHandler
+    public void onLogin(PlayerJoinEvent event) {
+        GAME.updatePlayerSidebar(event.getPlayer());
     }
 
     public BaseComponent[] getSpaceComponents() {

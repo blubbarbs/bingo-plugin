@@ -1,4 +1,4 @@
-package com.gmail.blubberalls.bingo.custom_sidebar;
+package com.gmail.blubberalls.bingo.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;

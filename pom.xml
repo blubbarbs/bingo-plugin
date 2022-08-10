@@ -3,7 +3,6 @@
     <groupId>com.gmail.blubberalls</groupId>
     <artifactId>Bingo</artifactId>
     <version>1.0.0</version>
-
     <build>
         <plugins>
             <plugin>
@@ -13,7 +12,6 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
-                    
                     <annotationProcessorPaths>
                         <path>
                             <groupId>dev.jorel</groupId>
@@ -25,7 +23,6 @@
             </plugin>
         </plugins>
      </build>  
-
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -53,7 +50,6 @@
             <scope>provided</scope>
           </dependency>
     </dependencies>
-
     <repositories>
         <repository>
           <id>spigot-repo</id>

@@ -3,7 +3,7 @@ package com.gmail.blubberalls.bingo;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.gmail.blubberalls.bingo.custom_sidebar.CustomSidebar;
+import com.gmail.blubberalls.bingo.util.CustomSidebar;
 
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;

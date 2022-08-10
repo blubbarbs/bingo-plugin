@@ -7,13 +7,20 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.gmail.blubberalls.bingo.Bingo;
 import com.gmail.blubberalls.bingo.Game;
-import com.gmail.blubberalls.bingo.goal.EntityGoal;
+import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.goal.goal_types.EntityGoal;
+import com.gmail.blubberalls.bingo.goal.goal_types.NumerableGoal;
 
 import de.tr7zw.nbtapi.NBTCompound;
 
-public class KillEntityGoal extends EntityGoal {
+public class KillEntityGoal extends Goal implements EntityGoal, NumerableGoal {
     public KillEntityGoal(Game game, NBTCompound compound) {
         super(game, compound);
+    }
+
+    @Override
+    public String getIcon() {
+        return null;
     }
 
     @Override
@@ -30,7 +37,7 @@ public class KillEntityGoal extends EntityGoal {
     public void onKill(EntityDeathEvent event) {
         if (!isTargetedEntity(event.getEntity())
             || event.getEntity().getKiller() == null
-            || getTeamData(event.getEntity().getKiller()) == null) return;
+            || isCompleted(event.getEntity().getKiller())) return;
 
         LivingEntity e = event.getEntity();
         Player killer = e.getKiller();
@@ -38,5 +45,4 @@ public class KillEntityGoal extends EntityGoal {
         addCompletion(killer, 1);
         Bingo.getInstance().getLogger().info("Killed " + e.getName() + ". Count: " + getGoalNumber() + " Completed: " + isCompleted(killer));
     }
-
 }

@@ -3,16 +3,13 @@ package com.gmail.blubberalls.bingo;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.map.MinecraftFont;
 import org.bukkit.scoreboard.Objective;
 
-import com.gmail.blubberalls.bingo.custom_sidebar.CustomSidebar;
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.CustomSidebar;
 
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTFile;
@@ -22,7 +19,6 @@ public class Game {
     private File dataFile;
     private NBTFile data;
     private ArrayList<Goal> goals = new ArrayList<Goal>();
-    private Random random = new Random();
 
     public Game() {
         this.dataFile = new File(Bingo.getInstance().getDataFolder(), "data.nbt");
@@ -49,10 +45,6 @@ public class Game {
 
     public int getWidth() {
         return data.getInteger("width");
-    }
-
-    public Random getRandom() {
-        return random;
     }
 
     public BaseComponent[] getBoard() {
@@ -86,27 +78,11 @@ public class Game {
     public void updatePlayerSidebar(Player p) {
         Collection<Goal> subscribedGoals = getSubscribedGoals(p);
 
-        Bukkit.getLogger().info("" + subscribedGoals.size());
-
         if (subscribedGoals.size() > 0) {
             ArrayList<String> strings = new ArrayList<String>();
-            int maxWidth = 0;
 
             for (Goal g : subscribedGoals) {
-                String title = g.getTitle();
-                String completion = g.getCompletionStatus(p);
-                int width = MinecraftFont.Font.getWidth(title + " " + completion);
-
-                maxWidth = width > maxWidth ? width : maxWidth;
-            }
-
-            for (Goal g : subscribedGoals) {
-                String title = g.getTitle();
-                String completion = g.getCompletionStatus(p);
-                int width = MinecraftFont.Font.getWidth(title + " " + completion);
-                String entry = title + " " +  CustomSidebar.getPixelOffsetString(maxWidth - width) + completion;
-
-                strings.add(entry);
+                strings.add(g.getCompletionStatus(p));
             }
 
             CustomSidebar.setPlayerSidebar(p, "Bingo", strings);    
@@ -116,10 +92,14 @@ public class Game {
         }
     }
 
-    public void updateAllSidebars() {
+    public void update() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             updatePlayerSidebar(p);
         }
+    }
+
+    public void unregisterGoalEvents() {
+        goals.forEach((goal) -> goal.unloadEvents());
     }
 
     public void newGame(int length, int width) {
@@ -130,10 +110,10 @@ public class Game {
         for (Goal g : Goals.randomGoals(this, length * width)) {
             data.getCompoundList("goals").addCompound(g.getData());
             goals.add(g);
-            Bukkit.getPluginManager().registerEvents(g, Bingo.getInstance());
+            g.loadEvents();
         }
 
-        updateAllSidebars();
+        update();
     }
 
     public void saveGame() {
@@ -152,19 +132,18 @@ public class Game {
         for (NBTCompound goalData : data.getCompoundList("goals")) {
             Goal g = Goals.loadGoal(this, goalData);
 
-            Bukkit.getPluginManager().registerEvents(g, Bingo.getInstance());
             goals.add(g);
+            g.loadEvents();
         }
 
-        updateAllSidebars();
+        update();
     }
 
     public void endGame() {
+        unregisterGoalEvents();
         data.removeKey("length");
         data.removeKey("width");
         data.removeKey("goals");
         goals.clear();
-
-        HandlerList.unregisterAll(Bingo.getInstance());
     }
 }

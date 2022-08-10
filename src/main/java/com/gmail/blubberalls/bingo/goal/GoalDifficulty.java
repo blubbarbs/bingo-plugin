@@ -1,6 +1,6 @@
 package com.gmail.blubberalls.bingo.goal;
 
-public enum EnumGoalDifficulty {
+public enum GoalDifficulty {
     EASY(),
     MEDIUM(),
     HARD();
