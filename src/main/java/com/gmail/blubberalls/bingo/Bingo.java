@@ -79,17 +79,17 @@ public class Bingo extends JavaPlugin implements Listener {
                 int offset = -(x * 15) -69; 
                 TranslatableComponent numberOffset = new TranslatableComponent("offset." + (offset - 16));
                 TranslatableComponent number = new TranslatableComponent("bingo.num.1");
-                TranslatableComponent statusOffset = new TranslatableComponent("offset." + (offset - 32));
-                TranslatableComponent status = new TranslatableComponent("bingo.blank");
+                TranslatableComponent overlayOffset = new TranslatableComponent("offset." + (offset - 32));
+                TranslatableComponent overlay = new TranslatableComponent("bingo.blank");
 
                 numberOffset.setFont("space:default");
                 numberOffset.addWith(number);
                 number.setFont("bingo:default");
-                statusOffset.setFont("space:default");
-                statusOffset.addWith(status); 
-                status.setFont("bingo:default");     
+                overlayOffset.setFont("space:default");
+                overlayOffset.addWith(overlay); 
+                overlay.setFont("bingo:default");     
                 builder.append(numberOffset);
-                builder.append(statusOffset);
+                builder.append(overlayOffset);
             }
 
             builder.append("\n\n");

@@ -1,5 +1,7 @@
 package com.gmail.blubberalls.bingo.util;
 
+import net.md_5.bungee.api.chat.TranslatableComponent;
+
 public class TextUtils {
     public static String join(String[] words, String joiner) {
         String joined = words[0];
@@ -34,4 +36,23 @@ public class TextUtils {
     public static String capitalizeFirstLetters(String words) {
         return capitalizeFirstLetters(words, " ", " ");
     }
+
+    public static TranslatableComponent getOffsetComponent(int offset) {
+        TranslatableComponent offsetComponent = new TranslatableComponent("space." + offset);
+
+        offsetComponent.setFont("space:default");
+
+        return offsetComponent;
+    }
+
+    public static TranslatableComponent getBoardComponent(int offset, String bingoText) {
+        TranslatableComponent offsetComponent = getOffsetComponent(offset);
+        TranslatableComponent textComponent = new TranslatableComponent(bingoText);
+
+        textComponent.setFont("bingo:default");
+        offsetComponent.addWith(textComponent);
+
+        return offsetComponent;
+    }
+
 }

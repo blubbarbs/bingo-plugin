@@ -17,6 +17,11 @@ public class BingoCommands {
         sender.sendMessage("Testing");
     }
     
+    @Subcommand("board")
+    public static void sendBoard(Player p) {
+        p.spigot().sendMessage(Bingo.getGame().getBoard());
+    }
+
     @Subcommand("newgame") 
     public static void newGame(CommandSender sender) {
         Bingo.getGame().newGame(10, 10);

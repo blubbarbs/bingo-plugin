@@ -1,6 +1,5 @@
 package com.gmail.blubberalls.bingo.goals;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -20,18 +19,12 @@ public class CraftItemGoal extends Goal implements MaterialGoal, NumerableGoal {
 
     @EventHandler
     public void onCraft(CraftItemEvent event) {
-        Bukkit.getLogger().info("???");
-
-        Bukkit.getLogger().info("" + event.getCurrentItem() + " " + event.getCurrentItem());
-
         if (!isTargetedMaterial(event.getCurrentItem())
             || isCompleted((Player) event.getWhoClicked())) return;
 
         Player whoClicked = (Player) event.getWhoClicked();
 
         addCompletion(whoClicked, 1);
-
-        Bukkit.getLogger().info("SUCCESS!");
     }
     
 }
