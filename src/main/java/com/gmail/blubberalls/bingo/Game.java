@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.goal.GoalFactories;
+import com.gmail.blubberalls.bingo.goal.Test;
 import com.gmail.blubberalls.bingo.util.CustomSidebar;
 
 import de.tr7zw.nbtapi.NBTCompound;
@@ -107,7 +109,7 @@ public class Game {
         data.setInteger("length", length);
         data.setInteger("width", width);
 
-        for (Goal g : Goals.randomGoals(this, length * width)) {
+        for (Goal g : GoalFactories.randomGoals(this, length * width)) {
             data.getCompoundList("goals").addCompound(g.getData());
             goals.add(g);
             g.loadEvents();
@@ -128,12 +130,16 @@ public class Game {
         }
     }
 
-    public void loadGame() {        
-        for (NBTCompound goalData : data.getCompoundList("goals")) {
-            Goal g = Goals.loadGoal(this, goalData);
+    public void loadGame() {
+        Bukkit.getLogger().info("Loading...");
 
-            goals.add(g);
-            g.loadEvents();
+        for (NBTCompound instanceData : data.getCompoundList("goals")) {
+            Goal g = GoalFactories.loadGoal(this, instanceData);
+
+            if (g != null) {
+                goals.add(g);
+                g.loadEvents();;    
+            }
         }
 
         update();

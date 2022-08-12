@@ -14,23 +14,8 @@ import de.tr7zw.nbtapi.NBTCompound;
 
 public class CraftItemGoal extends Goal implements MaterialGoal, NumerableGoal {
 
-    public CraftItemGoal(Game game, NBTCompound data) {
-        super(game, data);
-    }
-
-    @Override
-    public String getIcon() {
-        return null;
-    }
-
-    @Override
-    public String getTitle() {
-        return "Craft " + getMaterialName();
-    }
-
-    @Override
-    public String getDescription() {
-        return "Craft " + getGoalNumber() + " " + getMaterialName() + "(s)!";
+    public CraftItemGoal(Game game, NBTCompound goalData, NBTCompound instanceData) {
+        super(game, goalData, instanceData);
     }
 
     @EventHandler

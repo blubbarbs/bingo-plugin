@@ -8,6 +8,6 @@ public interface NumerableGoal extends DefaultGoal {
     
     @Override
     default String getCompletionStatus(Player p) {
-        return ChatColor.GRAY + getTitle() + " " + ChatColor.GREEN + getCompletion(p) + "/" + getGoalNumber();
+        return ChatColor.GRAY + getTitle() + " " + ChatColor.GREEN + getCompletion(p) + "/" + getGoal();
     }
 }

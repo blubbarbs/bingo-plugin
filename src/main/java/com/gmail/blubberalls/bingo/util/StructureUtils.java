@@ -22,10 +22,11 @@ public class StructureUtils {
         BlockPosition nmsLoc = new BlockPosition(loc.getX(), loc.getY(), loc.getZ());
         Structure nmsStructure = CraftStructure.bukkitToMinecraft(structure);
         StructureManager nmsStructureManager = nmsWorld.a();
-        StructureStart nmsStartAtLoc = nmsStructureManager.a(nmsLoc, nmsStructure);
+        //StructureStart nmsStartAtLoc = nmsStructureManager.a(nmsLoc, nmsStructure);
         StructureStart nmsStartContainingLoc = nmsStructureManager.b(nmsLoc, nmsStructure);
-        List<StructureStart> nmsChunkStarts = nmsStructureManager.a(SectionPosition.a(nmsLoc), nmsStructure);
+        //List<StructureStart> nmsChunkStarts = nmsStructureManager.a(SectionPosition.a(nmsLoc), nmsStructure);
 
+        /*
         if (nmsChunkStarts.size() > 0) {
             Bukkit.getLogger().info("-----------------------------------------");
             Bukkit.getLogger().info("NUM STARTS FOR " + structure.getKey().getKey() + " - " + nmsChunkStarts.size());            
@@ -45,6 +46,7 @@ public class StructureUtils {
         if (!nmsStartAtLoc.b() && !nmsStartContainingLoc.b()) {
             return false;
         }
+        */
 
         return nmsStartContainingLoc.b();
     }

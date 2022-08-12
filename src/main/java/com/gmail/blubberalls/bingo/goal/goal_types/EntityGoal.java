@@ -7,9 +7,11 @@ import org.bukkit.entity.EntityType;
 
 import com.gmail.blubberalls.bingo.util.TextUtils;
 
-public interface EntityGoal extends DefaultGoal {        
+public interface EntityGoal extends DefaultGoal {   
+    public static String KEY = "entity";
+    
     default NamespacedKey getEntityKey() {
-        return NamespacedKey.fromString(getData().getString("entity"));
+        return NamespacedKey.fromString(getGoalData().getString("entity"));
     }
 
     default String getEntityName() {

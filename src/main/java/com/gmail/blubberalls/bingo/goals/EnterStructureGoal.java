@@ -14,29 +14,15 @@ import de.tr7zw.nbtapi.NBTCompound;
 public class EnterStructureGoal extends Goal implements StructureGoal {
     private int schedulerID;
 
-    public EnterStructureGoal(Game game, NBTCompound data) {
-        super(game, data);
-    }
-
-    @Override
-    public String getIcon() {
-        return null;
-    }
-
-    @Override
-    public String getTitle() {
-        return "Enter " + " " + getStructureName();
-    }
-
-    @Override
-    public String getDescription() {
-        return "Enter Structure";
+    public EnterStructureGoal(Game game, NBTCompound goalData, NBTCompound instanceData) {
+        super(game, goalData, instanceData);
     }
 
     public void updateVisitedStructures() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (StructureUtils.isLocInStructure(p.getLocation(), getStructure())) {
-                //Bukkit.getLogger().info("YOU ARE IN THE " + getStructureName() + " STRUCTURE");
+                setCompleted(p);
+                break;
             }
         }
     }

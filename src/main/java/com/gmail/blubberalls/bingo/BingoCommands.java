@@ -1,5 +1,8 @@
 package com.gmail.blubberalls.bingo;
 
+import java.rmi.UnknownHostException;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -19,9 +22,11 @@ public class BingoCommands {
     
     @Subcommand("newgame") 
     public static void newGame(CommandSender sender) {
-        Bingo.getGame().newGame(10, 10);
+        Bukkit.getLogger().info("What the hell is going on, newgame");
 
+        Bingo.getGame().newGame(10, 10);
         sender.sendMessage("New game started.");
+
     }
 
     @Subcommand("savegame")

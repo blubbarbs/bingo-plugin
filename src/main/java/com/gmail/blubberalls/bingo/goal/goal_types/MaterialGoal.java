@@ -8,9 +8,10 @@ import org.bukkit.inventory.ItemStack;
 import com.gmail.blubberalls.bingo.util.TextUtils;
 
 public interface MaterialGoal extends DefaultGoal {
+    public static String KEY = "material";
 
     default NamespacedKey getMaterialKey() {
-        return NamespacedKey.fromString(getData().getString("material"));
+        return NamespacedKey.fromString(getGoalData().getString("material"));
     }
 
     default String getMaterialName() {

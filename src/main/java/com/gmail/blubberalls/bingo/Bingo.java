@@ -1,5 +1,6 @@
 package com.gmail.blubberalls.bingo;
 
+import org.apache.commons.lang.UnhandledException;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,6 +11,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
 import dev.jorel.commandapi.CommandAPI;
+import io.netty.handler.codec.EncoderException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -43,6 +45,8 @@ public class Bingo extends JavaPlugin implements Listener {
         INSTANCE = this;
         GAME = new Game();
         PROTOCOL_MANAGER = ProtocolLibrary.getProtocolManager();
+
+        Bukkit.getLogger().info("What the hell");
 
         GAME.loadGame();
         Bukkit.getPluginManager().registerEvents(this, this);

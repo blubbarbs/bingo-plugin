@@ -1,8 +1,6 @@
 package com.gmail.blubberalls.bingo.goal;
 
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -10,98 +8,102 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.generator.structure.Structure;
 
 import com.gmail.blubberalls.bingo.Game;
-import com.gmail.blubberalls.bingo.Goals;
-import com.gmail.blubberalls.bingo.util.NBTUtils;
+import com.gmail.blubberalls.bingo.goal.goal_types.EntityGoal;
+import com.gmail.blubberalls.bingo.goal.goal_types.MaterialGoal;
+import com.gmail.blubberalls.bingo.goal.goal_types.StructureGoal;
+import com.gmail.blubberalls.bingo.util.TextUtils;
 
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTContainer;
 
 public class GoalFactory {
     private String name;
-    private int minimumGoal = 1;
-    private int maximumGoal = 1;
     private Class<? extends Goal> productClass;
-    private HashMap<String, Supplier<?>> dataProducers = new HashMap<String, Supplier<?>>();
-
+    private NBTCompound goalData = new NBTContainer();
+    
     public GoalFactory(String name, Class<? extends Goal> productClass) {
         this.name = name;
         this.productClass = productClass;
-    }
 
+        goalData.setString("title", TextUtils.capitalizeFirstLetters(name, "_", " "));
+        goalData.getOrCreateCompound("goal").setInteger("min", 1);
+        goalData.getOrCreateCompound("goal").setInteger("max", 1);
+    }
+    
     public String getName() {
-        return name;
+        return this.getName();
     }
-
-    private GoalFactory with(String key, Object data) {
-        dataProducers.put(key, () -> data);
+    
+    public GoalFactory withTitle(String title) {
+        goalData.setString("title", title);
 
         return this;
     }
 
-    public GoalFactory withEntityType(EntityType type) {
-        return with("entity", type.getKey().toString());
-    }
+    public GoalFactory withIcon(String icon) {
+        goalData.setString("icon", icon);
 
-    public GoalFactory withMaterial(Material material) {
-        return with("material", material.getKey().toString());
-    }
-
-    public GoalFactory withStructure(Structure structure) {
-        return with("structure", structure.getKey().toString());
-    }
-
-    public GoalFactory withGoal(int goal) {
-        return with("goal", goal);
+        return this;
     }
 
     public GoalFactory withMinimum(int minimum) {
-        this.minimumGoal = minimum;
-
-        if (dataProducers.get("goal") == null) {
-            dataProducers.put("goal", () -> Goals.getRandom().nextInt(minimumGoal, maximumGoal));
-        }
-
+        goalData.getOrCreateCompound("goal").setInteger("min", minimum);
+    
         return this;
     }
-
+    
     public GoalFactory withMaximum(int maximum) {
-        this.maximumGoal = maximum;
-
-        if (dataProducers.get("goal") == null) {
-            dataProducers.put("goal", () -> Goals.getRandom().nextInt(minimumGoal, maximumGoal));
-        }
-
+        goalData.getOrCreateCompound("goal").setInteger("max", maximum);
+    
         return this;
     }
-
-    public Goal loadGoal(Game game, NBTCompound data) {
+    
+    public GoalFactory withGoal(int goal) {
+        return withMaximum(goal).withMaximum(goal);
+    }
+    
+    public GoalFactory withStructure(Structure structure) {
+        goalData.setString(StructureGoal.KEY, structure.getKey().toString());
+    
+        return this;
+    }
+    
+    public GoalFactory withEntity(EntityType type) {
+        goalData.setString(EntityGoal.KEY, type.getKey().toString());
+    
+        return this;
+    }
+    
+    public GoalFactory withMaterial(Material material) {
+        goalData.setString(MaterialGoal.KEY, material.getKey().toString());
+    
+        return this;
+    }
+    
+    public Goal loadGoal(Game game, NBTCompound instanceData) {
         try {
-            Constructor<? extends Goal> constructor = productClass.getConstructor(Game.class, NBTCompound.class);
-            Goal goal = constructor.newInstance(game, data);
-
+            Constructor<? extends Goal> constructor = productClass.getConstructor(Game.class, NBTCompound.class, NBTCompound.class);
+            Goal goal = constructor.newInstance(game, goalData, instanceData);
+    
             return goal;
         }
         catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
+    
+        return null;
     }
-
+    
     public Goal createGoal(Game game) {
         Goal goal = loadGoal(game, new NBTContainer());
-        NBTCompound goalData = goal.getData();
+        int minimum = goalData.getCompound("goal").getInteger("min");
+        int maximum = goalData.getCompound("goal").getInteger("max");
+        int goalNum = GoalFactories.getRandom().nextInt(minimum, maximum + 1);
 
-        Bukkit.getLogger().info(name);
-
-        for (String key : dataProducers.keySet()) {
-            Object value = dataProducers.get(key).get();
-
-            NBTUtils.set(goalData, key, value);
-            Bukkit.getLogger().info("Serializing " + key + " : " + value);
-        }
-
-        goalData.setString("name", name);
+        goal.getData().setInteger("goal", goalNum);
+        goal.getData().setString("name", name);
 
         return goal;
     }
+
 }
