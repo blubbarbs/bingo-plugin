@@ -73,11 +73,13 @@ public abstract class Goal implements DefaultGoal {
         return getCompletion(p) >= getGoal();
     }
 
-    public NBTCompound getTeamData(Player p) {
+    public String getTeamName(Player p) {
         Team t = p.getScoreboard().getEntryTeam(p.getName());
-        String teamName = t != null ? t.getName() : p.getUniqueId().toString();
+        return t != null ? t.getName() : p.getUniqueId().toString();
+    }
 
-        return data.getOrCreateCompound("team_data").getOrCreateCompound(teamName);
+    public NBTCompound getTeamData(Player p) {
+        return data.getOrCreateCompound("team_data").getOrCreateCompound(getTeamName(p));
     }
     
     public void setCompletion(Player p, int completion) {
@@ -85,6 +87,7 @@ public abstract class Goal implements DefaultGoal {
         
         if (isCompleted(p)) {
             setSubscription(p, false);
+            data.setString("completed_by", getTeamName(p));
         }
 
         game.update();

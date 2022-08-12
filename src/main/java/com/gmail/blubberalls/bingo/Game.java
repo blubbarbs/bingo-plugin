@@ -6,11 +6,9 @@ import java.util.Collection;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Objective;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.goal.GoalFactories;
-import com.gmail.blubberalls.bingo.goal.Test;
 import com.gmail.blubberalls.bingo.util.CustomSidebar;
 
 import de.tr7zw.nbtapi.NBTCompound;
@@ -65,18 +63,6 @@ public class Game {
         return subscribedGoals;
     }
 
-    public Objective getPlayerObjective(Player p) {
-        String objectiveName = "bingo_sidebar." + p.getUniqueId().toString();
-        
-        return p.getScoreboard().getObjective(objectiveName) != null ? p.getScoreboard().getObjective(objectiveName) : p.getScoreboard().registerNewObjective(objectiveName, "dummy", "Bingo");
-    }
-
-    public Objective resetPlayerObjective(Player p) {        
-        getPlayerObjective(p).unregister();
-
-        return getPlayerObjective(p);
-    }
-
     public void updatePlayerSidebar(Player p) {
         Collection<Goal> subscribedGoals = getSubscribedGoals(p);
 
@@ -87,21 +73,21 @@ public class Game {
                 strings.add(g.getCompletionStatus(p));
             }
 
-            CustomSidebar.setPlayerSidebar(p, "Bingo", strings);    
+            CustomSidebar.setPlayerSidebar(p, "Bingo", strings);
         }
         else {
             CustomSidebar.resetPlayerSidebar(p);
         }
     }
 
+    public void unregisterGoalEvents() {
+        goals.forEach((goal) -> goal.unloadEvents());
+    }
+
     public void update() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             updatePlayerSidebar(p);
         }
-    }
-
-    public void unregisterGoalEvents() {
-        goals.forEach((goal) -> goal.unloadEvents());
     }
 
     public void newGame(int length, int width) {

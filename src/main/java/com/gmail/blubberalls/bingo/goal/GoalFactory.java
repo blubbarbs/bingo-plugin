@@ -2,7 +2,6 @@ package com.gmail.blubberalls.bingo.goal;
 
 import java.lang.reflect.Constructor;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.generator.structure.Structure;
