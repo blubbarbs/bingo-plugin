@@ -1,9 +1,0 @@
-.gitignore
-/.vscode
-/bin
-/lib
-/target
-/atarget
-test.xml
-pom.xml
-apom.xml
