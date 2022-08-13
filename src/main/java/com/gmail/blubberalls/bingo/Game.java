@@ -3,6 +3,7 @@ package com.gmail.blubberalls.bingo;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,6 +25,7 @@ public class Game {
     private File dataFile;
     private NBTFile data;
     private ArrayList<Goal> goals = new ArrayList<Goal>();
+    private Random random = new Random();
 
     public Game() {
         this.dataFile = new File(Bingo.getInstance().getDataFolder(), "data.nbt");
@@ -50,6 +52,10 @@ public class Game {
 
     public int getWidth() {
         return data.getInteger("width");
+    }
+
+    public Random getRandom() {
+        return random;
     }
 
     public BaseComponent[] getBoard() {
@@ -130,7 +136,7 @@ public class Game {
         data.setInteger("width", width);
 
         for (Goal g : GoalFactories.randomGoals(this, length * width)) {
-            data.getCompoundList("goals").addCompound(g.getData());
+            data.getCompoundList("goals").addCompound(g.getSavedData());
             goals.add(g);
             g.loadEvents();
         }
@@ -140,7 +146,7 @@ public class Game {
 
     public void saveGame() {
         data.removeKey("goals");
-        goals.forEach((g) -> data.getCompoundList("goals").addCompound(g.getData()));
+        goals.forEach((g) -> data.getCompoundList("goals").addCompound(g.getSavedData()));
 
         try {
             data.save();

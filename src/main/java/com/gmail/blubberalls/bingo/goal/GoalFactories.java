@@ -3,64 +3,81 @@ package com.gmail.blubberalls.bingo.goal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Random;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.generator.structure.Structure;
+import java.util.function.Supplier;
 
 import com.gmail.blubberalls.bingo.Game;
-import com.gmail.blubberalls.bingo.goals.CraftItemGoal;
-import com.gmail.blubberalls.bingo.goals.EnterStructureGoal;
-import com.gmail.blubberalls.bingo.goals.KillEntityGoal;
+import com.gmail.blubberalls.bingo.goals.craft.CraftDiamondSword;
+import com.gmail.blubberalls.bingo.goals.inventory.PickUpDiamonds;
+import com.gmail.blubberalls.bingo.goals.kill.KillCreepersGoal;
+import com.gmail.blubberalls.bingo.goals.kill.KillSkeletonsGoal;
+import com.gmail.blubberalls.bingo.goals.location.EnterStronghold;
 
 import de.tr7zw.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTContainer;
 
 public class GoalFactories {
     private static final HashMap<String, GoalFactory> GOAL_FACTORIES = new HashMap<String, GoalFactory>();
-    private static final Random RANDOM = new Random();
 
-    public static GoalFactory KILL_CREEPERS = register("kill_creepers", KillEntityGoal.class)
-                                                .withEntity(EntityType.CREEPER)
-                                                .withMinimum(5)
-                                                .withMaximum(10);
-    public static GoalFactory KILL_SKELETONS = register("kill_skeletons", KillEntityGoal.class)
-                                                .withEntity(EntityType.SKELETON)
-                                                .withMinimum(6)
-                                                .withMaximum(7);
-    public static GoalFactory CRAFT_DIAMOND_SWORD = register("craft_diamond_sword", CraftItemGoal.class)
-                                                    .withMaterial(Material.DIAMOND_SWORD);
-    public static GoalFactory ENTER_STRONGHOLD = register("enter_stronghold", EnterStructureGoal.class)
-                                                    .withStructure(Structure.STRONGHOLD);
+    public static GoalFactory KILL_CREEPERS = register("kill_creepers", KillCreepersGoal::new);
+    public static GoalFactory KILL_SKELETONS = register("kill_skeletons", KillSkeletonsGoal::new);
+    public static GoalFactory CRAFT_DIAMOND_SWORD = register("craft_diamond_sword", CraftDiamondSword::new);
+    public static GoalFactory PICKUP_DIAMONDS = register("pickup_diamonds", PickUpDiamonds::new);
+    public static GoalFactory ENTER_STRONGHOLD = register("enter_stronghold", EnterStronghold::new);
 
-    static GoalFactory register(String name, Class<? extends Goal> productClass) {
-        GoalFactory factory = new GoalFactory(name, productClass);
+    static GoalFactory register(String name, Supplier<Goal> goalConstructor) {        
+        GoalFactory factory = new GoalFactory(name, goalConstructor);
         
         GOAL_FACTORIES.put(name, factory);
 
         return factory;
     }
 
-    public static Goal loadGoal(Game game, NBTCompound instanceData) {
-        GoalFactory factory = GOAL_FACTORIES.get(instanceData.getString("name"));
+    public static Goal loadGoal(Game game, NBTCompound savedData) {
+        GoalFactory f = GOAL_FACTORIES.get(savedData.getString("name"));
 
-        return factory != null ? factory.loadGoal(game, instanceData) : null;
-    }
-
-    public static Random getRandom() {
-        return RANDOM;
+        return f.loadGoal(game, savedData);
     }
 
     public static Collection<Goal> randomGoals(Game game, int amount) {
         ArrayList<Goal> goals = new ArrayList<Goal>();
 
-        Bukkit.getLogger().info("did it at least make it here");
-
-        for (GoalFactory f : GOAL_FACTORIES.values()) {
-            goals.add(f.createGoal(game));
-        }
+        GOAL_FACTORIES.values().forEach(factory -> goals.add(factory.newGoal(game)));
 
         return goals;
+    }
+
+    public static class GoalFactory {
+        private String name;
+        private Supplier<Goal> goalConstructor;
+
+        public GoalFactory(String name, Supplier<Goal> goalConstructor) {
+            this.name = name;
+            this.goalConstructor = goalConstructor;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Goal newGoal(Game game) {
+            Goal goal = goalConstructor.get();
+
+            goal.game = game;
+            goal.savedData = new NBTContainer();
+            goal.reset();
+            goal.getSavedData().setString("name", name);
+
+            return goal;
+        }    
+
+        public Goal loadGoal(Game game, NBTCompound savedData) {            
+            Goal goal = goalConstructor.get();
+            
+            goal.game = game;
+            goal.savedData = new NBTContainer();
+            goal.savedData.mergeCompound(savedData);
+
+            return goal;
+        }
     }
 }

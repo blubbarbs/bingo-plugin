@@ -10,8 +10,7 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
-public class StructureUtils {
-
+public class Checks {
     public static boolean isLocInStructure(Location loc, org.bukkit.generator.structure.Structure structure) {
         WorldServer nmsWorld = ((CraftWorld) loc.getWorld()).getHandle();
         BlockPosition nmsLoc = new BlockPosition(loc.getX(), loc.getY(), loc.getZ());
@@ -21,6 +20,4 @@ public class StructureUtils {
 
         return nmsStartContainingLoc.b();
     }
-
-
 }

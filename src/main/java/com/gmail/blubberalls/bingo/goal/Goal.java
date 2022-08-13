@@ -5,52 +5,52 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.Bingo;
 import com.gmail.blubberalls.bingo.Game;
-import com.gmail.blubberalls.bingo.goal.goal_types.DefaultGoal;
+import com.gmail.blubberalls.bingo.util.TextUtils;
 
 import de.tr7zw.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTList;
+import net.md_5.bungee.api.ChatColor;
 
-public abstract class Goal implements DefaultGoal {
-    protected Game game;
-    protected NBTCompound goalData;
-    protected NBTCompound data;
-
-    public Goal(Game game, NBTCompound goalData, NBTCompound instanceData) {
-        this.game = game;
-        this.goalData = goalData;
-        this.data = instanceData;
-    }
+public abstract class Goal implements Listener {
+    Game game;
+    NBTCompound savedData = new NBTContainer();
 
     public Game getGame() {
         return game;
     }
 
-    public NBTCompound getGoalData() {
-        return goalData;
+    public NBTCompound getSavedData() {
+        return savedData;
     }
 
-    public NBTCompound getData() {
-        return data;
+    public int getMinimumGoal() {
+        return 1;
+    }
+
+    public int getMaximumGoal() {
+        return 1;
     }
 
     public String getName() {
-        return goalData.getString("name");
+        return savedData.getString("name");
     }
 
     public String getTitle() {
-        return data.hasKey("title") ? data.getString("title") : goalData.getString("title");
+        return TextUtils.capitalizeFirstLetters(getName(), "_", " ");
     }
 
     public String getIcon() {
-        return data.hasKey("icon") ? data.getString("icon") : goalData.getString("icon");
+        return "bingo.icons.test";
     }
     
     public String getDescription() {
-        return data.hasKey("description") ? data.getString("description") : goalData.getString("description");
+        return "Default description";
     }
 
     public String getTooltip() {
@@ -58,19 +58,11 @@ public abstract class Goal implements DefaultGoal {
     }
 
     public int getGoal() {
-        return data.hasKey("goal") ? data.getInteger("goal") : 1;
+        return savedData.hasKey("goal") ? savedData.getInteger("goal") : 1;
     }
 
-    public int getCompletion(Player p) {
-        return getTeamData(p).getInteger("completion");
-    }
-
-    public boolean isSubscribed(Player p) {
-        return !isCompleted(p) && true;
-    }
-
-    public boolean isCompleted(Player p) {
-        return getCompletion(p) >= getGoal();
+    public NBTCompound getTeamData(Player p) {
+        return savedData.getOrCreateCompound("team_data").getOrCreateCompound(getTeamName(p));
     }
 
     public String getTeamName(Player p) {
@@ -78,16 +70,33 @@ public abstract class Goal implements DefaultGoal {
         return t != null ? t.getName() : p.getUniqueId().toString();
     }
 
-    public NBTCompound getTeamData(Player p) {
-        return data.getOrCreateCompound("team_data").getOrCreateCompound(getTeamName(p));
+    public int getCompletion(Player p) {
+        return getTeamData(p).getInteger("completion");
+    }
+
+    public String getCompletionStatus(Player p) {
+        if (getGoal() == 1) {
+            return ChatColor.GREEN + getTitle();
+        }
+        else {
+            return ChatColor.GRAY + getTitle() + " " + ChatColor.GREEN + getCompletion(p) + "/" + getGoal();
+        }
+    }
+
+    public boolean isCompleted(Player p) {
+        return getCompletion(p) >= getGoal();
     }
     
+    public boolean isSubscribed(Player p) {
+        return !isCompleted(p) && true;
+    }
+
     public void setCompletion(Player p, int completion) {
         getTeamData(p).setInteger("completion", completion);
         
         if (isCompleted(p)) {
             setSubscription(p, false);
-            data.setString("completed_by", getTeamName(p));
+            savedData.setString("completed_by", getTeamName(p));
         }
 
         game.update();
@@ -102,9 +111,9 @@ public abstract class Goal implements DefaultGoal {
         
         setCompletion(p, old + delta);
     }
-    
+
     public void setSubscription(Player p, boolean subscribe) {
-        NBTList<UUID> subscribers = getData().getUUIDList("subscribers");
+        NBTList<UUID> subscribers = savedData.getUUIDList("subscribers");
 
         if (subscribe && !subscribers.contains(p.getUniqueId())) {
             subscribers.add(p.getUniqueId());
@@ -112,6 +121,14 @@ public abstract class Goal implements DefaultGoal {
         else {
             subscribers.remove(p.getUniqueId());
         }
+    }
+
+    public void reset() {
+        getSavedData().setInteger("goal", game.getRandom().nextInt(getMinimumGoal(), getMaximumGoal() + 1));
+    }
+
+    public void loadNBT(NBTCompound savedData) {
+        this.savedData.mergeCompound(savedData);
     }
 
     public void loadEvents() {

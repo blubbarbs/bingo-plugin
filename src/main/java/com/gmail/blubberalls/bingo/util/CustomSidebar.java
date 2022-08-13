@@ -20,35 +20,6 @@ import net.minecraft.world.scores.criteria.IScoreboardCriteria;
 
 public class CustomSidebar {
     private static String OBJECTIVE_NAME = "sidebar";
-    private static HashMap<Integer, String> SPACES = new HashMap<Integer, String>();
-    private static HashMap<Integer, String> NEG_SPACES = new HashMap<Integer, String>();
-
-    static {
-        NEG_SPACES.put(128, "\uF80C");
-        NEG_SPACES.put(64, "\uF80B");
-        NEG_SPACES.put(32, "\uF80A");
-        NEG_SPACES.put(16, "\uF809");
-        NEG_SPACES.put(8, "\uF808");
-        NEG_SPACES.put(7, "\uF807");
-        NEG_SPACES.put(6, "\uF806");
-        NEG_SPACES.put(5, "\uF805");
-        NEG_SPACES.put(4, "\uF804");
-        NEG_SPACES.put(3, "\uF803");
-        NEG_SPACES.put(2, "\uF802");
-        NEG_SPACES.put(1, "\uF801");
-        SPACES.put(128, "\uF82C");
-        SPACES.put(64, "\uF82B");
-        SPACES.put(32, "\uF82A");
-        SPACES.put(16, "\uF829");
-        SPACES.put(8, "\uF828");
-        SPACES.put(7, "\uF827");
-        SPACES.put(6, "\uF826");
-        SPACES.put(5, "\uF825");
-        SPACES.put(4, "\uF824");
-        SPACES.put(3, "\uF823");
-        SPACES.put(2, "\uF822");
-        SPACES.put(1, "\uF821");
-    }
 
     private static PacketContainer getCreateObjectivePacket(String objectiveName, String title) {
         PacketContainer objectivePacket = new PacketContainer(PacketType.Play.Server.SCOREBOARD_OBJECTIVE);
@@ -90,23 +61,6 @@ public class CustomSidebar {
         setScorePacket.getScoreboardActions().write(0, ScoreboardAction.CHANGE);
 
         return setScorePacket;
-    }
-
-    public static String getPixelOffsetString(int pixelOffset) {
-        int offsetLeft = pixelOffset > 0 ? pixelOffset : -pixelOffset;
-        HashMap<Integer, String> map = pixelOffset > 0 ? SPACES : NEG_SPACES;
-        String offsetString = "";
-
-        while (offsetLeft > 0) {
-            for (int i : map.keySet()) {
-                if (offsetLeft >= i) {
-                    offsetString += map.get(i);
-                    offsetLeft -= i;
-                }
-            }
-        }
-
-        return offsetString;
     }
 
     public static void setPlayerSidebar(Player p, String title, Map<String, Integer> scoreboardValues) {
