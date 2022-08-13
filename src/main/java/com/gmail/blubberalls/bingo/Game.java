@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.logging.log4j.core.config.builder.api.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -54,27 +53,30 @@ public class Game {
     }
 
     public BaseComponent[] getBoard() {
+        int length = 5;
+        int width = 5;
         ComponentBuilder builder = new ComponentBuilder();
 
-        for (int y = 0; y < 5; y++) {
-            for (int x = 0; x < 5; x++) {
-                TranslatableComponent icon = TextUtils.getBoardComponent(2, "bingo.icons.test");
+        for (int y = 0; y < width; y++) {
+            for (int x = 0; x < length; x++) {
+                TranslatableComponent icon = TextUtils.getBoardComponent(TextUtils.SPACE_SIZE_PX, "bingo.icons.diamond_sword");
 
                 icon.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("" + x + "" + y)));
                 builder.append(icon);
             }
 
-            builder.append(TextUtils.getOffsetComponent((-16 * 5) - (5 * 2) - 2));
+            int rowLength = (length * TextUtils.ICON_SIZE_PX) + ((length) * TextUtils.SPACE_SIZE_PX) + length - TextUtils.SPACE_SIZE_PX;
+            builder.append(TextUtils.getOffsetComponent(-rowLength));
 
-            for (int x = 0; x < 5; x++) {
+            for (int x = 0; x < length; x++) {
                 TranslatableComponent o = TextUtils.getBoardComponent(0, "bingo.overlay.o");
-                TranslatableComponent blank = TextUtils.getBoardComponent(-17, "bingo.blank");
-                TranslatableComponent xc = TextUtils.getBoardComponent(-17, "bingo.overlay.x");
+                TranslatableComponent blank = TextUtils.getBoardComponent(-TextUtils.ICON_SIZE_PX - 1, "bingo.blank");
+                TranslatableComponent xc = TextUtils.getBoardComponent(-TextUtils.ICON_SIZE_PX - 1, "bingo.blank");
 
                 builder.append(o);
                 builder.append(blank);
                 builder.append(xc);
-                builder.append(TextUtils.getOffsetComponent(2));
+                builder.append(TextUtils.getOffsetComponent(TextUtils.SPACE_SIZE_PX));
             }
 
             builder.append("\n\n");

@@ -3,6 +3,9 @@ package com.gmail.blubberalls.bingo.util;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 
 public class TextUtils {
+    public static int ICON_SIZE_PX = 16;
+    public static int SPACE_SIZE_PX = 2;
+    
     public static String join(String[] words, String joiner) {
         String joined = words[0];
 
