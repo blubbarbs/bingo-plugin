@@ -18,7 +18,7 @@ public class KillSkeletonsGoal extends Goal {
         if (event.getEntity().getType() != EntityType.SKELETON
             || event.getEntity().getKiller() == null) return;
 
-        addCompletion(event.getEntity().getKiller(), 1);
+        addTeamCompletion(event.getEntity().getKiller(), 1);
     }
 
 }

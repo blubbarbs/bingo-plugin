@@ -91,11 +91,11 @@ public class Game {
         return builder.create();
     }
 
-    public Collection<Goal> getSubscribedGoals(Player p) {
+    public Collection<Goal> getPlayerSubscribedGoals(Player p) {
         ArrayList<Goal> subscribedGoals = new ArrayList<Goal>();
         
         for (Goal g : goals) {
-            if (g.isSubscribed(p)) {
+            if (g.isPlayerSubscribed(p)) {
                 subscribedGoals.add(g);
             }
         }
@@ -104,13 +104,13 @@ public class Game {
     }
 
     public void updatePlayerSidebar(Player p) {
-        Collection<Goal> subscribedGoals = getSubscribedGoals(p);
+        Collection<Goal> subscribedGoals = getPlayerSubscribedGoals(p);
 
         if (subscribedGoals.size() > 0) {
             ArrayList<String> strings = new ArrayList<String>();
 
             for (Goal g : subscribedGoals) {
-                strings.add(g.getCompletionStatus(p));
+                strings.add(g.getTeamCompletionStatus(p));
             }
 
             CustomSidebar.setPlayerSidebar(p, "Bingo", strings);
@@ -162,10 +162,8 @@ public class Game {
         for (NBTCompound instanceData : data.getCompoundList("goals")) {
             Goal g = GoalFactories.loadGoal(this, instanceData);
 
-            if (g != null) {
-                goals.add(g);
-                g.loadEvents();;    
-            }
+            goals.add(g);
+            g.loadEvents();  
         }
 
         update();

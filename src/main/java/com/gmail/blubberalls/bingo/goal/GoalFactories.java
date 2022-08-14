@@ -11,6 +11,7 @@ import com.gmail.blubberalls.bingo.goals.inventory.PickUpDiamonds;
 import com.gmail.blubberalls.bingo.goals.kill.KillCreepersGoal;
 import com.gmail.blubberalls.bingo.goals.kill.KillSkeletonsGoal;
 import com.gmail.blubberalls.bingo.goals.location.EnterStronghold;
+import com.gmail.blubberalls.bingo.goals.location.ExploreVillages;
 
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTContainer;
@@ -18,11 +19,12 @@ import de.tr7zw.nbtapi.NBTContainer;
 public class GoalFactories {
     private static final HashMap<String, GoalFactory> GOAL_FACTORIES = new HashMap<String, GoalFactory>();
 
-    public static GoalFactory KILL_CREEPERS = register("kill_creepers", KillCreepersGoal::new);
-    public static GoalFactory KILL_SKELETONS = register("kill_skeletons", KillSkeletonsGoal::new);
-    public static GoalFactory CRAFT_DIAMOND_SWORD = register("craft_diamond_sword", CraftDiamondSword::new);
-    public static GoalFactory PICKUP_DIAMONDS = register("pickup_diamonds", PickUpDiamonds::new);
-    public static GoalFactory ENTER_STRONGHOLD = register("enter_stronghold", EnterStronghold::new);
+    public static GoalFactory KILL_CREEPERS = GoalFactories.register("kill_creepers", KillCreepersGoal::new);
+    public static GoalFactory KILL_SKELETONS = GoalFactories.register("kill_skeletons", KillSkeletonsGoal::new);
+    public static GoalFactory CRAFT_DIAMOND_SWORD = GoalFactories.register("craft_diamond_sword", CraftDiamondSword::new);
+    public static GoalFactory PICKUP_DIAMONDS = GoalFactories.register("pickup_diamonds", PickUpDiamonds::new);
+    public static GoalFactory ENTER_STRONGHOLD = GoalFactories.register("enter_stronghold", EnterStronghold::new);
+    public static GoalFactory EXPLORE_VILLAGES = GoalFactories.register("explore_villages", ExploreVillages::new);
 
     static GoalFactory register(String name, Supplier<Goal> goalConstructor) {        
         GoalFactory factory = new GoalFactory(name, goalConstructor);
@@ -64,7 +66,7 @@ public class GoalFactories {
 
             goal.game = game;
             goal.savedData = new NBTContainer();
-            goal.reset();
+            goal.initializeNewGoal();
             goal.getSavedData().setString("name", name);
 
             return goal;

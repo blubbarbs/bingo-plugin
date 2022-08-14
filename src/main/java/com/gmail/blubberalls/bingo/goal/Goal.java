@@ -1,23 +1,20 @@
 package com.gmail.blubberalls.bingo.goal;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.Bingo;
 import com.gmail.blubberalls.bingo.Game;
+import com.gmail.blubberalls.bingo.goal.goal_data.GoalData;
 import com.gmail.blubberalls.bingo.util.TextUtils;
 
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTContainer;
-import de.tr7zw.nbtapi.NBTList;
 import net.md_5.bungee.api.ChatColor;
 
-public abstract class Goal implements Listener {
+public abstract class Goal implements Listener, GoalData {
     Game game;
     NBTCompound savedData = new NBTContainer();
 
@@ -36,9 +33,13 @@ public abstract class Goal implements Listener {
     public int getMaximumGoal() {
         return 1;
     }
+    
+    public boolean isNumerableGoal() {
+        return getMinimumGoal() > 1 || getMaximumGoal() > 1 || getGoal() > 1;
+    }
 
-    public String getName() {
-        return savedData.getString("name");
+    public boolean isCapturableGoal() {
+        return false;
     }
 
     public String getTitle() {
@@ -57,78 +58,27 @@ public abstract class Goal implements Listener {
         return getTitle() + "\n" + getDescription();
     }
 
-    public int getGoal() {
-        return savedData.hasKey("goal") ? savedData.getInteger("goal") : 1;
-    }
-
-    public NBTCompound getTeamData(Player p) {
-        return savedData.getOrCreateCompound("team_data").getOrCreateCompound(getTeamName(p));
-    }
-
-    public String getTeamName(Player p) {
-        Team t = p.getScoreboard().getEntryTeam(p.getName());
-        return t != null ? t.getName() : p.getUniqueId().toString();
-    }
-
-    public int getCompletion(Player p) {
-        return getTeamData(p).getInteger("completion");
-    }
-
-    public String getCompletionStatus(Player p) {
-        if (getGoal() == 1) {
-            return ChatColor.GREEN + getTitle();
+    public String getTeamCompletionStatus(Player p) {
+        if (isNumerableGoal()) {
+            return ChatColor.DARK_GREEN + getTitle() + " " + ChatColor.DARK_AQUA + getTeamCompletion(p) + "/" + getGoal();
         }
         else {
-            return ChatColor.GRAY + getTitle() + " " + ChatColor.GREEN + getCompletion(p) + "/" + getGoal();
+            return ChatColor.GREEN + getTitle();         
         }
     }
 
-    public boolean isCompleted(Player p) {
-        return getCompletion(p) >= getGoal();
-    }
-    
-    public boolean isSubscribed(Player p) {
-        return !isCompleted(p) && true;
-    }
+    public void setTeamCompletion(Player p, int completion) {
+        GoalData.super.setTeamCompletion(p, completion);
 
-    public void setCompletion(Player p, int completion) {
-        getTeamData(p).setInteger("completion", completion);
-        
-        if (isCompleted(p)) {
-            setSubscription(p, false);
-            savedData.setString("completed_by", getTeamName(p));
+        if (isCapturableGoal() && isCompleted()) {
+            unloadEvents();
         }
 
         game.update();
     }
 
-    public void setCompleted(Player p) {
-        setCompletion(p, getGoal());
-    }
-
-    public void addCompletion(Player p, int delta) {
-        int old = getCompletion(p);
-        
-        setCompletion(p, old + delta);
-    }
-
-    public void setSubscription(Player p, boolean subscribe) {
-        NBTList<UUID> subscribers = savedData.getUUIDList("subscribers");
-
-        if (subscribe && !subscribers.contains(p.getUniqueId())) {
-            subscribers.add(p.getUniqueId());
-        }
-        else {
-            subscribers.remove(p.getUniqueId());
-        }
-    }
-
-    public void reset() {
+    public void initializeNewGoal() {
         getSavedData().setInteger("goal", game.getRandom().nextInt(getMinimumGoal(), getMaximumGoal() + 1));
-    }
-
-    public void loadNBT(NBTCompound savedData) {
-        this.savedData.mergeCompound(savedData);
     }
 
     public void loadEvents() {
@@ -138,5 +88,4 @@ public abstract class Goal implements Listener {
     public void unloadEvents() {
         HandlerList.unregisterAll(this);
     }
-
 }

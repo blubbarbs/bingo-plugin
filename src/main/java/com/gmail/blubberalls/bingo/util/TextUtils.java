@@ -1,5 +1,8 @@
 package com.gmail.blubberalls.bingo.util;
 
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
+
 import net.md_5.bungee.api.chat.TranslatableComponent;
 
 public class TextUtils {
@@ -56,6 +59,11 @@ public class TextUtils {
         offsetComponent.addWith(textComponent);
 
         return offsetComponent;
+    }
+
+    public static String getTeamName(Player p) {
+        Team t = p.getScoreboard().getEntryTeam(p.getName());
+        return t != null ? t.getName() : p.getUniqueId().toString();
     }
 
 }

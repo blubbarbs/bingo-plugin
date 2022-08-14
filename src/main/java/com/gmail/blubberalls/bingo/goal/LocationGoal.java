@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import com.gmail.blubberalls.bingo.Bingo;
 
-public abstract class MovementGoal extends Goal {
+public abstract class LocationGoal extends Goal {
     private int scheduleID;
 
     @Override

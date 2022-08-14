@@ -8,12 +8,17 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 
 public class KillCreepersGoal extends Goal {
     
+    @Override
+    public int getMaximumGoal() {
+        return 10;
+    }
+
     @EventHandler
     public void onEntityKill(EntityDeathEvent event) {
         if (event.getEntity().getType() != EntityType.CREEPER
             || event.getEntity().getKiller() == null) return;
 
-        addCompletion(event.getEntity().getKiller(), 1);
+        addTeamCompletion(event.getEntity().getKiller(), 1);
     }
 
 }

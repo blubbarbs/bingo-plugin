@@ -11,7 +11,7 @@ public class PickUpDiamonds extends InventoryGoal {
     @Override
     public void onInventoryChange(Player player, ItemStack newStack, int changedSlot) {        
         if (newStack.getType() == Material.DIAMOND) {
-            setCompleted(player);
+            setTeamCompleted(player);
         }    
     }
     
