@@ -1,10 +1,11 @@
-package com.gmail.blubberalls.bingo.goal;
+package com.gmail.blubberalls.custom_events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -13,11 +14,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
+import com.gmail.blubberalls.bingo.Bingo;
+
 import net.minecraft.world.inventory.ICrafting;
 
-public abstract class InventoryGoal extends Goal {    
+public class CustomEventBukkitListeners implements Listener {
+    private int existEventSchedulerID;
     private ICrafting nmsSlotListener = new ICrafting() {
-        // On slot changed
         @Override
         public void a(net.minecraft.world.inventory.Container nmsContainer, int rawSlot, net.minecraft.world.item.ItemStack nmsStack) {            
             Inventory updatedInventory = nmsContainer.getBukkitView().getInventory(rawSlot);
@@ -25,7 +28,9 @@ public abstract class InventoryGoal extends Goal {
             ItemStack stack = CraftItemStack.asBukkitCopy(nmsStack);
 
             if (updatedInventory.getType() == InventoryType.PLAYER) {
-                onInventoryChange((Player) updatedInventory.getHolder(), stack, slot);
+                InventoryUpdateEvent event = new InventoryUpdateEvent(nmsContainer.getBukkitView(), stack, slot);
+
+                Bukkit.getPluginManager().callEvent(event);
             }
         }
 
@@ -33,6 +38,21 @@ public abstract class InventoryGoal extends Goal {
         @Override
         public void a(net.minecraft.world.inventory.Container nmsContainer, int rawSlot, int data) {}
     };
+
+    public CustomEventBukkitListeners() {
+        this.existEventSchedulerID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Bingo.getInstance(), new Runnable() {
+
+            @Override
+            public void run() {                
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    PlayerExistEvent event = new PlayerExistEvent(p);
+
+                    Bukkit.getPluginManager().callEvent(event);
+                }
+            }
+            
+        }, 0L, 10L);
+    }
 
     private void unregisterInventoryListener(InventoryView view) {
         if (nmsSlotListener == null) return;
@@ -71,21 +91,4 @@ public abstract class InventoryGoal extends Goal {
         
         unregisterInventoryListener(event.getView());
     }
-
-    @Override
-    public void loadEvents() {
-        super.loadEvents();
-        
-        Bukkit.getOnlinePlayers().forEach(p -> registerInventoryListener(p.getOpenInventory()));
-    }
-
-    @Override
-    public void unloadEvents() {
-        super.unloadEvents();
-
-        Bukkit.getOnlinePlayers().forEach(p -> unregisterInventoryListener(p.getOpenInventory()));
-    }
-
-    public abstract void onInventoryChange(Player player, ItemStack newStack, int changedSlot);
-
 }

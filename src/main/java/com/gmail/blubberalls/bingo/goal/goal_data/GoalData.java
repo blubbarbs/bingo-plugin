@@ -44,12 +44,6 @@ public interface GoalData {
         return !hasTeamCompleted(p) && true;
     }
 
-    default void addTeamCompletion(Player p, int delta) {
-        int old = getTeamCompletion(p);
-        
-        setTeamCompletion(p, old + delta);
-    }
-
     default void setTeamCompletion(Player p, int completion) {
         getTeamData(p).setInteger("completion", completion);
         
@@ -57,6 +51,12 @@ public interface GoalData {
             setPlayerSubscription(p, false);
             getSavedData().setString("completed_by", TextUtils.getTeamName(p));
         }
+    }
+
+    default void addTeamCompletion(Player p, int delta) {
+        int old = getTeamCompletion(p);
+        
+        setTeamCompletion(p, old + delta);
     }
 
     default void setTeamCompleted(Player p, boolean completed) {

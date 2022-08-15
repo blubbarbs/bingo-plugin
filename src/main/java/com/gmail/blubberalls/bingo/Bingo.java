@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.gmail.blubberalls.custom_events.CustomEventBukkitListeners;
 
 import dev.jorel.commandapi.CommandAPI;
 
@@ -41,6 +42,7 @@ public class Bingo extends JavaPlugin implements Listener {
 
         GAME.loadGame();
         Bukkit.getPluginManager().registerEvents(this, this);
+        Bukkit.getPluginManager().registerEvents(new CustomEventBukkitListeners(), this);
     }   
 
     @Override

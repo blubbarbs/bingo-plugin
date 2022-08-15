@@ -26,22 +26,6 @@ public abstract class Goal implements Listener, GoalData {
         return savedData;
     }
 
-    public int getMinimumGoal() {
-        return 1;
-    }
-
-    public int getMaximumGoal() {
-        return 1;
-    }
-    
-    public boolean isNumerableGoal() {
-        return getMinimumGoal() > 1 || getMaximumGoal() > 1 || getGoal() > 1;
-    }
-
-    public boolean isCapturableGoal() {
-        return false;
-    }
-
     public String getTitle() {
         return TextUtils.capitalizeFirstLetters(getName(), "_", " ");
     }
@@ -59,27 +43,24 @@ public abstract class Goal implements Listener, GoalData {
     }
 
     public String getTeamCompletionStatus(Player p) {
-        if (isNumerableGoal()) {
-            return ChatColor.DARK_GREEN + getTitle() + " " + ChatColor.DARK_AQUA + getTeamCompletion(p) + "/" + getGoal();
-        }
-        else {
-            return ChatColor.GREEN + getTitle();         
-        }
+        return ChatColor.GREEN + getTitle();         
     }
 
     public void setTeamCompletion(Player p, int completion) {
         GoalData.super.setTeamCompletion(p, completion);
 
-        if (isCapturableGoal() && isCompleted()) {
+        onCompletionUpdate();
+    }
+
+    public void onCompletionUpdate() {
+        if (isCompleted()) {
             unloadEvents();
         }
-
+        
         game.update();
     }
 
-    public void initializeNewGoal() {
-        getSavedData().setInteger("goal", game.getRandom().nextInt(getMinimumGoal(), getMaximumGoal() + 1));
-    }
+    public void initializeNewGoal() {}
 
     public void loadEvents() {
         Bukkit.getPluginManager().registerEvents(this, Bingo.getInstance());

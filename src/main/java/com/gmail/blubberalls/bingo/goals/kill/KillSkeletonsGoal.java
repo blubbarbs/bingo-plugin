@@ -4,9 +4,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.goal.NumerableGoal;
 
-public class KillSkeletonsGoal extends Goal {
+public class KillSkeletonsGoal extends NumerableGoal {
     
     @Override
     public int getMaximumGoal() {
