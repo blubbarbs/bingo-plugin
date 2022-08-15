@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.function.Supplier;
 
 import com.gmail.blubberalls.bingo.Game;
+import com.gmail.blubberalls.bingo.goals.capturable.WearPumpkins;
 import com.gmail.blubberalls.bingo.goals.craft.CraftDiamondSword;
-import com.gmail.blubberalls.bingo.goals.inventory.PickUpDiamonds;
+import com.gmail.blubberalls.bingo.goals.inventory.PickupDiamonds;
 import com.gmail.blubberalls.bingo.goals.kill.KillCreepersGoal;
 import com.gmail.blubberalls.bingo.goals.kill.KillSkeletonsGoal;
 import com.gmail.blubberalls.bingo.goals.location.EnterStronghold;
@@ -22,9 +23,10 @@ public class GoalFactories {
     public static GoalFactory KILL_CREEPERS = GoalFactories.register("kill_creepers", KillCreepersGoal::new);
     public static GoalFactory KILL_SKELETONS = GoalFactories.register("kill_skeletons", KillSkeletonsGoal::new);
     public static GoalFactory CRAFT_DIAMOND_SWORD = GoalFactories.register("craft_diamond_sword", CraftDiamondSword::new);
-    public static GoalFactory PICKUP_DIAMONDS = GoalFactories.register("pickup_diamonds", PickUpDiamonds::new);
+    public static GoalFactory PICKUP_DIAMONDS = GoalFactories.register("pickup_diamonds", PickupDiamonds::new);
     public static GoalFactory ENTER_STRONGHOLD = GoalFactories.register("enter_stronghold", EnterStronghold::new);
     public static GoalFactory EXPLORE_VILLAGES = GoalFactories.register("explore_villages", ExploreVillages::new);
+    public static GoalFactory WEAR_PUMPKINS = GoalFactories.register("wear_pumpkin", WearPumpkins::new);
 
     static GoalFactory register(String name, Supplier<Goal> goalConstructor) {        
         GoalFactory factory = new GoalFactory(name, goalConstructor);

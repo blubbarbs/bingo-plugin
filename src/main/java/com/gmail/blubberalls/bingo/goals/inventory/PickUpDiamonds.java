@@ -4,19 +4,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.custom_events.InventoryUpdateEvent;
 
-public class PickUpDiamonds extends Goal {
+public class PickupDiamonds extends Goal {
 
     @EventHandler
     public void onInventoryChange(InventoryUpdateEvent event) {        
-        Bukkit.getLogger().info("EVENT TRIGGERED");
+        if (event.getNewItemStack().getType() != Material.DIAMOND) return;
 
-        if (event.getNewItemStack().getType() == Material.DIAMOND) {
-            setTeamCompleted((Player) event.getInventory().getHolder());
-        }    
+        Bukkit.getLogger().info("DEBT");
+
+        Team t = getTeam((Player) event.getView().getPlayer());
+        setTeamCompleted(t);
     }
     
 }

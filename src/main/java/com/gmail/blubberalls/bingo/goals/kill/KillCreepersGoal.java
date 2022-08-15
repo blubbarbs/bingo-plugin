@@ -3,6 +3,7 @@ package com.gmail.blubberalls.bingo.goals.kill;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.goal.NumerableGoal;
 
@@ -18,7 +19,9 @@ public class KillCreepersGoal extends NumerableGoal {
         if (event.getEntity().getType() != EntityType.CREEPER
             || event.getEntity().getKiller() == null) return;
 
-        addTeamCompletion(event.getEntity().getKiller(), 1);
+        Team t = getTeam(event.getEntity().getKiller());
+
+        addTeamCompletion(t, 1);
     }
 
 }

@@ -4,12 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -18,9 +14,9 @@ import com.gmail.blubberalls.bingo.Bingo;
 
 import net.minecraft.world.inventory.ICrafting;
 
-public class CustomEventBukkitListeners implements Listener {
-    private int existEventSchedulerID;
-    private ICrafting nmsSlotListener = new ICrafting() {
+public class CustomEvents implements Listener {
+    private static int existEventSchedulerID;
+    private static ICrafting nmsSlotListener = new ICrafting() {
         @Override
         public void a(net.minecraft.world.inventory.Container nmsContainer, int rawSlot, net.minecraft.world.item.ItemStack nmsStack) {            
             Inventory updatedInventory = nmsContainer.getBukkitView().getInventory(rawSlot);
@@ -39,8 +35,8 @@ public class CustomEventBukkitListeners implements Listener {
         public void a(net.minecraft.world.inventory.Container nmsContainer, int rawSlot, int data) {}
     };
 
-    public CustomEventBukkitListeners() {
-        this.existEventSchedulerID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Bingo.getInstance(), new Runnable() {
+    static {
+        existEventSchedulerID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Bingo.getInstance(), new Runnable() {
 
             @Override
             public void run() {                
@@ -54,41 +50,16 @@ public class CustomEventBukkitListeners implements Listener {
         }, 0L, 10L);
     }
 
-    private void unregisterInventoryListener(InventoryView view) {
-        if (nmsSlotListener == null) return;
-        CraftInventoryView craftView = (CraftInventoryView) view;
-
-        // Unregister slot listener
-        craftView.getHandle().b(nmsSlotListener);
+    public static int getExistSchedulerID() {
+        return existEventSchedulerID;
     }
 
-    private void registerInventoryListener(InventoryView view) {
+    public static void registerInventoryListener(InventoryView view) {
         CraftInventoryView craftView = (CraftInventoryView) view;
 
+        // Unregister slot listener (if there)
+        craftView.getHandle().b(nmsSlotListener);
         // Register slot listener
         craftView.getHandle().a(nmsSlotListener);
-    }
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        registerInventoryListener(event.getPlayer().getOpenInventory());
-    }
-
-    @EventHandler
-    public void onOpenInventory(InventoryOpenEvent event) {
-        if (event.getInventory().getType() == InventoryType.PLAYER 
-            || event.getInventory().getType() == InventoryType.CREATIVE
-            || event.getInventory().getType() == InventoryType.CRAFTING) return;
-        
-        registerInventoryListener(event.getView());
-    }
-
-    @EventHandler
-    public void onCloseInventory(InventoryCloseEvent event) {
-        if (event.getInventory().getType() == InventoryType.PLAYER 
-            || event.getInventory().getType() == InventoryType.CREATIVE
-            || event.getInventory().getType() == InventoryType.CRAFTING) return;
-        
-        unregisterInventoryListener(event.getView());
     }
 }

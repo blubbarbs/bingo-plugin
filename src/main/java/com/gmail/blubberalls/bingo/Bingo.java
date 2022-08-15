@@ -3,12 +3,13 @@ package com.gmail.blubberalls.bingo;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.gmail.blubberalls.custom_events.CustomEventBukkitListeners;
+import com.gmail.blubberalls.custom_events.CustomEvents;
 
 import dev.jorel.commandapi.CommandAPI;
 
@@ -40,9 +41,9 @@ public class Bingo extends JavaPlugin implements Listener {
         GAME = new Game();
         PROTOCOL_MANAGER = ProtocolLibrary.getProtocolManager();
 
+        Bukkit.getOnlinePlayers().forEach(p -> CustomEvents.registerInventoryListener(p.getOpenInventory()));
         GAME.loadGame();
         Bukkit.getPluginManager().registerEvents(this, this);
-        Bukkit.getPluginManager().registerEvents(new CustomEventBukkitListeners(), this);
     }   
 
     @Override
@@ -54,5 +55,11 @@ public class Bingo extends JavaPlugin implements Listener {
     @EventHandler
     public void onLogin(PlayerJoinEvent event) {
         GAME.updatePlayerSidebar(event.getPlayer());
+        CustomEvents.registerInventoryListener(event.getPlayer().getOpenInventory());
+    }
+
+    @EventHandler
+    public void onOpenInventory(InventoryOpenEvent event) {
+        CustomEvents.registerInventoryListener(event.getView());
     }
 }

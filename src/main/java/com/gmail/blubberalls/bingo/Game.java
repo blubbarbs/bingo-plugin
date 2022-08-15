@@ -3,23 +3,23 @@ package com.gmail.blubberalls.bingo;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.goal.GoalFactories;
 import com.gmail.blubberalls.bingo.util.CustomSidebar;
-import com.gmail.blubberalls.bingo.util.TextUtils;
 
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTFile;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TranslatableComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class Game {
     private File dataFile;
@@ -58,34 +58,63 @@ public class Game {
         return random;
     }
 
-    public BaseComponent[] getBoard() {
-        int length = 5;
-        int width = 5;
+    public Team getTeam(Player p) {
+        Team t = p.getScoreboard().getEntryTeam(p.getName());
+
+        if (t == null) {
+            t = p.getScoreboard().registerNewTeam(p.getUniqueId().toString());
+            
+            t.setDisplayName(p.getDisplayName());
+            t.addEntry(p.getName());
+        }
+
+        return t;
+    }
+
+    public List<Player> getTeamPlayers(Team t) {
+        ArrayList<Player> players = new ArrayList<Player>();
+    
+        for (String name : t.getEntries()) {
+            Player p = Bukkit.getPlayer(name);
+
+            if (p != null) {
+                players.add(p);
+            }
+        }
+    
+        return players;
+    }
+
+    public BaseComponent getPrefix() {
+        return new TextComponent(ChatColor.AQUA + "[Bingo]" + ChatColor.RESET + " ");
+    }
+
+    public BaseComponent[] withPrefix(String s) {
+        BaseComponent[] prefixed = new BaseComponent[2];
+        
+        prefixed[0] = getPrefix();
+        prefixed[1] = new TextComponent(s);
+
+        return prefixed;
+    }
+
+    public BaseComponent[] withPrefix(BaseComponent[] components) {
+        BaseComponent[] prefixed = new BaseComponent[components.length + 1];
+        
+        for (int i = 0; i < components.length; i++) {
+            prefixed[i + 1] = components[i];
+        }
+
+        prefixed[0] = getPrefix();
+
+        return prefixed;
+    }
+
+    public BaseComponent[] getBoard(Player p) {
         ComponentBuilder builder = new ComponentBuilder();
 
-        for (int y = 0; y < width; y++) {
-            for (int x = 0; x < length; x++) {
-                TranslatableComponent icon = TextUtils.getBoardComponent(TextUtils.SPACE_SIZE_PX, "bingo.icons.diamond_sword");
-
-                icon.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("" + x + "" + y)));
-                builder.append(icon);
-            }
-
-            int rowLength = (length * TextUtils.ICON_SIZE_PX) + ((length) * TextUtils.SPACE_SIZE_PX) + length - TextUtils.SPACE_SIZE_PX;
-            builder.append(TextUtils.getOffsetComponent(-rowLength));
-
-            for (int x = 0; x < length; x++) {
-                TranslatableComponent o = TextUtils.getBoardComponent(0, "bingo.overlay.o");
-                TranslatableComponent blank = TextUtils.getBoardComponent(-TextUtils.ICON_SIZE_PX - 1, "bingo.blank");
-                TranslatableComponent xc = TextUtils.getBoardComponent(-TextUtils.ICON_SIZE_PX - 1, "bingo.blank");
-
-                builder.append(o);
-                builder.append(blank);
-                builder.append(xc);
-                builder.append(TextUtils.getOffsetComponent(TextUtils.SPACE_SIZE_PX));
-            }
-
-            builder.append("\n\n");
+        for (Goal g : goals) {
+            builder.append(g.getTextIcon());
         }
 
         return builder.create();
@@ -110,7 +139,7 @@ public class Game {
             ArrayList<String> strings = new ArrayList<String>();
 
             for (Goal g : subscribedGoals) {
-                strings.add(g.getTeamCompletionStatus(p));
+                strings.add(g.getTeamCompletionStatus(g.getTeam(p)));
             }
 
             CustomSidebar.setPlayerSidebar(p, "Bingo", strings);
@@ -120,12 +149,30 @@ public class Game {
         }
     }
 
+    public void broadcastMessage(Team t, String s) { 
+        getTeamPlayers(t).forEach(p -> p.spigot().sendMessage(withPrefix(s)));
+    }
+
+    public void broadcastMessage(Team t, BaseComponent[] message) { 
+        getTeamPlayers(t).forEach(p -> p.spigot().sendMessage(withPrefix(message)));
+    }
+
+    public void broadcastMessage(String s) {
+        Bukkit.getOnlinePlayers().forEach(p -> p.spigot().sendMessage(withPrefix(s)));
+    }
+
+    public void broadcastMessage(BaseComponent[] message) {
+        Bukkit.getOnlinePlayers().forEach(p -> p.spigot().sendMessage(withPrefix(message)));
+    }
+
     public void unregisterGoalEvents() {
         goals.forEach((goal) -> goal.unloadEvents());
     }
 
     public void update() {
         for (Player p : Bukkit.getOnlinePlayers()) {
+            if (getTeam(p) == null) continue;
+            
             updatePlayerSidebar(p);
         }
     }
@@ -163,7 +210,10 @@ public class Game {
             Goal g = GoalFactories.loadGoal(this, instanceData);
 
             goals.add(g);
-            g.loadEvents();  
+            
+            if (g.shouldRegisterEvents()) {
+                g.loadEvents();
+            }
         }
 
         update();

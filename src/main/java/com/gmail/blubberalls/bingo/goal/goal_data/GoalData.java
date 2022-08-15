@@ -2,9 +2,9 @@ package com.gmail.blubberalls.bingo.goal.goal_data;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import com.gmail.blubberalls.bingo.util.TextUtils;
+import org.bukkit.scoreboard.Team;
 
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTList;
@@ -20,56 +20,58 @@ public interface GoalData {
         return getSavedData().getString("name");
     }
 
-    default String getWhoCompleted() {
-        return getSavedData().getString("completed_by");
+    default Team getWhoCompleted() {
+        String teamName = getSavedData().getString("completed_by");
+
+        return !teamName.isEmpty() ? Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName) : null;
     }
 
     default boolean isCompleted() {
         return getWhoCompleted() != null;
     }
 
-    default NBTCompound getTeamData(Player p) {
-        return getSavedData().getOrCreateCompound("team_data").getOrCreateCompound(TextUtils.getTeamName(p));
+    default NBTCompound getTeamData(Team t) {
+        return getSavedData().getOrCreateCompound("team_data").getOrCreateCompound(t.getName());
     }
 
-    default int getTeamCompletion(Player p) {
-        return getTeamData(p).getInteger("completion");
+    default int getTeamCompletion(Team t) {
+        return getTeamData(t).getInteger("completion");
     }
 
-    default boolean hasTeamCompleted(Player p) {
-        return getTeamCompletion(p) >= getGoal();
+    default boolean hasTeamCompleted(Team t) {
+        return getTeamCompletion(t) >= getGoal();
     }
     
     default boolean isPlayerSubscribed(Player p) {
-        return !hasTeamCompleted(p) && true;
+        return !isCompleted();
+        //return getSavedData().getUUIDList("subscribers").contains(p.getUniqueId());
     }
 
-    default void setTeamCompletion(Player p, int completion) {
-        getTeamData(p).setInteger("completion", completion);
+    default void setTeamCompletion(Team t, int completion) {
+        getTeamData(t).setInteger("completion", completion);
         
-        if (hasTeamCompleted(p)) {
-            setPlayerSubscription(p, false);
-            getSavedData().setString("completed_by", TextUtils.getTeamName(p));
+        if (hasTeamCompleted(t)) {
+            getSavedData().setString("completed_by", t.getName());
         }
     }
 
-    default void addTeamCompletion(Player p, int delta) {
-        int old = getTeamCompletion(p);
+    default void addTeamCompletion(Team t, int delta) {
+        int old = getTeamCompletion(t);
         
-        setTeamCompletion(p, old + delta);
+        setTeamCompletion(t, old + delta);
     }
 
-    default void setTeamCompleted(Player p, boolean completed) {
+    default void setTeamCompleted(Team t, boolean completed) {
         if (completed) {
-            setTeamCompletion(p, getGoal());
+            setTeamCompletion(t, getGoal());
         }
         else {
-            setTeamCompletion(p, 0);
+            setTeamCompletion(t, 0);
         }
     }
 
-    default void setTeamCompleted(Player p) {
-        setTeamCompletion(p, getGoal());
+    default void setTeamCompleted(Team t) {
+        setTeamCompletion(t, getGoal());
     }
 
     default void setPlayerSubscription(Player p, boolean subscribe) {

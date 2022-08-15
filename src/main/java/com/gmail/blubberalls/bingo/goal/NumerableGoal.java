@@ -1,6 +1,6 @@
 package com.gmail.blubberalls.bingo.goal;
 
-import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -14,8 +14,8 @@ public class NumerableGoal extends Goal {
     }
 
     @Override
-    public String getTeamCompletionStatus(Player p) {
-        return ChatColor.AQUA + getTitle() + " " + ChatColor.GREEN + getTeamCompletion(p) + "/" + getGoal();         
+    public String getTeamCompletionStatus(Team t) {
+        return ChatColor.YELLOW + getTitle() + " " + ChatColor.GREEN + getTeamCompletion(t) + "/" + getGoal();         
     }
 
     @Override
