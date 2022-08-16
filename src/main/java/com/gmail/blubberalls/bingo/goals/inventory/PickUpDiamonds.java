@@ -3,19 +3,22 @@ package com.gmail.blubberalls.bingo.goals.inventory;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
-import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
+import com.gmail.blubberalls.custom_events.event.InventoryChangedEvent;
 
 public class PickupDiamonds extends Goal {
 
     @EventHandler
-    public void onInventoryChange(PlayerInventoryChangedEvent event) {                
-        if (!game.isPlaying((Player) event.getPlayer())
-            || !event.getPlayer().getInventory().contains(Material.DIAMOND)) return;
+    public void onInventoryChange(InventoryChangedEvent event) {                
+        if (event.getInventory().getType() != InventoryType.PLAYER
+            || !game.isPlaying((Player) event.getInventory().getHolder())
+            || !event.getInventory().contains(Material.DIAMOND)) return;
 
-        Team t = game.getTeam(event.getPlayer());
+        Player p = (Player) event.getInventory().getHolder();
+        Team t = game.getTeam(p);
         setTeamCompleted(t);
     }
     

@@ -10,6 +10,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.gmail.blubberalls.custom_events.CustomExistListener;
 import com.gmail.blubberalls.custom_events.CustomInventoryListener;
+import com.gmail.blubberalls.custom_events.event.InventoryChangedEvent;
 
 import dev.jorel.commandapi.CommandAPI;
 
@@ -41,7 +42,7 @@ public class Bingo extends JavaPlugin implements Listener {
         GAME = new Game();
         PROTOCOL_MANAGER = ProtocolLibrary.getProtocolManager();
 
-        Bukkit.getOnlinePlayers().forEach(p -> CustomInventoryListener.registerNMSSlotListener(p.getOpenInventory()));
+        Bukkit.getOnlinePlayers().forEach(p -> CustomInventoryListener.addNMSSlotListener(p.getOpenInventory()));
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new CustomInventoryListener(), this);
         Bukkit.getPluginManager().registerEvents(new CustomExistListener(), this);
@@ -60,5 +61,11 @@ public class Bingo extends JavaPlugin implements Listener {
 
         event.getPlayer().setScoreboard(GAME.getScoreboard());
         GAME.updatePlayerSidebar(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onInventoryChange(InventoryChangedEvent event) {
+        Bukkit.getLogger().info(event.getInventory().getType() + " CHANGED. SLOTS: ");
+        event.getUpdatedSlots().forEach(slot -> Bukkit.getLogger().info(slot + " PREVIOUS " + event.getPrevious(slot) + " CURRENT " + event.getInventory().getItem(slot)));
     }
 }
