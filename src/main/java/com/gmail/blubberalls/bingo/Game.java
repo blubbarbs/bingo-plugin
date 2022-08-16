@@ -60,6 +60,7 @@ public class Game {
 
     public Game() {
         this.dataFile = new File(Bingo.getInstance().getDataFolder(), "game_data.nbt");
+        
         try {
             this.data = new NBTFile(dataFile);
             this.goalData = data.getCompoundList("goals");

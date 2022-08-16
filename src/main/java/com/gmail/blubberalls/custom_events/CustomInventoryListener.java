@@ -30,6 +30,11 @@ public class CustomInventoryListener implements Listener {
         @Override
         public void a(net.minecraft.world.inventory.Container nmsContainer, int rawSlot, net.minecraft.world.item.ItemStack nmsStack) {            
             Player inventoryHolder = (Player) nmsContainer.getBukkitView().getPlayer();
+            int slot = nmsContainer.getBukkitView().convertSlot(rawSlot);
+            ItemStack previousStack = previousInventories.get(inventoryHolder.getUniqueId())[slot];
+            ItemStack newStack = inventoryHolder.getInventory().getItem(slot);
+
+            if (areStacksEqual(previousStack, newStack)) return;
 
             changedSlots.put(inventoryHolder.getUniqueId(), nmsContainer.getBukkitView().convertSlot(rawSlot));
 
@@ -42,6 +47,14 @@ public class CustomInventoryListener implements Listener {
         @Override
         public void a(net.minecraft.world.inventory.Container nmsContainer, int rawSlot, int data) {}
     };
+
+
+    private static boolean areStacksEqual(ItemStack a, ItemStack b) {
+        if (a == b) return true;
+        else if (a == null && b != null) return false;
+        else if (a != null && b == null) return false;
+        else return a.equals(b);
+    }
 
     private static void callInventoryChangeEvents() {
         for (UUID id : changedSlots.keySet()) {
