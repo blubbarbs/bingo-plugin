@@ -8,7 +8,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.gmail.blubberalls.custom_events.CustomEvents;
+import com.gmail.blubberalls.custom_events.CustomExistListener;
+import com.gmail.blubberalls.custom_events.CustomInventoryListener;
 
 import dev.jorel.commandapi.CommandAPI;
 
@@ -40,10 +41,11 @@ public class Bingo extends JavaPlugin implements Listener {
         GAME = new Game();
         PROTOCOL_MANAGER = ProtocolLibrary.getProtocolManager();
 
-        Bukkit.getOnlinePlayers().forEach(p -> CustomEvents.registerInventoryListener(p.getOpenInventory()));
-        GAME.loadGame();
+        Bukkit.getOnlinePlayers().forEach(p -> CustomInventoryListener.registerNMSSlotListener(p.getOpenInventory()));
         Bukkit.getPluginManager().registerEvents(this, this);
-        Bukkit.getPluginManager().registerEvents(new CustomEvents(), this);
+        Bukkit.getPluginManager().registerEvents(new CustomInventoryListener(), this);
+        Bukkit.getPluginManager().registerEvents(new CustomExistListener(), this);
+        GAME.loadGame();
     }   
 
     @Override

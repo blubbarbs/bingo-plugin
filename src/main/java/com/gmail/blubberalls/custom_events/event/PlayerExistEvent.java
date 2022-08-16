@@ -1,4 +1,4 @@
-package com.gmail.blubberalls.custom_events;
+package com.gmail.blubberalls.custom_events.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;

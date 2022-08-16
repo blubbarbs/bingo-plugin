@@ -9,7 +9,7 @@ import org.bukkit.scoreboard.Team;
 import com.gmail.blubberalls.bingo.goal.NumerableGoal;
 import com.gmail.blubberalls.bingo.goal.goal_data.StructureExploreData;
 import com.gmail.blubberalls.bingo.util.Checks;
-import com.gmail.blubberalls.custom_events.PlayerExistEvent;
+import com.gmail.blubberalls.custom_events.event.PlayerExistEvent;
 
 public class ExploreVillages extends NumerableGoal implements StructureExploreData {
 

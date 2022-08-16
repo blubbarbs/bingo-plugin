@@ -6,12 +6,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
-import com.gmail.blubberalls.custom_events.InventoryUpdateEvent;
+import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class PickupDiamonds extends Goal {
 
     @EventHandler
-    public void onInventoryChange(InventoryUpdateEvent event) {        
+    public void onInventoryChange(PlayerInventoryChangedEvent event) {                
         if (!game.isPlaying((Player) event.getPlayer())
             || !event.getPlayer().getInventory().contains(Material.DIAMOND)) return;
 

@@ -6,7 +6,7 @@ import org.bukkit.generator.structure.Structure;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.util.Checks;
-import com.gmail.blubberalls.custom_events.PlayerExistEvent;
+import com.gmail.blubberalls.custom_events.event.PlayerExistEvent;
 
 public class EnterStronghold extends Goal {
 
