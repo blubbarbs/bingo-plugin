@@ -1,7 +1,6 @@
 package com.gmail.blubberalls.bingo.goal;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scoreboard.Team;
@@ -12,7 +11,6 @@ import com.gmail.blubberalls.bingo.goal.goal_data.GoalData;
 import com.gmail.blubberalls.bingo.util.TextUtils;
 
 import de.tr7zw.nbtapi.NBTCompound;
-import de.tr7zw.nbtapi.NBTContainer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -23,8 +21,8 @@ import net.md_5.bungee.api.chat.HoverEvent.Action;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
 public abstract class Goal implements Listener, GoalData {
-    Game game;
-    NBTCompound savedData = new NBTContainer();
+    protected Game game;
+    protected NBTCompound savedData;
 
     public Game getGame() {
         return game;
@@ -34,12 +32,10 @@ public abstract class Goal implements Listener, GoalData {
         return savedData;
     }
 
-    public boolean shouldRegisterEvents() {
-        return !isCompleted();
-    }
-
-    public boolean shouldUnregisterEvents() {
-        return true;
+    // Having this set to true prevents events being unloaded
+    // after the goal is completed
+    public boolean hasEventsWhenCompleted() {
+        return false;
     }
 
     public String getTitle() {
@@ -56,10 +52,6 @@ public abstract class Goal implements Listener, GoalData {
 
     public String getTooltip() {
         return getTitle() + "\n" + getDescription();
-    }
-
-    public Team getTeam(Player p) {
-        return getGame().getTeam(p);
     }
 
     public BaseComponent[] getTextIcon() {
@@ -99,24 +91,35 @@ public abstract class Goal implements Listener, GoalData {
     }
 
     public String getTeamCompletionStatus(Team t) {
-        return ChatColor.GOLD + getTitle();         
+        if (isCompleted()) {
+            if (t.equals(getWhoCompleted())) {
+                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + " ✓";
+            }
+            else {
+                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.RED + " ✕";
+            }
+        }
+        else {
+            return ChatColor.GOLD + getTitle();
+        }
     }
 
     public void setTeamCompletion(Team t, int completion) {
         Team oldCompletor = getWhoCompleted();
+        GoalData.super.setTeamCompletion(t, completion);
+        Team newCompletor = getWhoCompleted();
         
-        if (oldCompletor == null && completion >= getGoal()) {
+        if (oldCompletor == null && t.equals(newCompletor)) {
             game.broadcastMessage(getCompletionMessage(t));
-            
-            if (shouldUnregisterEvents()) {
-                unloadEvents();
-            }
         }
-        else if (oldCompletor == t && completion < getGoal()) {
+        else if (t.equals(oldCompletor) && newCompletor == null) {
             game.broadcastMessage(getUncompletionMessage(t));
         }
 
-        GoalData.super.setTeamCompletion(t, completion);
+        if (isCompleted() && !hasEventsWhenCompleted()) {
+            unloadEvents();
+        }
+
         game.update();
     }
 

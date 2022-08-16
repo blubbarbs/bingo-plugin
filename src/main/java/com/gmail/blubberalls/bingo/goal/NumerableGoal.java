@@ -4,7 +4,7 @@ import org.bukkit.scoreboard.Team;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class NumerableGoal extends Goal {
+public abstract class NumerableGoal extends Goal {
     public int getMinimumGoal() {
         return 1;
     }
@@ -15,7 +15,17 @@ public class NumerableGoal extends Goal {
 
     @Override
     public String getTeamCompletionStatus(Team t) {
-        return ChatColor.YELLOW + getTitle() + " " + ChatColor.GREEN + getTeamCompletion(t) + "/" + getGoal();         
+        if (isCompleted()) {
+            if (t.equals(getWhoCompleted())) {
+                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + " ✓";
+            }
+            else {
+                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.RED + " ✕";
+            }
+        }
+        else {
+            return ChatColor.YELLOW + getTitle() + " " + ChatColor.AQUA + getTeamCompletion(t) + "/" + getGoal();         
+        }
     }
 
     @Override

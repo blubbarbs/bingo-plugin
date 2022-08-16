@@ -1,15 +1,13 @@
 package com.gmail.blubberalls.bingo.goal.goal_data;
 
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
+import com.gmail.blubberalls.bingo.Game;
+
 import de.tr7zw.nbtapi.NBTCompound;
-import de.tr7zw.nbtapi.NBTList;
 
 public interface GoalData {
+    public Game getGame();
     public NBTCompound getSavedData();
     
     default int getGoal() {
@@ -23,7 +21,7 @@ public interface GoalData {
     default Team getWhoCompleted() {
         String teamName = getSavedData().getString("completed_by");
 
-        return !teamName.isEmpty() ? Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName) : null;
+        return !teamName.isEmpty() ? getGame().getTeam(teamName) : null;
     }
 
     default boolean isCompleted() {
@@ -42,17 +40,17 @@ public interface GoalData {
         return getTeamCompletion(t) >= getGoal();
     }
     
-    default boolean isPlayerSubscribed(Player p) {
-        return !isCompleted();
-        //return getSavedData().getUUIDList("subscribers").contains(p.getUniqueId());
-    }
-
     default void setTeamCompletion(Team t, int completion) {
-        getTeamData(t).setInteger("completion", completion);
-        
-        if (hasTeamCompleted(t)) {
+        Team oldCompletor = getWhoCompleted();
+
+        if (oldCompletor != null && oldCompletor.equals(t) && completion < getGoal()) {
+            getSavedData().removeKey("completed_by");
+        }
+        else if (completion >= getGoal()) {
             getSavedData().setString("completed_by", t.getName());
         }
+
+        getTeamData(t).setInteger("completion", completion);
     }
 
     default void addTeamCompletion(Team t, int delta) {
@@ -72,16 +70,5 @@ public interface GoalData {
 
     default void setTeamCompleted(Team t) {
         setTeamCompletion(t, getGoal());
-    }
-
-    default void setPlayerSubscription(Player p, boolean subscribe) {
-        NBTList<UUID> subscribers = getSavedData().getUUIDList("subscribers");
-
-        if (subscribe && !subscribers.contains(p.getUniqueId())) {
-            subscribers.add(p.getUniqueId());
-        }
-        else {
-            subscribers.remove(p.getUniqueId());
-        }
     }
 }

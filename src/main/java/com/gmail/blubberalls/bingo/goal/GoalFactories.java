@@ -15,7 +15,6 @@ import com.gmail.blubberalls.bingo.goals.location.EnterStronghold;
 import com.gmail.blubberalls.bingo.goals.location.ExploreVillages;
 
 import de.tr7zw.nbtapi.NBTCompound;
-import de.tr7zw.nbtapi.NBTContainer;
 
 public class GoalFactories {
     private static final HashMap<String, GoalFactory> GOAL_FACTORIES = new HashMap<String, GoalFactory>();
@@ -67,19 +66,18 @@ public class GoalFactories {
             Goal goal = goalConstructor.get();
 
             goal.game = game;
-            goal.savedData = new NBTContainer();
+            goal.savedData = game.getGoalData().addCompound();
+            goal.savedData.setString("name", name);
             goal.initializeNewGoal();
-            goal.getSavedData().setString("name", name);
 
             return goal;
-        }    
+        }
 
         public Goal loadGoal(Game game, NBTCompound savedData) {            
             Goal goal = goalConstructor.get();
             
             goal.game = game;
-            goal.savedData = new NBTContainer();
-            goal.savedData.mergeCompound(savedData);
+            goal.savedData = savedData;
 
             return goal;
         }

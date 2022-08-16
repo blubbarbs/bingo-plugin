@@ -1,6 +1,5 @@
 package com.gmail.blubberalls.bingo.goals.inventory;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,11 +12,10 @@ public class PickupDiamonds extends Goal {
 
     @EventHandler
     public void onInventoryChange(InventoryUpdateEvent event) {        
-        if (event.getNewItemStack().getType() != Material.DIAMOND) return;
+        if (!game.isPlaying((Player) event.getPlayer())
+            || !event.getPlayer().getInventory().contains(Material.DIAMOND)) return;
 
-        Bukkit.getLogger().info("DEBT");
-
-        Team t = getTeam((Player) event.getView().getPlayer());
+        Team t = game.getTeam(event.getPlayer());
         setTeamCompleted(t);
     }
     

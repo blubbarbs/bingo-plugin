@@ -1,6 +1,7 @@
 package com.gmail.blubberalls.bingo.goals.location;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.generator.structure.Structure;
 import org.bukkit.scoreboard.Team;
@@ -23,10 +24,12 @@ public class ExploreVillages extends NumerableGoal implements StructureExploreDa
 
     @EventHandler
     public void onPlayerLocation(PlayerExistEvent event) {
+        Player p = event.getPlayer();
+        Team t = game.getTeam(p);
         Structure at = Checks.getStructureAtLoc(event.getPlayer().getLocation());
-        Team t = getTeam(event.getPlayer());
 
-        if (!isVillage(at)
+        if (!game.isPlaying(p)
+            || !isVillage(at)
             || hasTeamVisitedStructure(t, at)) return;
         
         Bukkit.getLogger().info("Added " + at.getKey().toString() + " to visited villages list");

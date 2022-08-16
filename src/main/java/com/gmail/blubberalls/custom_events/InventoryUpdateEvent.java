@@ -1,29 +1,23 @@
 package com.gmail.blubberalls.custom_events;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.inventory.InventoryView;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class InventoryUpdateEvent extends InventoryEvent {
+public class InventoryUpdateEvent extends PlayerEvent {
     private static final HandlerList handlers = new HandlerList();   
    
-    private ItemStack stack;
-    private int slot;
+    private ItemStack[] previousContents;
 
-    public InventoryUpdateEvent(InventoryView transaction, ItemStack stack, int slot) {
-        super(transaction);
+    public InventoryUpdateEvent(Player p, ItemStack[] previousContents) {
+        super(p);
 
-        this.stack = stack;
-        this.slot = slot;
+        this.previousContents = previousContents;
     }
  
-    public ItemStack getNewItemStack() {
-        return stack;
-    }
-
-    public int getChangedSlot() {
-        return slot;
+    public ItemStack[] getPreviousContents() {
+        return previousContents;
     }
 
     @Override

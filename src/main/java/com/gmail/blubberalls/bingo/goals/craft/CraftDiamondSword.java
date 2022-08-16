@@ -17,9 +17,10 @@ public class CraftDiamondSword extends Goal {
 
     @EventHandler
     public void onCraft(CraftItemEvent event) {
-        if (event.getCurrentItem().getType() != Material.DIAMOND_SWORD) return;
+        if (!game.isPlaying((Player) event.getWhoClicked())
+            || event.getCurrentItem().getType() != Material.DIAMOND_SWORD) return;
 
-        Team t = getTeam((Player) event.getWhoClicked());
+        Team t = game.getTeam((Player) event.getWhoClicked());
 
         addTeamCompletion(t, 1);
     }

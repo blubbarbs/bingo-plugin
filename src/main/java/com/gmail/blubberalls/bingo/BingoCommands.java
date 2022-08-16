@@ -1,13 +1,16 @@
 package com.gmail.blubberalls.bingo;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.util.CustomSidebar;
 
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 
 @Command("bingo")
 public class BingoCommands {
@@ -62,4 +65,30 @@ public class BingoCommands {
         p.sendMessage("Reset sidebar.");
     }
 
+    @Subcommand("join")
+    public static void joinGame(Player p, @AMultiLiteralArgument({
+        "aqua",
+        "black",
+        "blue",
+        "dark_aqua",
+        "dark_blue",
+        "dark_gray",
+        "dark_green",
+        "dark_purple",
+        "dark_red",
+        "gold",
+        "gray",
+        "green",
+        "light_purple",
+        "red",
+        "yellow",
+        "white"
+    }) String color) {
+        Team t = Bingo.getGame().getTeam(ChatColor.valueOf(color.toUpperCase()));
+
+        Bingo.getGame().addPlayer(p, t);
+        p.sendMessage("Successfully joined the game on the " + t.getColor() + t.getDisplayName() + " team.");
+    }
+
+    
 }
