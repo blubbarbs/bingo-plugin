@@ -9,11 +9,6 @@ import com.gmail.blubberalls.bingo.goal.NumerableGoal;
 
 public class KillCreepersGoal extends NumerableGoal {
     
-    @Override
-    public int getMaximumGoal() {
-        return 10;
-    }
-
     @EventHandler
     public void onEntityKill(EntityDeathEvent event) {        
         if (event.getEntity().getType() != EntityType.CREEPER

@@ -12,7 +12,7 @@ public class CraftDiamondSword extends Goal {
 
     @Override
     public String getIconPath() {
-        return "bingo.icons.diamond_sword";
+        return "bingo.icons.minecraft.golden_sword";
     }
 
     @EventHandler
@@ -22,6 +22,6 @@ public class CraftDiamondSword extends Goal {
 
         Team t = game.getTeam((Player) event.getWhoClicked());
 
-        addTeamCompletion(t, 1);
+        setCompletedBy(t);
     }
 }

@@ -1,5 +1,7 @@
 package com.gmail.blubberalls.bingo.util;
 
+import java.util.Arrays;
+
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
@@ -41,6 +43,21 @@ public class TextUtils {
 
     public static String capitalizeFirstLetters(String words) {
         return capitalizeFirstLetters(words, " ", " ");
+    }
+
+    public static String getGrammaticalList(String[] words) {
+        if (words.length == 1) {
+            return words[0];
+        }
+        else if (words.length == 2) {
+            return words[0] + " and " + words[1];
+        }
+        else {
+            String last = words[words.length - 1];
+            String[] beforeLast = Arrays.copyOfRange(words, 0, words.length - 1);
+
+            return TextUtils.join(beforeLast, ",") + ", and " + last;
+        }
     }
 
     public static TranslatableComponent getOffsetComponent(int offset) {

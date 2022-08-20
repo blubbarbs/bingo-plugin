@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.generator.strucutre.CraftStructure;
+import org.bukkit.inventory.ItemStack;
 
 import net.minecraft.core.BlockPosition;
 import net.minecraft.server.level.WorldServer;
@@ -42,5 +43,12 @@ public class Checks {
         }
 
         return null;
+    }
+
+    public static boolean areItemStacksEqual(ItemStack a, ItemStack b) {
+        if (a == b) return true;
+        else if (a == null && b != null) return false;
+        else if (a != null && b == null) return false;
+        else return a.equals(b);
     }
 }

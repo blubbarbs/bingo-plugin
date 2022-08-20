@@ -6,13 +6,11 @@ import java.util.HashMap;
 import java.util.function.Supplier;
 
 import com.gmail.blubberalls.bingo.Game;
-import com.gmail.blubberalls.bingo.goals.capturable.WearPumpkins;
-import com.gmail.blubberalls.bingo.goals.craft.CraftDiamondSword;
-import com.gmail.blubberalls.bingo.goals.inventory.PickupDiamonds;
-import com.gmail.blubberalls.bingo.goals.kill.KillCreepersGoal;
-import com.gmail.blubberalls.bingo.goals.kill.KillSkeletonsGoal;
-import com.gmail.blubberalls.bingo.goals.location.EnterStronghold;
-import com.gmail.blubberalls.bingo.goals.location.ExploreVillages;
+import com.gmail.blubberalls.bingo.goals.capturable.*;
+import com.gmail.blubberalls.bingo.goals.craft.*;
+import com.gmail.blubberalls.bingo.goals.inventory.*;
+import com.gmail.blubberalls.bingo.goals.kill.*;
+import com.gmail.blubberalls.bingo.goals.location.*;
 
 import de.tr7zw.nbtapi.NBTCompound;
 
@@ -68,7 +66,6 @@ public class GoalFactories {
             goal.game = game;
             goal.savedData = game.getGoalData().addCompound();
             goal.savedData.setString("name", name);
-            goal.initializeNewGoal();
 
             return goal;
         }

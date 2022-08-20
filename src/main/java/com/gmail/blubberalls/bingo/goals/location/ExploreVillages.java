@@ -13,7 +13,7 @@ import com.gmail.blubberalls.custom_events.event.PlayerExistEvent;
 
 public class ExploreVillages extends NumerableGoal implements StructureExploreData {
 
-    public static boolean isVillage(Structure s) {
+    public boolean isVillage(Structure s) {
         return s != null && s.getKey().getKey().startsWith("village");
     }
 

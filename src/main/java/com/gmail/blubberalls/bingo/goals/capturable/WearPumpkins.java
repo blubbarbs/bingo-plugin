@@ -1,6 +1,5 @@
 package com.gmail.blubberalls.bingo.goals.capturable;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,14 +23,8 @@ public class WearPumpkins extends CapturableGoal {
         
         Player player = (Player) event.getInventory().getHolder();
         Team t = game.getTeam(player);
+        boolean shouldComplete = game.getTeamPlayers(t).stream().allMatch(this::testCondition);
+        boolean hasCompleted = hasTeamCompleted(t);
         
-        if (shouldComplete(t)) {
-            Bukkit.getLogger().info("COMPLETED");
-            setTeamCompleted(t);
-        }
-        else {
-            Bukkit.getLogger().info("NOT COMPLETED");
-            setTeamCompleted(t, false);
-        }
     }
 }

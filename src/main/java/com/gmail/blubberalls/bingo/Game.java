@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -56,6 +57,7 @@ public class Game {
     private Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
     private HashMap<String, Goal> goals = new HashMap<String, Goal>();
     private HashMap<ChatColor, Team> teamsByColor = new HashMap<ChatColor, Team>();
+    private Leaderboard<Team> leaderboard = new Leaderboard<Team>();
     private Random random = new Random();
 
     public Game() {
@@ -126,6 +128,10 @@ public class Game {
         return scoreboard;
     }
 
+    public Leaderboard<Team> getLeaderboard() {
+        return leaderboard;
+    }
+
     public Random getRandom() {
         return random;
     }
@@ -152,6 +158,34 @@ public class Game {
 
     public Team getTeam(ChatColor color) {
         return teamsByColor.get(color);
+    }
+    
+    public Collection<Team> getAllTeams() {
+        return teamsByColor.values();
+    }
+
+    public int getTeamScore(Team t) {
+        int score = 0;
+
+        for (Goal g : goals.values()) {
+            if (t.equals(g.getWhoCompleted())) {
+                score++;
+            }
+        }
+    
+        return score;
+    }
+
+    public int getNumGoalsLeft() {
+        int freeGoals = 0;
+
+        for (Goal g : goals.values()) {
+            if (!g.isCompleted()) {
+                freeGoals++;
+            }
+        }
+
+        return freeGoals;
     }
 
     public List<OfflinePlayer> getAllPlayers() {
@@ -239,13 +273,11 @@ public class Game {
     public BaseComponent[] getBoard(Player p) {
         ComponentBuilder builder = new ComponentBuilder();
 
-        for (Goal g : goals.values()) {
-            builder.append(g.getTextIcon());
-        }
-
+        goals.values().forEach(goal -> builder.append(goal.getTextIcon()));
+        
         return builder.create();
     }
-    
+
     public void addPlayer(Player p, Team t) {
         if (isPlaying(p)) {
             removePlayer(p);
@@ -302,14 +334,27 @@ public class Game {
     }
 
     public void unregisterGoalEvents() {
-        goals.values().forEach((goal) -> goal.unloadEvents());
+        goals.values().forEach(Goal::unloadEvents);
     }
 
     public void update() {
         if (!hasStarted()) return;
 
-        for (Player p : getPlayers()) {            
-            updatePlayerSidebar(p);
+        getPlayers().forEach(this::updatePlayerSidebar);
+        getTeams().forEach(team -> leaderboard.setScore(team, getTeamScore(team)));
+
+        int freeGoals = getNumGoalsLeft();
+        List<Integer> orderedScores = leaderboard.getOrderedScores();
+        int topScore = orderedScores.get(0);
+        int nextScore = orderedScores.get(1);
+        boolean shouldEndGame = nextScore + freeGoals < topScore || freeGoals == 0;
+
+        Bukkit.getLogger().info(" FREE GOALS " + freeGoals + " TOP SCORE " + topScore + " NEXT SCORE " + nextScore);
+
+        if (shouldEndGame) {
+            Set<Team> winners = leaderboard.getWhoHasScore(topScore);
+
+            endGame(winners.toArray(new Team[winners.size()]));
         }
     }
 
@@ -348,13 +393,34 @@ public class Game {
         update();
     }
 
-    public void endGame() {        
+    public void endGame() {
         getPlayers().forEach(p -> removePlayer(p));
         unregisterGoalEvents();
         goalData.clear();
         NBTUtils.clearNBT(playerData);
         NBTUtils.clearNBT(teamData);
         goals.clear();
+    }
+
+    public void endGame(Team[] winners) {                
+        if (winners.length == 1) {
+            Team winner = winners[0];
+            
+            broadcastMessage(winner.getColor() + "" + winner.getDisplayName() + " has won the game!!! CONGRATULATIONS!!");
+        }
+        else if (winners.length > 1) {
+            String[] teams = new String[winners.length];
+
+            for (int i = 0; i < teams.length; i++) {
+                Team t = winners[i];
+
+                teams[i] = t.getColor() + t.getDisplayName() + ChatColor.RESET;
+            }
+
+            broadcastMessage(TextUtils.getGrammaticalList(teams) + " have won!!! CONGRATULATIONS!!");
+        }
+
+        endGame();
     }
 
 }

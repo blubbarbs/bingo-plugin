@@ -43,7 +43,7 @@ public abstract class Goal implements Listener, GoalData {
     }
 
     public String getIconPath() {
-        return "bingo.icons.test";
+        return "bingo.icons.original_test";
     }
     
     public String getDescription() {
@@ -61,7 +61,7 @@ public abstract class Goal implements Listener, GoalData {
         icon.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getTooltip())));
         builder.append(icon);
         builder.append(TextUtils.getBoardComponent(-TextUtils.ICON_SIZE_PX - 1, "bingo.blank"));
-        builder.append(TextUtils.getBoardComponent(-TextUtils.ICON_SIZE_PX - 1, "bingo.overlay.o"));
+        builder.append(TextUtils.getBoardComponent(-TextUtils.ICON_SIZE_PX - 1, "bingo.overlays.o"));
 
         return builder.create();
     }
@@ -104,26 +104,24 @@ public abstract class Goal implements Listener, GoalData {
         }
     }
 
-    public void setTeamCompletion(Team t, int completion) {
-        Team oldCompletor = getWhoCompleted();
-        GoalData.super.setTeamCompletion(t, completion);
-        Team newCompletor = getWhoCompleted();
+    public void setCompletedBy(Team t) {
+        Team lastCompletor = getWhoCompleted();
         
-        if (oldCompletor == null && t.equals(newCompletor)) {
+        GoalData.super.setCompletedBy(t);
+
+        if (t != null) {
             game.broadcastMessage(getCompletionMessage(t));
         }
-        else if (t.equals(oldCompletor) && newCompletor == null) {
-            game.broadcastMessage(getUncompletionMessage(t));
+        else if (t == null && lastCompletor != null) {
+            game.broadcastMessage(getUncompletionMessage(lastCompletor));
         }
 
-        if (isCompleted() && !hasEventsWhenCompleted()) {
+        if (hasEventsWhenCompleted() && t != null) {
             unloadEvents();
         }
 
         game.update();
     }
-
-    public void initializeNewGoal() {}
 
     public void loadEvents() {
         Bukkit.getPluginManager().registerEvents(this, Bingo.getInstance());

@@ -9,11 +9,7 @@ import de.tr7zw.nbtapi.NBTCompound;
 public interface GoalData {
     public Game getGame();
     public NBTCompound getSavedData();
-    
-    default int getGoal() {
-        return getSavedData().hasKey("goal") ? getSavedData().getInteger("goal") : 1;
-    }
-    
+        
     default String getName() {
         return getSavedData().getString("name");
     }
@@ -32,43 +28,16 @@ public interface GoalData {
         return getSavedData().getOrCreateCompound("team_data").getOrCreateCompound(t.getName());
     }
 
-    default int getTeamCompletion(Team t) {
-        return getTeamData(t).getInteger("completion");
-    }
-
     default boolean hasTeamCompleted(Team t) {
-        return getTeamCompletion(t) >= getGoal();
+        return t.equals(getWhoCompleted());
     }
     
-    default void setTeamCompletion(Team t, int completion) {
-        Team oldCompletor = getWhoCompleted();
-
-        if (oldCompletor != null && oldCompletor.equals(t) && completion < getGoal()) {
-            getSavedData().removeKey("completed_by");
-        }
-        else if (completion >= getGoal()) {
+    default void setCompletedBy(Team t) {
+        if (t != null) {
             getSavedData().setString("completed_by", t.getName());
         }
-
-        getTeamData(t).setInteger("completion", completion);
-    }
-
-    default void addTeamCompletion(Team t, int delta) {
-        int old = getTeamCompletion(t);
-        
-        setTeamCompletion(t, old + delta);
-    }
-
-    default void setTeamCompleted(Team t, boolean completed) {
-        if (completed) {
-            setTeamCompletion(t, getGoal());
-        }
         else {
-            setTeamCompletion(t, 0);
+            getSavedData().removeKey("completed_by");
         }
-    }
-
-    default void setTeamCompleted(Team t) {
-        setTeamCompletion(t, getGoal());
     }
 }

@@ -2,14 +2,13 @@ package com.gmail.blubberalls.bingo.goal;
 
 import org.bukkit.scoreboard.Team;
 
+import com.gmail.blubberalls.bingo.goal.goal_data.CompletionData;
+
 import net.md_5.bungee.api.ChatColor;
 
-public abstract class NumerableGoal extends Goal {
-    public int getMinimumGoal() {
-        return 1;
-    }
+public abstract class NumerableGoal extends Goal implements CompletionData {
 
-    public int getMaximumGoal() {
+    public int getGoal() {
         return 1;
     }
 
@@ -29,7 +28,29 @@ public abstract class NumerableGoal extends Goal {
     }
 
     @Override
-    public void initializeNewGoal() {
-        getSavedData().setInteger("goal", getGame().getRandom().nextInt(getMinimumGoal(), getMaximumGoal() + 1));
+    public void setTeamCompletion(Team t, int completion) {
+        Team oldCompletor = getWhoCompleted();
+
+        CompletionData.super.setTeamCompletion(t, completion);
+
+        if (oldCompletor == null && completion >= getGoal()) {
+            super.setCompletedBy(t);
+        }
+        else if (t.equals(oldCompletor) && completion < getGoal()) {
+            super.setCompletedBy(null);
+        }
+        else {
+            game.update();
+        }
+    }
+
+    @Override
+    public void setCompletedBy(Team t) {
+        if (t == null) {
+            setTeamCompletion(getWhoCompleted(), 0);
+        }
+        else {
+            setTeamCompletion(t, getGoal());
+        }
     }
 }
