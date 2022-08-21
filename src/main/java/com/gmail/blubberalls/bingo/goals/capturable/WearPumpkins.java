@@ -10,7 +10,7 @@ import com.gmail.blubberalls.bingo.goal.CapturableGoal;
 import com.gmail.blubberalls.custom_events.event.InventoryChangedEvent;
 
 public class WearPumpkins extends CapturableGoal {
-    
+
     public boolean testCondition(Player p) {
         return p.getInventory().getHelmet() != null 
             && p.getInventory().getHelmet().getType() == Material.CARVED_PUMPKIN;
@@ -19,12 +19,11 @@ public class WearPumpkins extends CapturableGoal {
     @EventHandler
     public void onInventoryChange(InventoryChangedEvent event) {        
         if (event.getInventory().getType() != InventoryType.PLAYER
-            || !game.isPlaying((Player) event.getInventory().getHolder())) return;
+            || !game.isPlayerPlaying((Player) event.getInventory().getHolder())) return;
         
         Player player = (Player) event.getInventory().getHolder();
         Team t = game.getTeam(player);
-        boolean shouldComplete = game.getTeamPlayers(t).stream().allMatch(this::testCondition);
-        boolean hasCompleted = hasTeamCompleted(t);
-        
+
+        setTeamCompleted(t, allMatch(t));
     }
 }

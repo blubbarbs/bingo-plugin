@@ -7,11 +7,11 @@ import org.bukkit.generator.structure.Structure;
 import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.goal.NumerableGoal;
-import com.gmail.blubberalls.bingo.goal.goal_data.StructureExploreData;
+import com.gmail.blubberalls.bingo.goal.goal_data.KeyedData;
 import com.gmail.blubberalls.bingo.util.Checks;
 import com.gmail.blubberalls.custom_events.event.PlayerExistEvent;
 
-public class ExploreVillages extends NumerableGoal implements StructureExploreData {
+public class ExploreVillages extends NumerableGoal implements KeyedData {
 
     public boolean isVillage(Structure s) {
         return s != null && s.getKey().getKey().startsWith("village");
@@ -28,12 +28,12 @@ public class ExploreVillages extends NumerableGoal implements StructureExploreDa
         Team t = game.getTeam(p);
         Structure at = Checks.getStructureAtLoc(event.getPlayer().getLocation());
 
-        if (!game.isPlaying(p)
+        if (!game.isPlayerPlaying(p)
             || !isVillage(at)
-            || hasTeamVisitedStructure(t, at)) return;
+            || containsKeyed(t, "visited_structures", at)) return;
         
         Bukkit.getLogger().info("Added " + at.getKey().toString() + " to visited villages list");
-        setTeamVisitedStructure(t, at);
+        addKeyed(t, "visited_structures", at);
         addTeamCompletion(t, 1);
     }
     

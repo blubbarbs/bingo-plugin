@@ -14,13 +14,13 @@ public class PickupDiamonds extends Goal {
     @EventHandler
     public void onInventoryChange(InventoryChangedEvent event) {                
         if (event.getInventory().getType() != InventoryType.PLAYER
-            || !game.isPlaying((Player) event.getInventory().getHolder())
+            || !game.isPlayerPlaying((Player) event.getInventory().getHolder())
             || !event.getInventory().contains(Material.DIAMOND)) return;
 
         Player p = (Player) event.getInventory().getHolder();
         Team t = game.getTeam(p);
 
-        setCompletedBy(t);
+        setTeamCompleted(t, true);
     }
     
 }

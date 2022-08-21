@@ -29,28 +29,19 @@ public abstract class NumerableGoal extends Goal implements CompletionData {
 
     @Override
     public void setTeamCompletion(Team t, int completion) {
-        Team oldCompletor = getWhoCompleted();
-
         CompletionData.super.setTeamCompletion(t, completion);
 
-        if (oldCompletor == null && completion >= getGoal()) {
-            super.setCompletedBy(t);
-        }
-        else if (t.equals(oldCompletor) && completion < getGoal()) {
-            super.setCompletedBy(null);
-        }
-        else {
-            game.update();
-        }
+        super.setTeamCompleted(t, completion >= getGoal());
+        game.getPlayers().forEach(game::updatePlayerSidebar);
     }
 
     @Override
-    public void setCompletedBy(Team t) {
-        if (t == null) {
-            setTeamCompletion(getWhoCompleted(), 0);
+    public void setTeamCompleted(Team t, boolean completed) {
+        if (completed) {
+            setTeamCompletion(t, getGoal());
         }
         else {
-            setTeamCompletion(t, getGoal());
+            setTeamCompletion(t, 0);
         }
     }
 }

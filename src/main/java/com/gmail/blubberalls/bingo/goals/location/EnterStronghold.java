@@ -14,10 +14,10 @@ public class EnterStronghold extends Goal {
     public void onPlayerLocation(PlayerExistEvent event) {
         Player p = event.getPlayer();
 
-        if (!game.isPlaying(p) 
+        if (!game.isPlayerPlaying(p) 
             || !Checks.isLocInStructure(p.getLocation(), Structure.STRONGHOLD)) return;
 
-        setCompletedBy(game.getTeam(p));
+        setTeamCompleted(game.getTeam(p), true);
     }
     
 }

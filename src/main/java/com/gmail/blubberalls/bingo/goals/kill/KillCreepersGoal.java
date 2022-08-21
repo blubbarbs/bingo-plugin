@@ -8,7 +8,11 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import com.gmail.blubberalls.bingo.goal.NumerableGoal;
 
 public class KillCreepersGoal extends NumerableGoal {
-    
+    @Override
+    public int getGoal() {
+        return 10;
+    }
+
     @EventHandler
     public void onEntityKill(EntityDeathEvent event) {        
         if (event.getEntity().getType() != EntityType.CREEPER
@@ -16,7 +20,7 @@ public class KillCreepersGoal extends NumerableGoal {
 
         Player p = event.getEntity().getKiller();
         
-        if (!game.isPlaying(p)) return;
+        if (!game.isPlayerPlaying(p)) return;
         
         addTeamCompletion(game.getTeam(p), 1);
     }

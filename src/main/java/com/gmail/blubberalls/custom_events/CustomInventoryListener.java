@@ -31,9 +31,7 @@ public class CustomInventoryListener implements Listener {
         // On slot change
         @Override
         public void a(net.minecraft.world.inventory.Container nmsContainer, int rawSlot, net.minecraft.world.item.ItemStack nmsStack) {                        
-            if (!Bingo.getInstance().isEnabled()) {
-                return;
-            }
+            if (!Bingo.getInstance().isEnabled()) return;
             
             Inventory changedInventory = nmsContainer.getBukkitView().getInventory(rawSlot);
             int slot = nmsContainer.getBukkitView().convertSlot(rawSlot);
@@ -43,18 +41,19 @@ public class CustomInventoryListener implements Listener {
             if (Checks.areItemStacksEqual(previousStack, newStack)) return;
 
             changedSlots.put(changedInventory, nmsContainer.getBukkitView().convertSlot(rawSlot));
-
-            Bukkit.getLogger().info(" ENABLED ?? " + Bingo.getInstance().isEnabled());
-
-            if (inventoryChangeSchedulerID == -1) {
-                inventoryChangeSchedulerID = Bukkit.getScheduler().scheduleSyncDelayedTask(Bingo.getInstance(), () -> callInventoryChangeEvents());
-            }
+            markInventoriesChanged();
         }
 
         // On data change (unused)
         @Override
         public void a(net.minecraft.world.inventory.Container nmsContainer, int rawSlot, int data) {}
     };
+
+    private void markInventoriesChanged() {
+        if (inventoryChangeSchedulerID != -1) return; 
+
+        inventoryChangeSchedulerID = Bukkit.getScheduler().scheduleSyncDelayedTask(Bingo.getInstance(), this::callInventoryChangeEvents);        
+    }
 
     private void callInventoryChangeEvents() {
         for (Inventory changed : changedSlots.keySet()) {
@@ -81,8 +80,6 @@ public class CustomInventoryListener implements Listener {
     private void registerInventory(Inventory inventory) {
         if (previousInventories.containsKey(inventory)) return;
 
-        Bukkit.getLogger().info("REGISTERED " + inventory.getType());
-
         ItemStack[] contents = new ItemStack[inventory.getSize()];
 
         for (int i = 0; i < contents.length; i++) {            
@@ -106,8 +103,6 @@ public class CustomInventoryListener implements Listener {
 
     private void removeNMSSlotListener(InventoryView view) {
         CraftInventoryView craftView = (CraftInventoryView) view;
-
-        Bukkit.getLogger().info("REGISTERED NMS LISTENER");
 
         // Unregister slot listener (if there)
         craftView.getHandle().b(nmsSlotListener);

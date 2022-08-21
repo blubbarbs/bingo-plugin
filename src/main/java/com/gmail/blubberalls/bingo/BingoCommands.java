@@ -5,12 +5,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
+import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.util.CustomSidebar;
 
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
+import dev.jorel.commandapi.annotations.arguments.AStringArgument;
 
 @Command("bingo")
 public class BingoCommands {
@@ -90,5 +92,20 @@ public class BingoCommands {
         p.sendMessage("Successfully joined the game on the " + t.getColor() + t.getDisplayName() + " team.");
     }
 
-    
+    @Subcommand("togglesubscribe")
+    public static void toggleSubscribe(Player p, @AStringArgument String goalName) {
+        if (!Bingo.getGame().isPlayerPlaying(p)) {
+            p.sendMessage(ChatColor.RED + "You are not currently in any game!");
+            return;
+        }
+        else if (Bingo.getGame().getGoal(goalName) == null) {
+            p.sendMessage(ChatColor.RED + "That is not the name of a goal.");
+            return;
+        }
+
+        Goal goal = Bingo.getGame().getGoal(goalName);
+        boolean isPlayerSubscribed = Bingo.getGame().isPlayerSubscribed(p, goal);
+
+        Bingo.getGame().setPlayerGoalSubscription(p, goal, !isPlayerSubscribed);
+    }
 }

@@ -3,10 +3,10 @@ package com.gmail.blubberalls.bingo;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -21,6 +21,7 @@ import com.gmail.blubberalls.bingo.goal.GoalFactories;
 import com.gmail.blubberalls.bingo.util.CustomSidebar;
 import com.gmail.blubberalls.bingo.util.NBTUtils;
 import com.gmail.blubberalls.bingo.util.TextUtils;
+import com.google.common.collect.HashMultimap;
 
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTCompoundList;
@@ -56,8 +57,7 @@ public class Game {
     private NBTCompound playerData;
     private Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
     private HashMap<String, Goal> goals = new HashMap<String, Goal>();
-    private HashMap<ChatColor, Team> teamsByColor = new HashMap<ChatColor, Team>();
-    private Leaderboard<Team> leaderboard = new Leaderboard<Team>();
+    private HashMap<ChatColor, Team> allTeamsByColor = new HashMap<ChatColor, Team>();
     private Random random = new Random();
 
     public Game() {
@@ -79,8 +79,7 @@ public class Game {
             team.setDisplayName(TextUtils.capitalizeFirstLetters(color.name(), "_", " "));
             team.setColor(color);
             team.setCanSeeFriendlyInvisibles(true);
-            teamsByColor.put(color, team);
-            teamData.getOrCreateCompound(team.getName());
+            allTeamsByColor.put(color, team);
         }
     }
 
@@ -128,28 +127,24 @@ public class Game {
         return scoreboard;
     }
 
-    public Leaderboard<Team> getLeaderboard() {
-        return leaderboard;
-    }
-
     public Random getRandom() {
         return random;
     }
 
     public boolean hasStarted() {
-        return goalData.size() > 0;
+        return data.getCompoundList("goals").size() > 0;
     }
 
-    public Collection<Team> getTeams() {
-        return teamsByColor.values();
-    }
-
-    public boolean isPlaying(Player p) {
+    public boolean isPlayerPlaying(Player p) {
         return p != null && getPlayerData(p) != null;
     }
 
+    public boolean isPlayerSubscribed(Player p, Goal g) {
+        return getPlayerData(p).getStringList("subscriptions").contains(g.getName());
+    }
+
     public Team getTeam(Player p) {
-        return isPlaying(p) ? getTeam(getPlayerData(p).getString("team")) : null;
+        return isPlayerPlaying(p) ? getTeam(getPlayerData(p).getString("team")) : null;
     }
 
     public Team getTeam(String name) {
@@ -157,35 +152,55 @@ public class Game {
     }
 
     public Team getTeam(ChatColor color) {
-        return teamsByColor.get(color);
+        return allTeamsByColor.get(color);
     }
     
-    public Collection<Team> getAllTeams() {
-        return teamsByColor.values();
-    }
+    public Collection<Team> getTeams() {
+        ArrayList<Team> teams = new ArrayList<Team>();
 
-    public int getTeamScore(Team t) {
-        int score = 0;
-
-        for (Goal g : goals.values()) {
-            if (t.equals(g.getWhoCompleted())) {
-                score++;
-            }
-        }
-    
-        return score;
-    }
-
-    public int getNumGoalsLeft() {
-        int freeGoals = 0;
-
-        for (Goal g : goals.values()) {
-            if (!g.isCompleted()) {
-                freeGoals++;
+        for (Team t : allTeamsByColor.values()) {
+            if (getAllTeamPlayers(t).size() > 0) {
+                teams.add(t);
             }
         }
 
-        return freeGoals;
+        return teams;
+    }
+
+    public Collection<Team> getWinners() {
+        Collection<Team> teams = getTeams();
+
+        if (teams.size() < 2) return null;
+        
+        HashMap<Team, Integer> teamToPoints = new HashMap<Team, Integer>();
+        HashMultimap<Integer, Team> pointsToTeam = HashMultimap.create();
+        ArrayList<Integer> allPoints = new ArrayList<Integer>();
+        int freeGoals = goals.size();
+
+        for (Goal g : goals.values()) {
+            if (!g.isCompleted()) continue;
+            
+            Team completor = g.getWhoCompleted();
+            int currentPoints = teamToPoints.getOrDefault(completor, 0);
+
+            teamToPoints.put(completor, currentPoints + 1);
+            freeGoals--;
+        }
+        
+        for (Team t : teams) {
+            int currentPoints = teamToPoints.getOrDefault(t, 0);
+            
+            pointsToTeam.put(currentPoints, t);
+            allPoints.add(currentPoints);
+        }
+
+        Collections.sort(allPoints, (a, b) -> b - a);
+
+        int topScore = allPoints.get(0);
+        int secondPlace = allPoints.get(1);
+        boolean hasWinner = secondPlace + freeGoals < topScore || freeGoals == 0;
+
+        return hasWinner ? pointsToTeam.get(topScore) : null;
     }
 
     public List<OfflinePlayer> getAllPlayers() {
@@ -239,8 +254,7 @@ public class Game {
     public Collection<Goal> getPlayerSubscribedGoals(Player p) {
         ArrayList<Goal> subscribedGoals = new ArrayList<Goal>();
 
-        subscribedGoals.addAll(goals.values());
-        //getPlayerData(p).getStringList("subscriptions").forEach(goalName -> subscribedGoals.add(getGoal(goalName)));
+        getPlayerData(p).getStringList("subscriptions").forEach(goalName -> subscribedGoals.add(getGoal(goalName)));
 
         return subscribedGoals;
     }
@@ -279,7 +293,7 @@ public class Game {
     }
 
     public void addPlayer(Player p, Team t) {
-        if (isPlaying(p)) {
+        if (isPlayerPlaying(p)) {
             removePlayer(p);
         }
 
@@ -294,10 +308,10 @@ public class Game {
         Team t = getTeam(p);
         
         p.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-        CustomSidebar.resetPlayerSidebar(p);
         t.removeEntry(p.getName());
         playerData.removeKey(p.getUniqueId().toString());
         getTeamData(t).getStringList("players").remove(p.getUniqueId().toString());
+        CustomSidebar.resetPlayerSidebar(p);
     }
 
     public void updatePlayerSidebar(Player p) {
@@ -337,24 +351,26 @@ public class Game {
         goals.values().forEach(Goal::unloadEvents);
     }
 
+    public void setPlayerGoalSubscription(Player p, Goal g, boolean subscribed) {
+        if (subscribed && !isPlayerSubscribed(p, g)) {
+            getPlayerData(p).getStringList("subscriptions").add(g.getName());
+        }
+        else if (!subscribed) {
+            getPlayerData(p).getStringList("subscriptions").remove(g.getName());
+        }
+
+        updatePlayerSidebar(p);
+    }
+
     public void update() {
         if (!hasStarted()) return;
 
         getPlayers().forEach(this::updatePlayerSidebar);
-        getTeams().forEach(team -> leaderboard.setScore(team, getTeamScore(team)));
 
-        int freeGoals = getNumGoalsLeft();
-        List<Integer> orderedScores = leaderboard.getOrderedScores();
-        int topScore = orderedScores.get(0);
-        int nextScore = orderedScores.get(1);
-        boolean shouldEndGame = nextScore + freeGoals < topScore || freeGoals == 0;
+        Collection<Team> winners = getWinners();
 
-        Bukkit.getLogger().info(" FREE GOALS " + freeGoals + " TOP SCORE " + topScore + " NEXT SCORE " + nextScore);
-
-        if (shouldEndGame) {
-            Set<Team> winners = leaderboard.getWhoHasScore(topScore);
-
-            endGame(winners.toArray(new Team[winners.size()]));
+        if (winners != null) {
+            endGame(winners);
         }
     }
 
@@ -402,22 +418,24 @@ public class Game {
         goals.clear();
     }
 
-    public void endGame(Team[] winners) {                
-        if (winners.length == 1) {
-            Team winner = winners[0];
+    public void endGame(Collection<Team> winners) {                
+        Team[] winnerArray = winners.toArray(new Team[winners.size()]);
+
+        if (winnerArray.length == 1) {
+            Team winner = winnerArray[0];
             
-            broadcastMessage(winner.getColor() + "" + winner.getDisplayName() + " has won the game!!! CONGRATULATIONS!!");
+            broadcastMessage(winner.getColor() + "" + winner.getDisplayName() + ChatColor.RESET + " has won the game!!! CONGRATULATIONS!!");
         }
-        else if (winners.length > 1) {
-            String[] teams = new String[winners.length];
+        else if (winnerArray.length > 1) {
+            String[] teams = new String[winnerArray.length];
 
             for (int i = 0; i < teams.length; i++) {
-                Team t = winners[i];
+                Team t = winnerArray[i];
 
                 teams[i] = t.getColor() + t.getDisplayName() + ChatColor.RESET;
             }
 
-            broadcastMessage(TextUtils.getGrammaticalList(teams) + " have won!!! CONGRATULATIONS!!");
+            broadcastMessage(TextUtils.getGrammaticalList(teams) + " have tied for first place, they are the winners!!! CONGRATULATIONS!!");
         }
 
         endGame();

@@ -2,15 +2,7 @@ package com.gmail.blubberalls.bingo.util;
 
 import java.util.Arrays;
 
-import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Team;
-
-import net.md_5.bungee.api.chat.TranslatableComponent;
-
-public class TextUtils {
-    public static int ICON_SIZE_PX = 16;
-    public static int SPACE_SIZE_PX = 2;
-    
+public class TextUtils {    
     public static String join(String[] words, String joiner) {
         String joined = words[0];
 
@@ -59,28 +51,4 @@ public class TextUtils {
             return TextUtils.join(beforeLast, ",") + ", and " + last;
         }
     }
-
-    public static TranslatableComponent getOffsetComponent(int offset) {
-        TranslatableComponent offsetComponent = new TranslatableComponent("space." + offset);
-
-        offsetComponent.setFont("space:default");
-
-        return offsetComponent;
-    }
-
-    public static TranslatableComponent getBoardComponent(int offset, String bingoText) {
-        TranslatableComponent offsetComponent = getOffsetComponent(offset);
-        TranslatableComponent textComponent = new TranslatableComponent(bingoText);
-
-        textComponent.setFont("bingo:default");
-        offsetComponent.addWith(textComponent);
-
-        return offsetComponent;
-    }
-
-    public static String getTeamName(Player p) {
-        Team t = p.getScoreboard().getEntryTeam(p.getName());
-        return t != null ? t.getName() : p.getUniqueId().toString();
-    }
-
 }

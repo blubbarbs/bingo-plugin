@@ -9,6 +9,11 @@ import com.gmail.blubberalls.bingo.goal.NumerableGoal;
 
 public class KillSkeletonsGoal extends NumerableGoal {
     
+    @Override
+    public int getGoal() {
+        return 5;
+    }
+
     @EventHandler
     public void onEntityKill(EntityDeathEvent event) {        
         if (event.getEntity().getType() != EntityType.SKELETON
@@ -16,7 +21,7 @@ public class KillSkeletonsGoal extends NumerableGoal {
 
         Player p = event.getEntity().getKiller();
         
-        if (!game.isPlaying(p)) return;
+        if (!game.isPlayerPlaying(p)) return;
         
         addTeamCompletion(game.getTeam(p), 1);
     }

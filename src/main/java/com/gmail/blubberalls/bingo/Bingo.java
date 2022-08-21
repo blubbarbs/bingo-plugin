@@ -55,7 +55,7 @@ public class Bingo extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onLogin(PlayerJoinEvent event) {
-        if (!GAME.isPlaying(event.getPlayer())) return;
+        if (!GAME.isPlayerPlaying(event.getPlayer())) return;
 
         event.getPlayer().setScoreboard(GAME.getScoreboard());
         GAME.updatePlayerSidebar(event.getPlayer());

@@ -6,7 +6,7 @@ import com.gmail.blubberalls.bingo.Game;
 
 import de.tr7zw.nbtapi.NBTCompound;
 
-public interface GoalData {
+public interface GoalData {    
     public Game getGame();
     public NBTCompound getSavedData();
         
@@ -17,7 +17,7 @@ public interface GoalData {
     default Team getWhoCompleted() {
         String teamName = getSavedData().getString("completed_by");
 
-        return !teamName.isEmpty() ? getGame().getTeam(teamName) : null;
+        return getGame().getTeam(teamName);
     }
 
     default boolean isCompleted() {
@@ -32,8 +32,8 @@ public interface GoalData {
         return t.equals(getWhoCompleted());
     }
     
-    default void setCompletedBy(Team t) {
-        if (t != null) {
+    default void setTeamCompleted(Team t, boolean completed) {        
+        if (completed) {
             getSavedData().setString("completed_by", t.getName());
         }
         else {
