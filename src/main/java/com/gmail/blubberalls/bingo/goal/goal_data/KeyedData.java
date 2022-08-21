@@ -51,39 +51,15 @@ public interface KeyedData extends GoalData {
         return getKeyed(t, key, Registry.MATERIAL);
     }
     
-    default boolean containsKey(Team t, String key, String value) {
-        return getTeamData(t).getStringList(key).contains(value);
-    }
-
-    default boolean containsKey(Team t, String key, NamespacedKey value) {
-        return containsKey(t, key, value.toString());
-    }
-
     default boolean containsKeyed(Team t, String key, Keyed value) {
-        return containsKey(t, key, value.getKey());
-    }
-
-    default void addKey(Team t, String key, String value) {
-        getTeamData(t).getStringList(key).add(value);
-    }
-
-    default void addKey(Team t, String key, NamespacedKey value) {
-        addKey(t, key, value.toString());
+        return getTeamData(t).getStringList(key).contains(value.getKey().toString());
     }
 
     default void addKeyed(Team t, String key, Keyed value) {
-        addKey(t, key, value.getKey());
-    }
-
-    default void setKey(Team t, String key, String value) {
-        getTeamData(t).setString(key, value);
-    }
-
-    default void setKey(Team t, String key, NamespacedKey value) {
-        setKey(t, key, value.toString());
+        getTeamData(t).getStringList(key).add(value.getKey().toString());    
     }
 
     default void setKeyed(Team t, String key, Keyed value) {
-        setKey(t, key, value.getKey());
+        getTeamData(t).setString(key, value.getKey().toString());
     }
 }

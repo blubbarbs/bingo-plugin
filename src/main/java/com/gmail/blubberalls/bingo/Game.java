@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -132,7 +133,7 @@ public class Game {
     }
 
     public boolean hasStarted() {
-        return data.getCompoundList("goals").size() > 0;
+        return goalData.size() > 0;
     }
 
     public boolean isPlayerPlaying(Player p) {
@@ -263,16 +264,7 @@ public class Game {
         return new TextComponent(ChatColor.AQUA + "[Bingo]" + ChatColor.RESET + " ");
     }
 
-    public BaseComponent[] getMessageWithPrefix(String s) {
-        BaseComponent[] prefixed = new BaseComponent[2];
-        
-        prefixed[0] = getPrefix();
-        prefixed[1] = new TextComponent(s);
-
-        return prefixed;
-    }
-
-    public BaseComponent[] getMessageWithPrefix(BaseComponent[] components) {
+    public BaseComponent[] getMessageWithPrefix(BaseComponent... components) {
         BaseComponent[] prefixed = new BaseComponent[components.length + 1];
         
         for (int i = 0; i < components.length; i++) {
@@ -282,6 +274,10 @@ public class Game {
         prefixed[0] = getPrefix();
 
         return prefixed;
+    }
+
+    public BaseComponent[] getMessageWithPrefix(String s) {
+        return getMessageWithPrefix(new TextComponent(s));
     }
 
     public BaseComponent[] getBoard(Player p) {
@@ -331,20 +327,24 @@ public class Game {
         }
     }
 
-    public void broadcastMessage(Team t, String s) { 
-        getTeamPlayers(t).forEach(p -> p.spigot().sendMessage(getMessageWithPrefix(s)));
+    public void broadcastMessage(Collection<Player> players, BaseComponent... message) {
+        players.forEach(player -> player.spigot().sendMessage(message));
     }
 
-    public void broadcastMessage(Team t, BaseComponent[] message) { 
-        getTeamPlayers(t).forEach(p -> p.spigot().sendMessage(getMessageWithPrefix(message)));
+    public void broadcastMessage(Collection<Player> players, String s) {
+        broadcastMessage(players, new TextComponent(s));
     }
 
-    public void broadcastMessage(String s) {
-        getPlayers().forEach(p -> p.spigot().sendMessage(getMessageWithPrefix(s)));
+    public void broadcastMessage(BaseComponent... message) {
+        broadcastMessage(getPlayers(), message);
     }
 
-    public void broadcastMessage(BaseComponent[] message) {
-        getPlayers().forEach(p -> p.spigot().sendMessage(getMessageWithPrefix(message)));
+    public void broadcastMessage(String message) {
+        broadcastMessage(getPlayers(), message);
+    }
+
+    public void broadcastSound(Collection<Player> players, Sound sound) {
+        players.forEach(player -> player.playSound(player.getLocation(), sound, 1F, 1F));
     }
 
     public void unregisterGoalEvents() {
