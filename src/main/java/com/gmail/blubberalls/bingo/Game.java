@@ -96,12 +96,12 @@ public class Game {
         return goalData;
     }
 
-    public NBTCompound getPlayerData(Player p, boolean create) {
-        return create ? playerData.getOrCreateCompound(p.getUniqueId().toString()) : playerData.getCompound(p.getUniqueId().toString());
+    public NBTCompound getPlayerData(OfflinePlayer op, boolean create) {
+        return create ? playerData.getOrCreateCompound(op.getUniqueId().toString()) : playerData.getCompound(op.getUniqueId().toString());
     }
 
-    public NBTCompound getPlayerData(Player p) {
-        return getPlayerData(p, false);
+    public NBTCompound getPlayerData(OfflinePlayer op) {
+        return getPlayerData(op, false);
     }
 
     public NBTCompound getTeamData(Team t, boolean create) {
@@ -136,16 +136,16 @@ public class Game {
         return goalData.size() > 0;
     }
 
-    public boolean isPlayerPlaying(Player p) {
-        return p != null && getPlayerData(p) != null;
+    public boolean isPlayerPlaying(OfflinePlayer op) {
+        return op != null && getPlayerData(op) != null;
     }
 
-    public boolean isPlayerSubscribed(Player p, Goal g) {
-        return getPlayerData(p).getStringList("subscriptions").contains(g.getName());
+    public boolean isPlayerSubscribed(OfflinePlayer op, Goal g) {
+        return getPlayerData(op).getStringList("subscriptions").contains(g.getName());
     }
 
-    public Team getTeam(Player p) {
-        return isPlayerPlaying(p) ? getTeam(getPlayerData(p).getString("team")) : null;
+    public Team getTeam(OfflinePlayer op) {
+        return isPlayerPlaying(op) ? getTeam(getPlayerData(op).getString("team")) : null;
     }
 
     public Team getTeam(String name) {
@@ -226,6 +226,31 @@ public class Game {
         }
 
         return players;
+    }
+
+    public List<Player> getPlayersNotInTeam(Team t) {
+        ArrayList<Player> players = new ArrayList<Player>();
+
+        for (Player p : getPlayers()) {
+            if (!t.equals(getTeam(p))) {
+                players.add(p);
+            }
+        }
+
+        return players;
+    }
+    
+    public List<OfflinePlayer> getAllPlayersNotInTeam(Team t) {
+        ArrayList<OfflinePlayer> oPlayers = new ArrayList<OfflinePlayer>();
+
+        for (OfflinePlayer op : getAllPlayers()) {
+            if (!t.equals(getTeam(op))) {
+                oPlayers.add(op);
+            }
+        }
+
+        return oPlayers;
+
     }
 
     public List<OfflinePlayer> getAllTeamPlayers(Team t) {
@@ -351,15 +376,17 @@ public class Game {
         goals.values().forEach(Goal::unloadEvents);
     }
 
-    public void setPlayerGoalSubscription(Player p, Goal g, boolean subscribed) {
-        if (subscribed && !isPlayerSubscribed(p, g)) {
-            getPlayerData(p).getStringList("subscriptions").add(g.getName());
+    public void setPlayerGoalSubscription(OfflinePlayer op, Goal g, boolean subscribed) {
+        if (subscribed && !isPlayerSubscribed(op, g)) {
+            getPlayerData(op).getStringList("subscriptions").add(g.getName());
         }
         else if (!subscribed) {
-            getPlayerData(p).getStringList("subscriptions").remove(g.getName());
+            getPlayerData(op).getStringList("subscriptions").remove(g.getName());
         }
 
-        updatePlayerSidebar(p);
+        if (op.isOnline()) {
+            updatePlayerSidebar(op.getPlayer());
+        }
     }
 
     public void update() {

@@ -29,8 +29,8 @@ public class ExploreVillages extends NumerableGoal implements KeyedData {
         Structure at = Checks.getStructureAtLoc(event.getPlayer().getLocation());
 
         if (!game.isPlayerPlaying(p)
-            || !isVillage(at)
-            || containsKeyed(t, "visited_structures", at)) return;
+        ||  !isVillage(at)
+        ||  containsKeyed(t, "visited_structures", at)) return;
         
         Bukkit.getLogger().info("Added " + at.getKey().toString() + " to visited villages list");
         addKeyed(t, "visited_structures", at);

@@ -15,7 +15,7 @@ public class EnterStronghold extends Goal {
         Player p = event.getPlayer();
 
         if (!game.isPlayerPlaying(p) 
-            || !Checks.isLocInStructure(p.getLocation(), Structure.STRONGHOLD)) return;
+        ||  !Checks.isLocInStructure(p.getLocation(), Structure.STRONGHOLD)) return;
 
         setTeamCompleted(game.getTeam(p), true);
     }

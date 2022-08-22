@@ -6,16 +6,19 @@ import java.util.HashMap;
 import java.util.function.Supplier;
 
 import com.gmail.blubberalls.bingo.Game;
+import com.gmail.blubberalls.bingo.goals.build.BuildHerobrineAltar;
 import com.gmail.blubberalls.bingo.goals.capturable.*;
 import com.gmail.blubberalls.bingo.goals.craft.*;
 import com.gmail.blubberalls.bingo.goals.inventory.*;
 import com.gmail.blubberalls.bingo.goals.kill.*;
 import com.gmail.blubberalls.bingo.goals.location.*;
+import com.google.common.collect.HashMultimap;
 
 import de.tr7zw.nbtapi.NBTCompound;
 
 public class GoalFactories {
     private static final HashMap<String, GoalFactory> GOAL_FACTORIES = new HashMap<String, GoalFactory>();
+    private static final HashMultimap<GoalDifficulty, GoalFactory> GOAL_FACTORIES_BY_DIFFICULTY = HashMultimap.create();
 
     public static GoalFactory KILL_CREEPERS = GoalFactories.register("kill_creepers", KillCreepersGoal::new);
     public static GoalFactory KILL_SKELETONS = GoalFactories.register("kill_skeletons", KillSkeletonsGoal::new);
@@ -24,11 +27,14 @@ public class GoalFactories {
     public static GoalFactory ENTER_STRONGHOLD = GoalFactories.register("enter_stronghold", EnterStronghold::new);
     public static GoalFactory EXPLORE_VILLAGES = GoalFactories.register("explore_villages", ExploreVillages::new);
     public static GoalFactory WEAR_PUMPKINS = GoalFactories.register("wear_pumpkin", WearPumpkins::new);
+    public static GoalFactory BUILD_HEROBRINE_ALTAR = GoalFactories.register("build_herobrine_altar", BuildHerobrineAltar::new);
 
-    static GoalFactory register(String name, Supplier<Goal> goalConstructor) {        
+    static GoalFactory register(String name, Supplier<Goal> goalConstructor) {
         GoalFactory factory = new GoalFactory(name, goalConstructor);
         
         GOAL_FACTORIES.put(name, factory);
+        // Creates a single, empty instance of the goal just to get its difficulty ;_; sad but necessary
+        GOAL_FACTORIES_BY_DIFFICULTY.put(goalConstructor.get().getDifficulty(), factory);
 
         return factory;
     }

@@ -17,7 +17,7 @@ public class KillSkeletonsGoal extends NumerableGoal {
     @EventHandler
     public void onEntityKill(EntityDeathEvent event) {        
         if (event.getEntity().getType() != EntityType.SKELETON
-            || event.getEntity().getKiller() == null) return;
+        ||  event.getEntity().getKiller() == null) return;
 
         Player p = event.getEntity().getKiller();
         

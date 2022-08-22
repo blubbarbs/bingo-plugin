@@ -16,7 +16,7 @@ public class KillCreepersGoal extends NumerableGoal {
     @EventHandler
     public void onEntityKill(EntityDeathEvent event) {        
         if (event.getEntity().getType() != EntityType.CREEPER
-            || event.getEntity().getKiller() == null) return;
+        ||  event.getEntity().getKiller() == null) return;
 
         Player p = event.getEntity().getKiller();
         

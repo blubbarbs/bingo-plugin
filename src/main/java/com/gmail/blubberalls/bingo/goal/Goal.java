@@ -1,6 +1,7 @@
 package com.gmail.blubberalls.bingo.goal;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scoreboard.Team;
@@ -28,6 +29,10 @@ public abstract class Goal implements Listener, GoalData {
 
     public Game getGame() {
         return game;
+    }
+    
+    public GoalDifficulty getDifficulty() {
+        return GoalDifficulty.EASY;
     }
 
     public NBTCompound getSavedData() {
@@ -123,9 +128,13 @@ public abstract class Goal implements Listener, GoalData {
 
         if (completed) {
             game.broadcastMessage(getCompletionMessage(t));
+            game.broadcastSound(game.getTeamPlayers(t), Sound.ENTITY_PLAYER_LEVELUP);
+            game.broadcastSound(game.getPlayersNotInTeam(t), Sound.BLOCK_CONDUIT_DEACTIVATE);
         }
         else {
             game.broadcastMessage(getUncompletionMessage(t));
+            game.broadcastSound(game.getTeamPlayers(t), Sound.BLOCK_CONDUIT_DEACTIVATE);
+            game.broadcastSound(game.getPlayersNotInTeam(t), Sound.BLOCK_CONDUIT_DEACTIVATE);
         }
         
         if (!hasEventsWhenCompleted() && completed) {
