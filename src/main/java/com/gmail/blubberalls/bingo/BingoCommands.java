@@ -29,7 +29,7 @@ public class BingoCommands {
 
     @Subcommand("newgame") 
     public static void newGame(CommandSender sender) {
-        Bingo.getGame().newGame(10, 10);
+        Bingo.getGame().newGame(5, 5);
         
         sender.sendMessage("New game started.");
     }

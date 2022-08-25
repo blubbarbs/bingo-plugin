@@ -10,6 +10,16 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 
 public class BuildHerobrineAltar extends Goal {
     
+    @Override
+    public String getTitle() {
+        return "Summon Herobrine";
+    }
+
+    @Override
+    public String getIconPath() {
+        return "bingo.icons.herobrine";
+    }
+
     public boolean checkAltar(Block netherrackBlock) {
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
@@ -36,7 +46,10 @@ public class BuildHerobrineAltar extends Goal {
         Block netherrack = event.getBlock().getRelative(BlockFace.DOWN);
         boolean hasAltar = checkAltar(netherrack);
 
-        setTeamCompleted(game.getTeam(event.getPlayer()), hasAltar);
+        if (hasAltar) {
+            event.getBlock().getWorld().strikeLightningEffect(event.getBlock().getLocation());
+            setTeamCompleted(game.getTeam(event.getPlayer()), true);
+        }
     }
 
 }

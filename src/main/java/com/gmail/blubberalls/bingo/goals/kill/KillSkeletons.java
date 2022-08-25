@@ -7,7 +7,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.gmail.blubberalls.bingo.goal.NumerableGoal;
 
-public class KillSkeletonsGoal extends NumerableGoal {
+public class KillSkeletons extends NumerableGoal {
     
     @Override
     public int getGoal() {
@@ -16,7 +16,7 @@ public class KillSkeletonsGoal extends NumerableGoal {
 
     @EventHandler
     public void onEntityKill(EntityDeathEvent event) {        
-        if (event.getEntity().getType() != EntityType.SKELETON
+        if (event.getEntityType() != EntityType.SKELETON
         ||  event.getEntity().getKiller() == null) return;
 
         Player p = event.getEntity().getKiller();

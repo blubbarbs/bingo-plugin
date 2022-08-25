@@ -8,7 +8,9 @@ import java.util.function.Supplier;
 import com.gmail.blubberalls.bingo.Game;
 import com.gmail.blubberalls.bingo.goals.build.BuildHerobrineAltar;
 import com.gmail.blubberalls.bingo.goals.capturable.*;
+import com.gmail.blubberalls.bingo.goals.consume.*;
 import com.gmail.blubberalls.bingo.goals.craft.*;
+import com.gmail.blubberalls.bingo.goals.interact.*;
 import com.gmail.blubberalls.bingo.goals.inventory.*;
 import com.gmail.blubberalls.bingo.goals.kill.*;
 import com.gmail.blubberalls.bingo.goals.location.*;
@@ -20,14 +22,20 @@ public class GoalFactories {
     private static final HashMap<String, GoalFactory> GOAL_FACTORIES = new HashMap<String, GoalFactory>();
     private static final HashMultimap<GoalDifficulty, GoalFactory> GOAL_FACTORIES_BY_DIFFICULTY = HashMultimap.create();
 
-    public static GoalFactory KILL_CREEPERS = GoalFactories.register("kill_creepers", KillCreepersGoal::new);
-    public static GoalFactory KILL_SKELETONS = GoalFactories.register("kill_skeletons", KillSkeletonsGoal::new);
+    public static GoalFactory KILL_CREEPERS = GoalFactories.register("kill_creepers", KillCreepers::new);
+    public static GoalFactory KILL_SKELETONS = GoalFactories.register("kill_skeletons", KillSkeletons::new);
     public static GoalFactory CRAFT_DIAMOND_SWORD = GoalFactories.register("craft_diamond_sword", CraftDiamondSword::new);
     public static GoalFactory PICKUP_DIAMONDS = GoalFactories.register("pickup_diamonds", PickupDiamonds::new);
     public static GoalFactory ENTER_STRONGHOLD = GoalFactories.register("enter_stronghold", EnterStronghold::new);
     public static GoalFactory EXPLORE_VILLAGES = GoalFactories.register("explore_villages", ExploreVillages::new);
     public static GoalFactory WEAR_PUMPKINS = GoalFactories.register("wear_pumpkin", WearPumpkins::new);
     public static GoalFactory BUILD_HEROBRINE_ALTAR = GoalFactories.register("build_herobrine_altar", BuildHerobrineAltar::new);
+    public static GoalFactory EAT_SUSPICIOUS_STEW = GoalFactories.register("eat_suspicious_stew", EatSuspiciousStew::new);
+    public static GoalFactory RENAME_RABBIT = GoalFactories.register("rename_rabbit", RenameRabbit::new);
+    public static GoalFactory RENAME_SHEEP = GoalFactories.register("rename_sheep", RenameSheep::new);
+    public static GoalFactory RENAME_VINDICATOR = GoalFactories.register("rename_vindicator", RenameVindicator::new);
+    public static GoalFactory EQUIP_DIFFERENT_ARMOR = GoalFactories.register("equip_different_armor", EquipDifferentArmor::new);
+    public static GoalFactory KILL_COOKED_ANIMAL = GoalFactories.register("kill_cooked_mob", KillCookedAnimal::new);
 
     static GoalFactory register(String name, Supplier<Goal> goalConstructor) {
         GoalFactory factory = new GoalFactory(name, goalConstructor);

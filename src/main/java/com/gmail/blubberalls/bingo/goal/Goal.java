@@ -31,10 +31,6 @@ public abstract class Goal implements Listener, GoalData {
         return game;
     }
     
-    public GoalDifficulty getDifficulty() {
-        return GoalDifficulty.EASY;
-    }
-
     public NBTCompound getSavedData() {
         return savedData;
     }
@@ -47,6 +43,10 @@ public abstract class Goal implements Listener, GoalData {
 
     public String getTitle() {
         return TextUtils.capitalizeFirstLetters(getName(), "_", " ");
+    }
+
+    public GoalDifficulty getDifficulty() {
+        return GoalDifficulty.EASY;
     }
 
     public String getIconPath() {
@@ -134,7 +134,7 @@ public abstract class Goal implements Listener, GoalData {
         else {
             game.broadcastMessage(getUncompletionMessage(t));
             game.broadcastSound(game.getTeamPlayers(t), Sound.BLOCK_CONDUIT_DEACTIVATE);
-            game.broadcastSound(game.getPlayersNotInTeam(t), Sound.BLOCK_CONDUIT_DEACTIVATE);
+            game.broadcastSound(game.getPlayersNotInTeam(t), Sound.ENTITY_ENDERMAN_TELEPORT);
         }
         
         if (!hasEventsWhenCompleted() && completed) {
@@ -143,6 +143,10 @@ public abstract class Goal implements Listener, GoalData {
 
         GoalData.super.setTeamCompleted(t, completed);
         game.update();
+    }
+    
+    public void setTeamCompleted(Team t) {
+        setTeamCompleted(t, true);
     }
 
     public void loadEvents() {

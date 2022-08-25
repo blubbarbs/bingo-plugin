@@ -8,12 +8,17 @@ import net.md_5.bungee.api.ChatColor;
 public abstract class CapturableGoal extends Goal {
     public abstract boolean testCondition(Player p);
 
-    public boolean allMatch(Team t) {
+    public boolean allMatchCondition(Team t) {
         return game.getTeamPlayers(t).stream().allMatch(this::testCondition);
     }
 
-    public boolean anyMatch(Team t) {
+    public boolean anyMatchCondition(Team t) {
         return game.getTeamPlayers(t).stream().anyMatch(this::testCondition);
+    }
+
+    @Override
+    public GoalDifficulty getDifficulty() {
+        return GoalDifficulty.HARD;
     }
 
     @Override

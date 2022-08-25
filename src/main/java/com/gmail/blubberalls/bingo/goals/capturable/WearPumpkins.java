@@ -17,13 +17,13 @@ public class WearPumpkins extends CapturableGoal {
     }
     
     @EventHandler
-    public void onInventoryChange(InventoryChangedEvent event) {        
+    public void onInventoryChange(InventoryChangedEvent event) {
         if (event.getInventory().getType() != InventoryType.PLAYER
             || !game.isPlayerPlaying((Player) event.getInventory().getHolder())) return;
         
         Player player = (Player) event.getInventory().getHolder();
         Team t = game.getTeam(player);
 
-        setTeamCompleted(t, allMatch(t));
+        setTeamCompleted(t, allMatchCondition(t));
     }
 }

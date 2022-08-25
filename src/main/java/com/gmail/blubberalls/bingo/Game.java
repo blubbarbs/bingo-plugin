@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -21,6 +22,7 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.goal.GoalFactories;
 import com.gmail.blubberalls.bingo.util.CustomSidebar;
 import com.gmail.blubberalls.bingo.util.NBTUtils;
+import com.gmail.blubberalls.bingo.util.TextComponents;
 import com.gmail.blubberalls.bingo.util.TextUtils;
 import com.google.common.collect.HashMultimap;
 
@@ -307,8 +309,16 @@ public class Game {
 
     public BaseComponent[] getBoard(Player p) {
         ComponentBuilder builder = new ComponentBuilder();
+        Iterator<Goal> goalIterator = goals.values().iterator();
 
-        goals.values().forEach(goal -> builder.append(goal.getTextIcon()));
+        for (int y = 0; y < getWidth() && goalIterator.hasNext(); y++) {
+            for (int x = 0; x < getLength() && goalIterator.hasNext(); x++) {
+                builder.append(goalIterator.next().getTextIcon());
+                builder.append(TextComponents.offset(1));
+            }
+
+            builder.append("\n\n");
+        }
         
         return builder.create();
     }
