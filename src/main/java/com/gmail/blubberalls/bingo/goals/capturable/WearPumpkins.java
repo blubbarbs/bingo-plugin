@@ -24,6 +24,6 @@ public class WearPumpkins extends CapturableGoal {
         Player player = (Player) event.getInventory().getHolder();
         Team t = game.getTeam(player);
 
-        setTeamCompleted(t, allMatchCondition(t));
+        setCompletedFor(t, allMatchCondition(t));
     }
 }

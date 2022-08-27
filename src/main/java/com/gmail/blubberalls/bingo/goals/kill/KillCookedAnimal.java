@@ -29,6 +29,6 @@ public class KillCookedAnimal extends Goal{
         ||  event.getEntity().getKiller() == null
         ||  event.getEntity().getFireTicks() <= 0) return;
 
-        setTeamCompleted(game.getTeam(event.getEntity().getKiller()));
+        setCompletedFor(event.getEntity().getKiller());
     }
 }

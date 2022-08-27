@@ -13,7 +13,7 @@ public abstract class NumerableGoal extends Goal implements CompletionData {
     }
 
     @Override
-    public String getTeamCompletionStatus(Team t) {
+    public String getCompletionStatusFor(Team t) {
         if (isCompleted()) {
             if (t.equals(getWhoCompleted())) {
                 return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + " ✓";
@@ -23,25 +23,25 @@ public abstract class NumerableGoal extends Goal implements CompletionData {
             }
         }
         else {
-            return ChatColor.YELLOW + getTitle() + " " + ChatColor.AQUA + getTeamCompletion(t) + "/" + getGoal();         
+            return ChatColor.YELLOW + getTitle() + " " + ChatColor.AQUA + getCompletionFor(t) + "/" + getGoal();         
         }
     }
 
     @Override
-    public void setTeamCompletion(Team t, int completion) {
-        CompletionData.super.setTeamCompletion(t, completion);
+    public void setCompletionFor(Team t, int completion) {
+        CompletionData.super.setCompletionFor(t, completion);
 
-        super.setTeamCompleted(t, completion >= getGoal());
+        super.setCompletedFor(t, completion >= getGoal());
         game.getPlayers().forEach(game::updatePlayerSidebar);
     }
 
     @Override
-    public void setTeamCompleted(Team t, boolean completed) {
+    public void setCompletedFor(Team t, boolean completed) {
         if (completed) {
-            setTeamCompletion(t, getGoal());
+            setCompletionFor(t, getGoal());
         }
         else {
-            setTeamCompletion(t, 0);
+            setCompletionFor(t, 0);
         }
     }
 }

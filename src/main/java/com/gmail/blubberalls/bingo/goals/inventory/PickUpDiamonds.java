@@ -18,7 +18,7 @@ public class PickupDiamonds extends Goal {
 
         Player p = (Player) event.getInventory().getHolder();
 
-        setTeamCompleted(game.getTeam(p), true);
+        setCompletedFor(p);
     }
     
 }

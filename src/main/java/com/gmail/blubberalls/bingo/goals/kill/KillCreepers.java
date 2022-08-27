@@ -22,7 +22,7 @@ public class KillCreepers extends NumerableGoal {
         
         if (!game.isPlayerPlaying(p)) return;
         
-        addTeamCompletion(game.getTeam(p), 1);
+        addCompletionFor(p, 1);
     }
 
 }

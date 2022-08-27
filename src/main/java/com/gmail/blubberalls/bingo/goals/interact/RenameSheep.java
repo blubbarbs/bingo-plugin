@@ -16,7 +16,7 @@ public class RenameSheep extends Goal {
         ||  event.getPlayer().getInventory().getItem(event.getHand()).getType() != Material.NAME_TAG
         ||  !event.getPlayer().getInventory().getItem(event.getHand()).getItemMeta().getDisplayName().equals("jeb_")) return;
 
-        setTeamCompleted(game.getTeam(event.getPlayer()));
+        setCompletedFor(event.getPlayer());
     }
 
 }

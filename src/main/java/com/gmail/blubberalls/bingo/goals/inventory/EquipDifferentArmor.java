@@ -35,6 +35,6 @@ public class EquipDifferentArmor extends Goal {
         if (!game.isPlayerPlaying(p)
         ||  !checkDifferentArmor(p)) return;
 
-        setTeamCompleted(game.getTeam(p));
+        setCompletedFor(p);
     }
 }

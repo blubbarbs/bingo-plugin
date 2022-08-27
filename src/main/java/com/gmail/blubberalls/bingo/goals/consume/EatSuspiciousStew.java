@@ -13,6 +13,6 @@ public class EatSuspiciousStew extends Goal {
         if (!game.isPlayerPlaying(event.getPlayer())
         ||  event.getItem().getType() != Material.SUSPICIOUS_STEW) return;
         
-        setTeamCompleted(game.getTeam(event.getPlayer()));
+        setCompletedFor(event.getPlayer());
     }
 }

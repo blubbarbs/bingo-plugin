@@ -2,6 +2,7 @@ package com.gmail.blubberalls.bingo.goal;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scoreboard.Team;
@@ -20,11 +21,13 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.HoverEvent.Action;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
 public abstract class Goal implements Listener, GoalData {
     protected Game game;
+    protected GoalDifficulty difficulty;
     protected NBTCompound savedData;
 
     public Game getGame() {
@@ -46,7 +49,7 @@ public abstract class Goal implements Listener, GoalData {
     }
 
     public GoalDifficulty getDifficulty() {
-        return GoalDifficulty.EASY;
+        return difficulty;
     }
 
     public String getIconPath() {
@@ -61,21 +64,28 @@ public abstract class Goal implements Listener, GoalData {
         return getTitle() + "\n" + getDescription();
     }
 
-    public BaseComponent[] getTextIcon() {
+    public BaseComponent[] getIcon() {
         ComponentBuilder builder = new ComponentBuilder();
-        TranslatableComponent background = isCompleted() ? TextComponents.icon("bingo.team_backgrounds." + getWhoCompleted().getName().toLowerCase()) : TextComponents.icon("bingo.team_backgrounds.none");
+        TranslatableComponent frame = TextComponents.icon("bingo.borders.border_test");
         TranslatableComponent icon = TextComponents.icon(getIconPath());
-        TranslatableComponent border = TextComponents.icon("bingo.blank");
+        TranslatableComponent overlay = TextComponents.icon("bingo.blank");
 
-        builder.append(background);
-        builder.append(TextComponents.ICON_OFFSET);
-        builder.append(border);
-        builder.append(TextComponents.ICON_OFFSET);
-        builder.append(icon);
-        background.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getTooltip())));
-        background.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/bingo togglesubscribe " + getName()));
+        builder.append(frame, FormatRetention.NONE);
+        builder.append(TextComponents.BORDER_OFFSET, FormatRetention.NONE);
+        builder.append(icon, FormatRetention.NONE);
+        builder.append(TextComponents.ICON_OFFSET, FormatRetention.NONE);
+        builder.append(overlay, FormatRetention.NONE);
 
         return builder.create();
+    }
+    
+    public BaseComponent getClickbox() {
+        BaseComponent clickbox = TextComponents.icon("bingo.borders.border_blank");
+
+        clickbox.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getTooltip())));
+        clickbox.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/bingo togglesubscribe " + getName()));
+
+        return clickbox;
     }
 
     public BaseComponent[] getCompletionMessage(Team t) {
@@ -83,8 +93,8 @@ public abstract class Goal implements Listener, GoalData {
         TextComponent baseMessage = new TextComponent("Team " + t.getColor() + t.getDisplayName() + ChatColor.RESET + " has completed ");
         TextComponent goalMessage = new TextComponent(ChatColor.GREEN + "[" + getTitle() + ChatColor.GREEN + "]" + ChatColor.RESET + "!");
 
-        messageBuilder.append(baseMessage);
-        messageBuilder.append(goalMessage);
+        messageBuilder.append(baseMessage, FormatRetention.NONE);
+        messageBuilder.append(goalMessage, FormatRetention.NONE);
         goalMessage.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getDescription())));
 
         return messageBuilder.create();
@@ -102,7 +112,7 @@ public abstract class Goal implements Listener, GoalData {
         return messageBuilder.create();
     }
 
-    public String getTeamCompletionStatus(Team t) {
+    public String getCompletionStatusFor(Team t) {
         if (isCompleted()) {
             if (t.equals(getWhoCompleted())) {
                 return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.BOLD + " ✓";
@@ -116,15 +126,15 @@ public abstract class Goal implements Listener, GoalData {
         }
     }
 
-    public boolean willChangeCompletor(Team t, boolean completed) {
+    public boolean willChangeCompletorFor(Team t, boolean completed) {
         Team oldCompletor = getWhoCompleted();
 
         return (oldCompletor == null && completed)
             || (t.equals(oldCompletor) && isCompleted() != completed);
     }
 
-    public void setTeamCompleted(Team t, boolean completed) {
-        if (!willChangeCompletor(t, completed)) return;
+    public void setCompletedFor(Team t, boolean completed) {
+        if (!willChangeCompletorFor(t, completed)) return;
 
         if (completed) {
             game.broadcastMessage(getCompletionMessage(t));
@@ -141,12 +151,16 @@ public abstract class Goal implements Listener, GoalData {
             unloadEvents();
         }
 
-        GoalData.super.setTeamCompleted(t, completed);
+        GoalData.super.setCompletedFor(t, completed);
         game.update();
     }
     
-    public void setTeamCompleted(Team t) {
-        setTeamCompleted(t, true);
+    public void setCompletedFor(Team t) {
+        setCompletedFor(t, true);
+    }
+
+    public void setCompletedFor(Player p) {
+        setCompletedFor(game.getTeam(p));
     }
 
     public void loadEvents() {

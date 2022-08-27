@@ -19,7 +19,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
-import com.gmail.blubberalls.bingo.goal.GoalFactories;
+import com.gmail.blubberalls.bingo.goal.Goals;
 import com.gmail.blubberalls.bingo.util.CustomSidebar;
 import com.gmail.blubberalls.bingo.util.NBTUtils;
 import com.gmail.blubberalls.bingo.util.TextComponents;
@@ -32,6 +32,7 @@ import de.tr7zw.nbtapi.NBTFile;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 
 public class Game {
     public static ChatColor[] TEAM_COLORS = {
@@ -311,15 +312,31 @@ public class Game {
         ComponentBuilder builder = new ComponentBuilder();
         Iterator<Goal> goalIterator = goals.values().iterator();
 
-        for (int y = 0; y < getWidth() && goalIterator.hasNext(); y++) {
+        for (int y = 0; y < getWidth() && goalIterator.hasNext(); y++) {            
+            ArrayList<Goal> goalRow = new ArrayList<Goal>();
+            
             for (int x = 0; x < getLength() && goalIterator.hasNext(); x++) {
-                builder.append(goalIterator.next().getTextIcon());
-                builder.append(TextComponents.offset(1));
+                goalRow.add(goalIterator.next());
+            }
+            
+            for (int x = 0; x < goalRow.size(); x++) {
+                builder.append(goalRow.get(x).getIcon(), FormatRetention.NONE);
+                builder.append(TextComponents.offset(6), FormatRetention.NONE);
             }
 
-            builder.append("\n\n");
+            builder.append("\n");
+
+            for (int x = 0; x < goalRow.size(); x++) {
+                builder.append(goalRow.get(x).getClickbox(), FormatRetention.NONE);
+            }
+
+            if (goalIterator.hasNext()) {
+                builder.append("\n\n", FormatRetention.NONE);
+            }
         }
         
+        Bukkit.getLogger().info(builder.toString());
+
         return builder.create();
     }
 
@@ -352,7 +369,7 @@ public class Game {
             ArrayList<String> strings = new ArrayList<String>();
 
             for (Goal g : subscribedGoals) {
-                strings.add(g.getTeamCompletionStatus(getTeam(p)));
+                strings.add(g.getCompletionStatusFor(getTeam(p)));
             }
 
             CustomSidebar.setPlayerSidebar(p, "Bingo", strings);
@@ -416,7 +433,7 @@ public class Game {
         data.setInteger("length", length);
         data.setInteger("width", width);
 
-        for (Goal goal : GoalFactories.randomGoals(this, length * width)) {
+        for (Goal goal : Goals.randomGoals(this, length * width)) {
             goals.put(goal.getName(), goal);
             goal.loadEvents();
         }
@@ -435,7 +452,7 @@ public class Game {
 
     public void loadGame() {
         for (NBTCompound instanceData : goalData) {
-            Goal g = GoalFactories.loadGoal(this, instanceData);
+            Goal g = Goals.loadGoal(this, instanceData);
 
             goals.put(g.getName(), g);
             if (!g.isCompleted() || g.hasEventsWhenCompleted()) {

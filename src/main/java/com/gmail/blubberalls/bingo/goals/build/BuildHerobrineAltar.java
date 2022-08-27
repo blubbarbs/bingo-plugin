@@ -48,7 +48,7 @@ public class BuildHerobrineAltar extends Goal {
 
         if (hasAltar) {
             event.getBlock().getWorld().strikeLightningEffect(event.getBlock().getLocation());
-            setTeamCompleted(game.getTeam(event.getPlayer()), true);
+            setCompletedFor(event.getPlayer());
         }
     }
 

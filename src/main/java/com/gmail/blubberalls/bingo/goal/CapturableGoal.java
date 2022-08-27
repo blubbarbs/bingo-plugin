@@ -17,17 +17,12 @@ public abstract class CapturableGoal extends Goal {
     }
 
     @Override
-    public GoalDifficulty getDifficulty() {
-        return GoalDifficulty.HARD;
-    }
-
-    @Override
     public boolean hasEventsWhenCompleted() {
         return true;
     }
 
     @Override
-    public String getTeamCompletionStatus(Team t) {
+    public String getCompletionStatusFor(Team t) {
         if (isCompleted()) {
             Team completor = getWhoCompleted();
 
