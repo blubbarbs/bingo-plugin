@@ -1,5 +1,7 @@
 package com.gmail.blubberalls.bingo;
 
+import java.util.Collection;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -102,9 +104,14 @@ public class BingoCommands {
             p.sendMessage(ChatColor.RED + "That is not the name of a goal.");
             return;
         }
-
+        Collection<Goal> subscribedGoals = Bingo.getGame().getPlayerSubscribedGoals(p);
         Goal goal = Bingo.getGame().getGoal(goalName);
         boolean isPlayerSubscribed = Bingo.getGame().isPlayerSubscribed(p, goal);
+
+        if (!isPlayerSubscribed && subscribedGoals.size() >= 5) {
+            p.sendMessage(ChatColor.RED + "You cannot subscribe to more than 5 goals at a time.");
+            return;
+        }
 
         Bingo.getGame().setPlayerGoalSubscription(p, goal, !isPlayerSubscribed);
     }

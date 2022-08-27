@@ -38,18 +38,16 @@ public abstract class Goal implements Listener, GoalData {
         return savedData;
     }
 
-    // Having this set to true prevents events being unloaded
-    // after the goal is completed
-    public boolean hasEventsWhenCompleted() {
-        return false;
-    }
-
     public String getTitle() {
         return TextUtils.capitalizeFirstLetters(getName(), "_", " ");
     }
 
     public GoalDifficulty getDifficulty() {
         return difficulty;
+    }
+
+    public boolean isCapturable() {
+        return difficulty.equals(GoalDifficulty.CAPTURABLE);
     }
 
     public String getIconPath() {
@@ -60,35 +58,48 @@ public abstract class Goal implements Listener, GoalData {
         return "Default description";
     }
 
-    public String getTooltip() {
-        return getTitle() + "\n" + getDescription();
-    }
-
     public BaseComponent[] getIcon() {
         ComponentBuilder builder = new ComponentBuilder();
-        TranslatableComponent frame = TextComponents.icon("bingo.borders.border_test");
+        TranslatableComponent frame = difficulty.getFrameFor(getWhoCompleted());
         TranslatableComponent icon = TextComponents.icon(getIconPath());
-        TranslatableComponent overlay = TextComponents.icon("bingo.blank");
 
         builder.append(frame, FormatRetention.NONE);
-        builder.append(TextComponents.BORDER_OFFSET, FormatRetention.NONE);
+        builder.append(TextComponents.FRAME_OFFSET, FormatRetention.NONE);
         builder.append(icon, FormatRetention.NONE);
-        builder.append(TextComponents.ICON_OFFSET, FormatRetention.NONE);
-        builder.append(overlay, FormatRetention.NONE);
 
         return builder.create();
     }
-    
-    public BaseComponent getClickbox() {
-        BaseComponent clickbox = TextComponents.icon("bingo.borders.border_blank");
 
-        clickbox.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getTooltip())));
+    public String getTooltipFor(Team t) {
+        String tooltip = ChatColor.BOLD + "" + ChatColor.UNDERLINE + getTitle() +  ChatColor.RESET + "\n";
+        tooltip += "Difficulty: " + difficulty.getColor() + "" + difficulty.name() +  ChatColor.RESET + "\n\n";
+        tooltip += getDescription() +  ChatColor.RESET;
+
+        if (!isCompleted()) {
+            tooltip += !getCompletionDescriptionFor(t).isEmpty() ? "\n\n" + getCompletionDescriptionFor(t) : "";
+        }
+        else {
+            Team completor = getWhoCompleted();
+            tooltip += ChatColor.ITALIC + "\n\nCompleted By: " + completor.getColor() + "" + ChatColor.ITALIC + completor.getDisplayName();
+        }
+        
+        return tooltip;
+    }
+    
+    public BaseComponent getClickboxFor(Team t) {
+        BaseComponent clickbox = TextComponents.icon("bingo.frames.frame_blank");
+
+        clickbox.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getTooltipFor(t))));
         clickbox.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/bingo togglesubscribe " + getName()));
 
         return clickbox;
     }
 
-    public BaseComponent[] getCompletionMessage(Team t) {
+    public String getCompletionDescriptionFor(Team t) {
+        return "";
+    }
+
+    public BaseComponent[] getCompletionMessageFor(Team t) {
         ComponentBuilder messageBuilder = new ComponentBuilder();
         TextComponent baseMessage = new TextComponent("Team " + t.getColor() + t.getDisplayName() + ChatColor.RESET + " has completed ");
         TextComponent goalMessage = new TextComponent(ChatColor.GREEN + "[" + getTitle() + ChatColor.GREEN + "]" + ChatColor.RESET + "!");
@@ -100,7 +111,7 @@ public abstract class Goal implements Listener, GoalData {
         return messageBuilder.create();
     }
 
-    public BaseComponent[] getUncompletionMessage(Team t) {
+    public BaseComponent[] getUncompletionMessageFor(Team t) {
         ComponentBuilder messageBuilder = new ComponentBuilder();
         TextComponent baseMessage = new TextComponent("Team " + t.getColor() + t.getDisplayName() + ChatColor.RESET + " has lost ");
         TextComponent goalMessage = new TextComponent(ChatColor.GREEN + "[" + getTitle() + ChatColor.GREEN + "]" + ChatColor.RESET + "!");
@@ -112,7 +123,7 @@ public abstract class Goal implements Listener, GoalData {
         return messageBuilder.create();
     }
 
-    public String getCompletionStatusFor(Team t) {
+    public String getCompletionStatusFor(Team t) {        
         if (isCompleted()) {
             if (t.equals(getWhoCompleted())) {
                 return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.BOLD + " ✓";
@@ -137,17 +148,17 @@ public abstract class Goal implements Listener, GoalData {
         if (!willChangeCompletorFor(t, completed)) return;
 
         if (completed) {
-            game.broadcastMessage(getCompletionMessage(t));
+            game.broadcastMessage(getCompletionMessageFor(t));
             game.broadcastSound(game.getTeamPlayers(t), Sound.ENTITY_PLAYER_LEVELUP);
             game.broadcastSound(game.getPlayersNotInTeam(t), Sound.BLOCK_CONDUIT_DEACTIVATE);
         }
         else {
-            game.broadcastMessage(getUncompletionMessage(t));
+            game.broadcastMessage(getUncompletionMessageFor(t));
             game.broadcastSound(game.getTeamPlayers(t), Sound.BLOCK_CONDUIT_DEACTIVATE);
             game.broadcastSound(game.getPlayersNotInTeam(t), Sound.ENTITY_ENDERMAN_TELEPORT);
         }
         
-        if (!hasEventsWhenCompleted() && completed) {
+        if (!isCapturable() && completed) {
             unloadEvents();
         }
 

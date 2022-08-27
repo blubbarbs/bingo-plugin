@@ -22,7 +22,7 @@ public interface GoalData {
     }
 
     default boolean isCompleted() {
-        return getWhoCompleted() != null;
+        return !getSavedData().getString("completed_by").isEmpty();
     }
 
     default NBTCompound getDataFor(Team t) {

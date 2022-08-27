@@ -1,6 +1,7 @@
 package com.gmail.blubberalls.bingo.goals.location;
 
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.generator.structure.Structure;
@@ -11,6 +12,8 @@ import com.gmail.blubberalls.bingo.goal.goal_data.KeyedData;
 import com.gmail.blubberalls.bingo.util.Checks;
 import com.gmail.blubberalls.custom_events.event.PlayerExistEvent;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class ExploreVillages extends NumerableGoal implements KeyedData {
 
     public boolean isVillage(Structure s) {
@@ -20,6 +23,17 @@ public class ExploreVillages extends NumerableGoal implements KeyedData {
     @Override
     public int getGoal() {
         return 3;
+    }
+
+    @Override
+    public String getCompletionDescriptionFor(Team t) {
+        String description = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Villages Visited" + ChatColor.RESET;
+        
+        for (NamespacedKey key : getKeysFor(t, "visited_structures")) {
+            description += ChatColor.AQUA + "\n- " + key.getKey();
+        }
+
+        return description;
     }
 
     @EventHandler
@@ -34,7 +48,7 @@ public class ExploreVillages extends NumerableGoal implements KeyedData {
         
         Bukkit.getLogger().info("Added " + at.getKey().toString() + " to visited villages list");
         addKeyedFor(t, "visited_structures", at);
-        addCompletionFor(t, 1);
+        addCompletionFor(p, 1);
     }
     
 }

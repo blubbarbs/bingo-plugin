@@ -11,7 +11,7 @@ import com.gmail.blubberalls.custom_events.event.InventoryChangedEvent;
 
 public class WearPumpkins extends CapturableGoal {
 
-    public boolean testCondition(Player p) {
+    public boolean hasPumpkin(Player p) {
         return p.getInventory().getHelmet() != null 
             && p.getInventory().getHelmet().getType() == Material.CARVED_PUMPKIN;
     }
@@ -24,6 +24,6 @@ public class WearPumpkins extends CapturableGoal {
         Player player = (Player) event.getInventory().getHolder();
         Team t = game.getTeam(player);
 
-        setCompletedFor(t, allMatchCondition(t));
+        setCompletedFor(t, game.allTeamMembersMatchCondition(t, this::hasPumpkin));
     }
 }

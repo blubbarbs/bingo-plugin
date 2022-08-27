@@ -24,6 +24,7 @@ import com.gmail.blubberalls.bingo.util.CustomSidebar;
 import com.gmail.blubberalls.bingo.util.NBTUtils;
 import com.gmail.blubberalls.bingo.util.TextComponents;
 import com.gmail.blubberalls.bingo.util.TextUtils;
+import com.google.common.base.Predicate;
 import com.google.common.collect.HashMultimap;
 
 import de.tr7zw.nbtapi.NBTCompound;
@@ -280,6 +281,14 @@ public class Game {
         return players;
     }
 
+    public boolean allTeamMembersMatchCondition(Team t, Predicate<Player> condition) {
+        return getTeamPlayers(t).stream().allMatch(condition);
+    }
+
+    public boolean anyTeamMemberMatchesCondition(Team t, Predicate<Player> condition) {
+        return getTeamPlayers(t).stream().anyMatch(condition);
+    }
+
     public Collection<Goal> getPlayerSubscribedGoals(Player p) {
         ArrayList<Goal> subscribedGoals = new ArrayList<Goal>();
 
@@ -309,6 +318,7 @@ public class Game {
     }
 
     public BaseComponent[] getBoard(Player p) {
+        Team t = getTeam(p);
         ComponentBuilder builder = new ComponentBuilder();
         Iterator<Goal> goalIterator = goals.values().iterator();
 
@@ -327,15 +337,15 @@ public class Game {
             builder.append("\n");
 
             for (int x = 0; x < goalRow.size(); x++) {
-                builder.append(goalRow.get(x).getClickbox(), FormatRetention.NONE);
+                builder.append(goalRow.get(x).getClickboxFor(t), FormatRetention.NONE);
             }
 
             if (goalIterator.hasNext()) {
                 builder.append("\n\n", FormatRetention.NONE);
             }
         }
-        
-        Bukkit.getLogger().info(builder.toString());
+
+        builder.append("\n\n", FormatRetention.NONE);
 
         return builder.create();
     }
@@ -455,7 +465,7 @@ public class Game {
             Goal g = Goals.loadGoal(this, instanceData);
 
             goals.put(g.getName(), g);
-            if (!g.isCompleted() || g.hasEventsWhenCompleted()) {
+            if (!g.isCompleted() || g.isCapturable()) {
                 g.loadEvents();
             }
         }

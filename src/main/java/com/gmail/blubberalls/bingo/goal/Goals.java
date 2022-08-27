@@ -28,6 +28,7 @@ public class Goals {
         registerEasyGoals();
         registerMediumGoals();
         registerHardGoals();
+        registerCapturableGoals();
     }
 
     static void registerEasyGoals() {
@@ -61,8 +62,11 @@ public class Goals {
     }
 
     static void registerHardGoals() {
-        registerHard("wear_pumpkin", WearPumpkins::new);
         registerHard("kill_phantom", KillPhantom::new);
+    }
+
+    static void registerCapturableGoals() {
+        registerCapturable("wear_pumpkin", WearPumpkins::new);
     }
 
     static GoalFactory registerEasy(String name, Supplier<Goal> goalConstructor) {
@@ -75,6 +79,10 @@ public class Goals {
 
     static GoalFactory registerHard(String name, Supplier<Goal> goalConstructor) {
         return register(name, goalConstructor, GoalDifficulty.HARD);
+    }
+
+    static GoalFactory registerCapturable(String name, Supplier<Goal> goalConstructor) {
+        return register(name, goalConstructor, GoalDifficulty.CAPTURABLE);
     }
 
     static GoalFactory register(String name, Supplier<Goal> goalConstructor, GoalDifficulty difficulty) {
