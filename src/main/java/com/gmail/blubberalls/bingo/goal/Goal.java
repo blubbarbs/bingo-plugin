@@ -75,7 +75,7 @@ public abstract class Goal implements Listener, GoalData {
         tooltip += "Difficulty: " + difficulty.getColor() + "" + difficulty.name() +  ChatColor.RESET + "\n\n";
         tooltip += getDescription() +  ChatColor.RESET;
 
-        if (!isCompleted()) {
+        if (isCapturable() || !isCompleted()) {
             tooltip += !getCompletionDescriptionFor(t).isEmpty() ? "\n\n" + getCompletionDescriptionFor(t) : "";
         }
         else {
@@ -124,8 +124,10 @@ public abstract class Goal implements Listener, GoalData {
     }
 
     public String getCompletionStatusFor(Team t) {        
-        if (isCompleted()) {
-            if (t.equals(getWhoCompleted())) {
+        Team completor = getWhoCompleted();
+        
+        if (completor != null) {
+            if (t.equals(completor)) {
                 return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.BOLD + " ✓";
             }
             else {

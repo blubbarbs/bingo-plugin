@@ -1,8 +1,5 @@
 package com.gmail.blubberalls.bingo.goals.capturable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -12,19 +9,10 @@ import com.gmail.blubberalls.bingo.goal.CapturableGoal;
 import com.gmail.blubberalls.bingo.goal.goal_data.ScoreData;
 
 public class KillMostPlayers extends CapturableGoal implements ScoreData {
-    
     public boolean teamHasMostKills(Team team) {
-        int teamScore = getScoreFor(team, "killed");
-        ArrayList<Integer> scores = new ArrayList<Integer>();
         
-        for (Team t : game.getTeams()) {
-            scores.add(getScoreFor(t, "killed"));
-        }
+        int teamScore = getScoreFor(team, "killed");
 
-        Collections.sort(scores);
-        int highestScore = scores.get(scores.size() - 1);
-
-        return teamScore == highestScore;
     }
 
     @EventHandler
