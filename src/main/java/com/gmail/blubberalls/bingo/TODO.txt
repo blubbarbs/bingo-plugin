@@ -1,0 +1,5 @@
+Change logic for capturable goals:
+    > Upon a possible completion:
+            1. Check the current completor. Do they still fulfill the criteria for "staying on top"? If yes, ignore and keep them at the top
+            2. Check the team that just had their completion update. Do THEY fulfill the criteria for staying on top? If yes, make them the new completors
+Possible adding of multiple lines of information on sidebar per goal

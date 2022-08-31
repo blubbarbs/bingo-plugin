@@ -22,10 +22,15 @@ public abstract class NumerableGoal extends Goal implements ScoreData {
     }
 
     @Override
-    public String getCompletionStatusFor(Team t) {
+    public String getProgressDescriptionFor(Team t) {
+        return "Completed: " + ChatColor.AQUA + getCompletionFor(t) + "/" + getGoal();
+    }
+
+    @Override
+    public String getSidebarTitleFor(Team t) {
         if (isCompleted()) {
             if (t.equals(getWhoCompleted())) {
-                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + " ✓";
+                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.BOLD + " ✓";
             }
             else {
                 return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.RED + " ✕";
@@ -34,11 +39,6 @@ public abstract class NumerableGoal extends Goal implements ScoreData {
         else {
             return ChatColor.YELLOW + getTitle() + " " + ChatColor.AQUA + getCompletionFor(t) + "/" + getGoal();         
         }
-    }
-
-    @Override
-    public String getCompletionDescriptionFor(Team t) {
-        return "Completed: " + ChatColor.AQUA + getCompletionFor(t) + "/" + getGoal();
     }
 
     public void setCompletionFor(Team t, int completion) {

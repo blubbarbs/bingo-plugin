@@ -172,6 +172,21 @@ public class Game {
         return teams;
     }
 
+    public Leaderboard<Team, Integer> getLeaderboard() {
+        Leaderboard<Team, Integer> leaderboard = new Leaderboard<Team, Integer>();
+
+        for (Goal g : goals.values()) {
+            Team whoCompleted = g.getWhoCompleted();
+            int currentScore = leaderboard.containsKey(whoCompleted) ? leaderboard.get(whoCompleted) : 0;
+
+            if (whoCompleted == null) continue;
+
+            leaderboard.put(whoCompleted, currentScore + 1);
+        }
+
+        return leaderboard;
+    }
+
     public Collection<Team> getWinners() {
         Collection<Team> teams = getTeams();
 
@@ -379,7 +394,7 @@ public class Game {
             ArrayList<String> strings = new ArrayList<String>();
 
             for (Goal g : subscribedGoals) {
-                strings.add(g.getCompletionStatusFor(getTeam(p)));
+                strings.add(g.getSidebarTitleFor(getTeam(p)));
             }
 
             CustomSidebar.setPlayerSidebar(p, "Bingo", strings);

@@ -31,13 +31,7 @@ public class Goals {
         registerCapturableGoals();
     }
 
-    static void registerEasyGoals() {
-        registerEasy("kill_creepers", KillCreepers::new);
-        registerEasy("kill_skeletons", KillSkeletons::new);
-        registerEasy("craft_diamond_sword", CraftDiamondSword::new);
-        registerEasy("pickup_diamonds", PickupDiamonds::new);
-        registerEasy("enter_stronghold", EnterStronghold::new);
-        
+    static void registerEasyGoals() {        
         registerEasy("eat_suspicious_stew", EatSuspiciousStew::new);
         registerEasy("equip_different_armor", EquipDifferentArmor::new);
         registerEasy("kill_cooked_mob", KillCookedAnimal::new);
@@ -66,6 +60,7 @@ public class Goals {
     }
 
     static void registerCapturableGoals() {
+        registerCapturable("kill_players", KillMostPlayers::new);
         registerCapturable("wear_pumpkin", WearPumpkins::new);
     }
 

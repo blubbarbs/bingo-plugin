@@ -38,6 +38,14 @@ public abstract class Goal implements Listener, GoalData {
         return savedData;
     }
 
+    public String getIconPath() {
+        return "bingo.icons.original_test";
+    }
+    
+    public String getDescription() {
+        return "Default description";
+    }
+
     public String getTitle() {
         return TextUtils.capitalizeFirstLetters(getName(), "_", " ");
     }
@@ -48,14 +56,6 @@ public abstract class Goal implements Listener, GoalData {
 
     public boolean isCapturable() {
         return difficulty.equals(GoalDifficulty.CAPTURABLE);
-    }
-
-    public String getIconPath() {
-        return "bingo.icons.original_test";
-    }
-    
-    public String getDescription() {
-        return "Default description";
     }
 
     public BaseComponent[] getIcon() {
@@ -70,19 +70,33 @@ public abstract class Goal implements Listener, GoalData {
         return builder.create();
     }
 
-    public String getTooltipFor(Team t) {
-        String tooltip = ChatColor.BOLD + "" + ChatColor.UNDERLINE + getTitle() +  ChatColor.RESET + "\n";
-        tooltip += "Difficulty: " + difficulty.getColor() + "" + difficulty.name() +  ChatColor.RESET + "\n\n";
-        tooltip += getDescription() +  ChatColor.RESET;
+    public String getCompletionDescription() {
+        Team completor = getWhoCompleted();
 
-        if (isCapturable() || !isCompleted()) {
-            tooltip += !getCompletionDescriptionFor(t).isEmpty() ? "\n\n" + getCompletionDescriptionFor(t) : "";
-        }
-        else {
-            Team completor = getWhoCompleted();
-            tooltip += ChatColor.ITALIC + "\n\nCompleted By: " + completor.getColor() + "" + ChatColor.ITALIC + completor.getDisplayName();
-        }
+        return isCompleted() ? ChatColor.ITALIC + "Completed By: " + completor.getColor() + "" + ChatColor.ITALIC + completor.getDisplayName() : "";
+    }
+
+    public String getProgressDescriptionFor(Team t) {
+        return "";
+    }
+
+    public String getTooltipFor(Team t) {
+        String tooltip = difficulty.getColor() + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + getTitle() + ChatColor.RESET;
+        String description = getDescription();
+        String progressDescription = getProgressDescriptionFor(t);
+        String completionDescription = getCompletionDescription();
         
+        if (!description.isEmpty()) {
+            tooltip += "\n" + description;
+        }
+
+        if (!isCompleted() && !progressDescription.isEmpty()) {
+            tooltip += "\n\n" + progressDescription;
+        }
+        else if (isCompleted() && !completionDescription.isEmpty()) {
+            tooltip += "\n\n" + completionDescription;
+        }
+
         return tooltip;
     }
     
@@ -95,8 +109,21 @@ public abstract class Goal implements Listener, GoalData {
         return clickbox;
     }
 
-    public String getCompletionDescriptionFor(Team t) {
-        return "";
+
+    public String getSidebarTitleFor(Team t) {        
+        Team completor = getWhoCompleted();
+        
+        if (completor != null) {
+            if (t.equals(completor)) {
+                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.BOLD + " ✓";
+            }
+            else {
+                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.RED + ChatColor.BOLD + " ✕";
+            }
+        }
+        else {
+            return ChatColor.GOLD + getTitle();
+        }
     }
 
     public BaseComponent[] getCompletionMessageFor(Team t) {
@@ -121,22 +148,6 @@ public abstract class Goal implements Listener, GoalData {
         messageBuilder.append(goalMessage);
         
         return messageBuilder.create();
-    }
-
-    public String getCompletionStatusFor(Team t) {        
-        Team completor = getWhoCompleted();
-        
-        if (completor != null) {
-            if (t.equals(completor)) {
-                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.BOLD + " ✓";
-            }
-            else {
-                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.RED + ChatColor.BOLD + " ✕";
-            }
-        }
-        else {
-            return ChatColor.GOLD + getTitle();
-        }
     }
 
     public boolean willChangeCompletorFor(Team t, boolean completed) {

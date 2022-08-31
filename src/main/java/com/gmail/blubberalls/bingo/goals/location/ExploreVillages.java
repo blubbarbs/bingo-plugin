@@ -26,11 +26,11 @@ public class ExploreVillages extends NumerableGoal implements KeyedData {
     }
 
     @Override
-    public String getCompletionDescriptionFor(Team t) {
-        String description = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Villages Visited" + ChatColor.RESET;
+    public String getProgressDescriptionFor(Team t) {
+        String description = "Villages Visited:" + ChatColor.RESET;
         
         for (NamespacedKey key : getKeysFor(t, "visited_structures")) {
-            description += ChatColor.AQUA + "\n- " + key.getKey();
+            description += ChatColor.AQUA + "\n> " + key.getKey();
         }
 
         return description;

@@ -1,15 +1,23 @@
 package com.gmail.blubberalls.bingo.goal.goal_data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
+import com.gmail.blubberalls.bingo.Leaderboard;
+
 public interface ScoreData extends GoalData {
-    default LinkedHashMap<Team, Integer> getLeaderboard(String key) {
+    default Leaderboard<Team, Integer> getLeaderboard(String key) {
+        Leaderboard<Team, Integer> leaderboard = new Leaderboard<Team, Integer>();
+    
+
+        for (String teamName : getSavedData().getCompound("team_data").getKeys()) {
+            Team team = getGame().getTeam(teamName);
+            int score = getScoreFor(team, key);
+
+            leaderboard.put(team, score);
+        }
+
+        return leaderboard;
     }
     
     default int getScoreFor(Team t, String key) {
