@@ -9,7 +9,6 @@ public interface ScoreData extends GoalData {
     default Leaderboard<Team, Integer> getLeaderboard(String key) {
         Leaderboard<Team, Integer> leaderboard = new Leaderboard<Team, Integer>();
     
-
         for (String teamName : getSavedData().getCompound("team_data").getKeys()) {
             Team team = getGame().getTeam(teamName);
             int score = getScoreFor(team, key);
@@ -28,8 +27,13 @@ public interface ScoreData extends GoalData {
         return getScoreFor(getGame().getTeam(p), key);
     }
 
-    default void setScoreFor(Team t, String key, int completion) {
-        getDataFor(t).setInteger(key, completion);
+    default void setScoreFor(Team t, String key, int newScore) {
+        int oldScore = getScoreFor(t, key);
+
+        if (oldScore == newScore) return;
+        
+        getDataFor(t).setInteger(key, newScore);
+        onScoreDataChange(t, key, oldScore);
     }
 
     default void setScoreFor(Player p, String key, int completion) {
@@ -45,4 +49,6 @@ public interface ScoreData extends GoalData {
     default void addScoreFor(Player p, String key, int delta) {
         addScoreFor(getGame().getTeam(p), key, delta);
     }
+
+    default void onScoreDataChange(Team t, String key, int oldValue) {}
 }

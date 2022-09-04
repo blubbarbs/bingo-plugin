@@ -1,8 +1,6 @@
 package com.gmail.blubberalls.bingo.goal;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scoreboard.Team;
@@ -109,7 +107,6 @@ public abstract class Goal implements Listener, GoalData {
         return clickbox;
     }
 
-
     public String getSidebarTitleFor(Team t) {        
         Team completor = getWhoCompleted();
         
@@ -125,66 +122,20 @@ public abstract class Goal implements Listener, GoalData {
             return ChatColor.GOLD + getTitle();
         }
     }
-
-    public BaseComponent[] getCompletionMessageFor(Team t) {
-        ComponentBuilder messageBuilder = new ComponentBuilder();
-        TextComponent baseMessage = new TextComponent("Team " + t.getColor() + t.getDisplayName() + ChatColor.RESET + " has completed ");
-        TextComponent goalMessage = new TextComponent(ChatColor.GREEN + "[" + getTitle() + ChatColor.GREEN + "]" + ChatColor.RESET + "!");
-
-        messageBuilder.append(baseMessage, FormatRetention.NONE);
-        messageBuilder.append(goalMessage, FormatRetention.NONE);
-        goalMessage.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getDescription())));
-
-        return messageBuilder.create();
-    }
-
-    public BaseComponent[] getUncompletionMessageFor(Team t) {
-        ComponentBuilder messageBuilder = new ComponentBuilder();
-        TextComponent baseMessage = new TextComponent("Team " + t.getColor() + t.getDisplayName() + ChatColor.RESET + " has lost ");
-        TextComponent goalMessage = new TextComponent(ChatColor.GREEN + "[" + getTitle() + ChatColor.GREEN + "]" + ChatColor.RESET + "!");
-
-        goalMessage.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getDescription())));
-        messageBuilder.append(baseMessage);
-        messageBuilder.append(goalMessage);
-        
-        return messageBuilder.create();
-    }
-
-    public boolean willChangeCompletorFor(Team t, boolean completed) {
-        Team oldCompletor = getWhoCompleted();
-
-        return (oldCompletor == null && completed)
-            || (t.equals(oldCompletor) && isCompleted() != completed);
-    }
-
-    public void setCompletedFor(Team t, boolean completed) {
-        if (!willChangeCompletorFor(t, completed)) return;
-
-        if (completed) {
-            game.broadcastMessage(getCompletionMessageFor(t));
-            game.broadcastSound(game.getTeamPlayers(t), Sound.ENTITY_PLAYER_LEVELUP);
-            game.broadcastSound(game.getPlayersNotInTeam(t), Sound.BLOCK_CONDUIT_DEACTIVATE);
-        }
-        else {
-            game.broadcastMessage(getUncompletionMessageFor(t));
-            game.broadcastSound(game.getTeamPlayers(t), Sound.BLOCK_CONDUIT_DEACTIVATE);
-            game.broadcastSound(game.getPlayersNotInTeam(t), Sound.ENTITY_ENDERMAN_TELEPORT);
-        }
-        
-        if (!isCapturable() && completed) {
-            unloadEvents();
-        }
-
-        GoalData.super.setCompletedFor(t, completed);
-        game.update();
-    }
     
-    public void setCompletedFor(Team t) {
-        setCompletedFor(t, true);
-    }
+    public void onCompletorChange(Team oldCompletor) {
+        Team currentCompletor = getWhoCompleted();
 
-    public void setCompletedFor(Player p) {
-        setCompletedFor(game.getTeam(p));
+        if (currentCompletor == null) return; 
+
+        TextComponent goalComponent = new TextComponent(difficulty.getColor() + "[" + getTitle() + ChatColor.GREEN + "]");
+        ComponentBuilder completionMessage = new ComponentBuilder();
+
+        completionMessage.append("Team " + currentCompletor.getColor() + currentCompletor.getDisplayName() + " has completed ", FormatRetention.NONE);
+        completionMessage.append(goalComponent);
+        goalComponent.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getDescription())));
+        game.broadcastMessage(completionMessage.create());
+        game.update();
     }
 
     public void loadEvents() {
