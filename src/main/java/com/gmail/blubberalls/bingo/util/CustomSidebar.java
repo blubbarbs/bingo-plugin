@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -68,7 +70,7 @@ public class CustomSidebar {
         PacketContainer createObjectivePacket = getCreateObjectivePacket(OBJECTIVE_NAME, title);
         PacketContainer displayPacket = getDisplayPacket(OBJECTIVE_NAME);
         ArrayList<PacketContainer> setScorePackets = new ArrayList<PacketContainer>();
-        
+
         for (String s : scoreboardValues.keySet()) {
             setScorePackets.add(getScorePacket(OBJECTIVE_NAME, s, scoreboardValues.get(s)));
         }
@@ -84,7 +86,11 @@ public class CustomSidebar {
         int i = strings.size();
 
         for (String s : strings) {
-            scoreboardValues.put(s, i--);
+            String sanitizedString = s + ChatColor.values()[i];
+            
+            Bukkit.getLogger().info("SANITIZED!!! " + sanitizedString);
+
+            scoreboardValues.put(sanitizedString, i--);
         }
 
         setPlayerSidebar(p, title, scoreboardValues);

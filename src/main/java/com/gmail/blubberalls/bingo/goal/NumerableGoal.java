@@ -28,24 +28,25 @@ public abstract class NumerableGoal extends Goal implements ScoreData {
 
     @Override
     public String getSidebarTitleFor(Team t) {
-        if (isCompleted()) {
-            if (t.equals(getWhoCompleted())) {
-                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.BOLD + " ✓";
-            }
-            else {
-                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.RED + " ✕";
-            }
+        Team completor = getWhoCompleted();
+        String titlePrefix = completor == null ? difficulty.getColor() + "" : ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH;
+        String sidebar = titlePrefix + ChatColor.BOLD + getTitle();
+
+        if (completor != null) {
+            sidebar += ChatColor.RESET + "\n" + "> Completed by: " + completor.getColor() + completor.getDisplayName();
         }
         else {
-            return ChatColor.YELLOW + getTitle() + " " + ChatColor.AQUA + getCompletionFor(t) + "/" + getGoal();         
+            sidebar += ChatColor.RESET + "\n" + "> Completed: " + ChatColor.AQUA + getCompletionFor(t) + "/" + getGoal();
         }
+        
+        return sidebar;
     }
 
     public void setCompletionFor(Team t, int completion) {
         setScoreFor(t, "completion", completion);
 
         super.setCompletedFor(t, completion >= getGoal());
-        game.getPlayers().forEach(game::updatePlayerSidebar);
+        game.getTeamPlayers(t).forEach(game::updatePlayerSidebar);
     }
 
     public void setCompletionFor(Player p, int completion) {

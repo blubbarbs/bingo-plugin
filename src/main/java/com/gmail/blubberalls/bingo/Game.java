@@ -2,6 +2,7 @@ package com.gmail.blubberalls.bingo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,7 +25,6 @@ import com.gmail.blubberalls.bingo.util.CustomSidebar;
 import com.gmail.blubberalls.bingo.util.NBTUtils;
 import com.gmail.blubberalls.bingo.util.TextComponents;
 import com.gmail.blubberalls.bingo.util.TextUtils;
-import com.google.common.base.Predicate;
 import com.google.common.collect.HashMultimap;
 
 import de.tr7zw.nbtapi.NBTCompound;
@@ -269,7 +269,6 @@ public class Game {
         }
 
         return oPlayers;
-
     }
 
     public List<OfflinePlayer> getAllTeamPlayers(Team t) {
@@ -294,14 +293,6 @@ public class Game {
         }
 
         return players;
-    }
-
-    public boolean allTeamMembersMatchCondition(Team t, Predicate<Player> condition) {
-        return getTeamPlayers(t).stream().allMatch(condition);
-    }
-
-    public boolean anyTeamMemberMatchesCondition(Team t, Predicate<Player> condition) {
-        return getTeamPlayers(t).stream().anyMatch(condition);
     }
 
     public Collection<Goal> getPlayerSubscribedGoals(Player p) {
@@ -388,13 +379,20 @@ public class Game {
     }
 
     public void updatePlayerSidebar(Player p) {
+        Team t = getTeam(p);
         Collection<Goal> subscribedGoals = getPlayerSubscribedGoals(p);
 
         if (subscribedGoals.size() > 0) {
             ArrayList<String> strings = new ArrayList<String>();
 
             for (Goal g : subscribedGoals) {
-                strings.add(g.getSidebarTitleFor(getTeam(p)));
+                strings.addAll(Arrays.asList(g.getSidebarTitleFor(t).split("\n")));
+            }
+
+            Bukkit.getLogger().info("SIZE: " + strings.size());
+
+            for (String s : strings) {
+                Bukkit.getLogger().info(s);
             }
 
             CustomSidebar.setPlayerSidebar(p, "Bingo", strings);
@@ -480,7 +478,7 @@ public class Game {
             Goal g = Goals.loadGoal(this, instanceData);
 
             goals.put(g.getName(), g);
-            if (!g.isCompleted() || g.isCapturable()) {
+            if (g.shouldLoadEvents()) {
                 g.loadEvents();
             }
         }
@@ -519,5 +517,4 @@ public class Game {
 
         endGame();
     }
-
 }

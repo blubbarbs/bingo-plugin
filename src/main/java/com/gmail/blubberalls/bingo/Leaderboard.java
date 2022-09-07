@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +79,7 @@ public class Leaderboard<K, V extends Comparable<? super V>> implements Map<K, V
     public Set<V> getUniqueValues() {
         if (root == null) return Collections.emptySet();
 
-        HashSet<V> uniqueValues = new HashSet<V>();
+        LinkedHashSet<V> uniqueValues = new LinkedHashSet<V>();
 
         root.forEach(n -> uniqueValues.add(n.value));
 
@@ -91,7 +90,7 @@ public class Leaderboard<K, V extends Comparable<? super V>> implements Map<K, V
         if (root == null) return Collections.emptyList();
 
         ArrayList<V> values = new ArrayList<V>();
-        
+
         root.forEach(node -> values.add(node.value));
 
         return values;

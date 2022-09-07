@@ -8,8 +8,8 @@ import com.gmail.blubberalls.bingo.Leaderboard;
 public interface ScoreData extends GoalData {
     default Leaderboard<Team, Integer> getLeaderboard(String key) {
         Leaderboard<Team, Integer> leaderboard = new Leaderboard<Team, Integer>();
-    
-        for (String teamName : getSavedData().getCompound("team_data").getKeys()) {
+
+        for (String teamName : getSavedData().getOrCreateCompound("team_data").getKeys()) {
             Team team = getGame().getTeam(teamName);
             int score = getScoreFor(team, key);
 
@@ -19,6 +19,10 @@ public interface ScoreData extends GoalData {
         return leaderboard;
     }
     
+    default int getHighestScore(String key) {
+        return getLeaderboard(key).values().get(0);
+    }
+
     default int getScoreFor(Team t, String key) {
         return getDataFor(t).getInteger(key) != null ? getDataFor(t).getInteger(key) : 0;
     }
@@ -27,13 +31,8 @@ public interface ScoreData extends GoalData {
         return getScoreFor(getGame().getTeam(p), key);
     }
 
-    default void setScoreFor(Team t, String key, int newScore) {
-        int oldScore = getScoreFor(t, key);
-
-        if (oldScore == newScore) return;
-        
+    default void setScoreFor(Team t, String key, int newScore) {        
         getDataFor(t).setInteger(key, newScore);
-        onScoreDataChange(t, key, oldScore);
     }
 
     default void setScoreFor(Player p, String key, int completion) {
@@ -49,6 +48,4 @@ public interface ScoreData extends GoalData {
     default void addScoreFor(Player p, String key, int delta) {
         addScoreFor(getGame().getTeam(p), key, delta);
     }
-
-    default void onScoreDataChange(Team t, String key, int oldValue) {}
 }

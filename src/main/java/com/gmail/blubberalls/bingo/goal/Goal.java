@@ -52,8 +52,8 @@ public abstract class Goal implements Listener, GoalData {
         return difficulty;
     }
 
-    public boolean isCapturable() {
-        return difficulty.equals(GoalDifficulty.CAPTURABLE);
+    public boolean shouldLoadEvents() {
+        return !isCompleted();
     }
 
     public BaseComponent[] getIcon() {
@@ -85,14 +85,14 @@ public abstract class Goal implements Listener, GoalData {
         String completionDescription = getCompletionDescription();
         
         if (!description.isEmpty()) {
-            tooltip += "\n" + description;
+            tooltip += "\n" + ChatColor.RESET + description;
         }
 
         if (!isCompleted() && !progressDescription.isEmpty()) {
-            tooltip += "\n\n" + progressDescription;
+            tooltip += "\n\n" + ChatColor.RESET + progressDescription;
         }
         else if (isCompleted() && !completionDescription.isEmpty()) {
-            tooltip += "\n\n" + completionDescription;
+            tooltip += "\n\n" + ChatColor.RESET + completionDescription;
         }
 
         return tooltip;
@@ -109,33 +109,41 @@ public abstract class Goal implements Listener, GoalData {
 
     public String getSidebarTitleFor(Team t) {        
         Team completor = getWhoCompleted();
-        
+        String titlePrefix = completor == null ? difficulty.getColor() + "" : ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH;
+        String sidebar = titlePrefix + ChatColor.BOLD + getTitle();
+
         if (completor != null) {
-            if (t.equals(completor)) {
-                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.BOLD + " ✓";
-            }
-            else {
-                return ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + getTitle() + ChatColor.RESET + "" + ChatColor.RED + ChatColor.BOLD + " ✕";
-            }
+            sidebar += ChatColor.RESET + "\n" + "> Completed by: " + completor.getColor() + completor.getDisplayName();
         }
-        else {
-            return ChatColor.GOLD + getTitle();
-        }
+        
+        return sidebar;
     }
     
+    @Override
+    public void setCompletedFor(Team t, boolean completed) {
+        String oldCompletorName = getWhoCompletedName();
+        
+        GoalData.super.setCompletedFor(t, completed);
+
+        if (oldCompletorName.equals(getWhoCompletedName())) return;
+
+        onCompletorChange(game.getTeam(oldCompletorName));
+    }
+
     public void onCompletorChange(Team oldCompletor) {
         Team currentCompletor = getWhoCompleted();
 
         if (currentCompletor == null) return; 
 
-        TextComponent goalComponent = new TextComponent(difficulty.getColor() + "[" + getTitle() + ChatColor.GREEN + "]");
+        TextComponent goalComponent = new TextComponent(difficulty.getColor() + "[" + getTitle() + "]");
         ComponentBuilder completionMessage = new ComponentBuilder();
 
-        completionMessage.append("Team " + currentCompletor.getColor() + currentCompletor.getDisplayName() + " has completed ", FormatRetention.NONE);
+        completionMessage.append("Team " + currentCompletor.getColor() + currentCompletor.getDisplayName() + ChatColor.RESET + " has completed ", FormatRetention.NONE);
         completionMessage.append(goalComponent);
         goalComponent.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getDescription())));
         game.broadcastMessage(completionMessage.create());
         game.update();
+        unloadEvents();
     }
 
     public void loadEvents() {

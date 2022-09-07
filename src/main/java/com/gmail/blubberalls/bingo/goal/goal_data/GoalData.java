@@ -15,10 +15,12 @@ public interface GoalData {
         return getSavedData().getString("name");
     }
 
-    default Team getWhoCompleted() {
-        String teamName = getSavedData().getString("completed_by");
+    default String getWhoCompletedName() {
+        return getSavedData().getString("completed_by");
+    }
 
-        return getGame().getTeam(teamName);
+    default Team getWhoCompleted() {
+        return getGame().getTeam(getWhoCompletedName());
     }
 
     default boolean isCompleted() {
@@ -29,19 +31,13 @@ public interface GoalData {
         return getSavedData().getOrCreateCompound("team_data").getOrCreateCompound(t.getName());
     }
     
-    default void setCompletedFor(Team t, boolean completed) {                
-        Team previousCompletor = getWhoCompleted();
-        
+    default void setCompletedFor(Team t, boolean completed) {                                
         if (completed) {
             getSavedData().setString("completed_by", t.getName());
         }
-        else {
+        else if (!completed && getWhoCompletedName().equals(t.getName())) {
             getSavedData().removeKey("completed_by");
         }
-
-        if (t.equals(previousCompletor)) return;
-
-        onCompletorChange(previousCompletor);
     }
 
     default void setCompletedFor(Player p, boolean completed) {
@@ -55,6 +51,4 @@ public interface GoalData {
     default void setCompletedFor(Player p) {
         setCompletedFor(p, true);
     }
-
-    default void onCompletorChange(Team oldCompletor) {}
 }

@@ -31,7 +31,11 @@ public class Goals {
         registerCapturableGoals();
     }
 
-    static void registerEasyGoals() {        
+    static void registerEasyGoals() {
+        registerEasy("kill_creepers", KillCreepers::new);
+        registerEasy("kill_skeletons", KillSkeletons::new);
+        registerEasy("pickup_diamonds", PickupDiamonds::new);
+
         registerEasy("eat_suspicious_stew", EatSuspiciousStew::new);
         registerEasy("equip_different_armor", EquipDifferentArmor::new);
         registerEasy("kill_cooked_mob", KillCookedAnimal::new);

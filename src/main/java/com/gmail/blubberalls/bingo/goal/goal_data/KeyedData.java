@@ -40,12 +40,7 @@ public interface KeyedData extends GoalData {
     }
 
     default void addKeyedFor(Team t, String key, Keyed value) {
-        Collection<NamespacedKey> oldValues = getKeysFor(t, key);
-        
-        if (oldValues.contains(value.getKey())) return;
-
-        getDataFor(t).getStringList(key).add(value.getKey().toString());    
-        onKeyedListDataChange(t, key, oldValues);
+        getDataFor(t).getStringList(key).add(value.getKey().toString());
     }
 
     default void addKeyedFor(Player p, String key, Keyed value) {
@@ -53,18 +48,10 @@ public interface KeyedData extends GoalData {
     }
 
     default void setKeyed(Team t, String key, Keyed value) {
-        NamespacedKey oldValue = getKeyFor(t, key);
-        
-        if (value.getKey().equals(oldValue)) return;
-
         getDataFor(t).setString(key, value.getKey().toString());
-        onKeyedDataChange(t, key, oldValue);
     }
 
     default void setKeyed(Player p, String key, Keyed value) {
         setKeyed(getGame().getTeam(p), key, value);
     }
-
-    default void onKeyedDataChange(Team t, String key, NamespacedKey oldValue) {}
-    default void onKeyedListDataChange(Team t, String key, Collection<NamespacedKey> oldValue) {}
 }
