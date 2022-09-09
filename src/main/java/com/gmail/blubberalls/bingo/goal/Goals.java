@@ -42,11 +42,13 @@ public class Goals {
         registerEasy("get_full_cobble", CollectFullCobblestone::new);
         registerEasy("fish_fishing_rod", FishFishingRod::new);
         registerEasy("fish_lilypad", FishLilypad::new);
-        registerEasy("fish_nautilus_shell", FishNautilusShell::new);
+        //registerEasy("fish_nautilus_shell", FishNautilusShell::new);
         registerEasy("fish_tropical_fish", FishTropicalFish::new);
         registerEasy("dye_wolf", DyeWolf::new);
         registerEasy("shear_pink_sheep", ShearPinkSheep::new);
         registerEasy("enter_lush_cave", EnterLushCave::new);
+        //registerEasy("idiot_box", BuildIdiotBox::new);
+        registerEasy("consume_rotten_flesh", EatRottenFlesh::new);
     }
 
     static void registerMediumGoals() {
@@ -57,6 +59,7 @@ public class Goals {
         registerMedium("build_herobrine_altar", BuildHerobrineAltar::new);
         registerMedium("craft_magma_block", CraftMagmaBlock::new);
         registerMedium("mine_amethyst", MineAmethystCrystal::new);
+        registerMedium("kill_zombies", KillZombies::new);
     }
 
     static void registerHardGoals() {

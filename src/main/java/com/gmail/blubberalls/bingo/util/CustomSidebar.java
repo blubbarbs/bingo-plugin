@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -87,9 +86,7 @@ public class CustomSidebar {
 
         for (String s : strings) {
             String sanitizedString = s + ChatColor.values()[i];
-            
-            Bukkit.getLogger().info("SANITIZED!!! " + sanitizedString);
-
+    
             scoreboardValues.put(sanitizedString, i--);
         }
 

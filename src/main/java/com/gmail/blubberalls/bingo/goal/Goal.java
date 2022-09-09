@@ -52,10 +52,6 @@ public abstract class Goal implements Listener, GoalData {
         return difficulty;
     }
 
-    public boolean shouldLoadEvents() {
-        return !isCompleted();
-    }
-
     public BaseComponent[] getIcon() {
         ComponentBuilder builder = new ComponentBuilder();
         TranslatableComponent frame = difficulty.getFrameFor(getWhoCompleted());
@@ -109,14 +105,13 @@ public abstract class Goal implements Listener, GoalData {
 
     public String getSidebarTitleFor(Team t) {        
         Team completor = getWhoCompleted();
-        String titlePrefix = completor == null ? difficulty.getColor() + "" : ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH;
-        String sidebar = titlePrefix + ChatColor.BOLD + getTitle();
-
-        if (completor != null) {
-            sidebar += ChatColor.RESET + "\n" + "> Completed by: " + completor.getColor() + completor.getDisplayName();
-        }
         
-        return sidebar;
+        if (completor == null) {
+            return difficulty.getColor() + "" + ChatColor.BOLD + getTitle();
+        }
+        else {
+            return ChatColor.GRAY + "" + ChatColor.BOLD + ChatColor.STRIKETHROUGH + getTitle() + completor.getColor() + ChatColor.BOLD + " (" + completor.getDisplayName() + ")";
+        }
     }
     
     @Override
@@ -143,14 +138,16 @@ public abstract class Goal implements Listener, GoalData {
         goalComponent.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getDescription())));
         game.broadcastMessage(completionMessage.create());
         game.update();
-        unloadEvents();
+        unload();
     }
 
-    public void loadEvents() {
-        Bukkit.getPluginManager().registerEvents(this, Bingo.getInstance());
+    public void load() {
+        if (!isCompleted()) {
+            Bukkit.getPluginManager().registerEvents(this, Bingo.getInstance());
+        }
     }
 
-    public void unloadEvents() {
+    public void unload() {
         HandlerList.unregisterAll(this);
     }
 }

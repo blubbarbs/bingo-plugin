@@ -29,14 +29,14 @@ public abstract class NumerableGoal extends Goal implements ScoreData {
     @Override
     public String getSidebarTitleFor(Team t) {
         Team completor = getWhoCompleted();
-        String titlePrefix = completor == null ? difficulty.getColor() + "" : ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH;
-        String sidebar = titlePrefix + ChatColor.BOLD + getTitle();
+        String sidebar = "";
 
-        if (completor != null) {
-            sidebar += ChatColor.RESET + "\n" + "> Completed by: " + completor.getColor() + completor.getDisplayName();
+        if (completor == null) {
+            sidebar += difficulty.getColor() + "" + ChatColor.BOLD + getTitle();
+            sidebar += ChatColor.RESET +"\n> Completed: " + ChatColor.AQUA + getCompletionFor(t) + "/" + getGoal();
         }
         else {
-            sidebar += ChatColor.RESET + "\n" + "> Completed: " + ChatColor.AQUA + getCompletionFor(t) + "/" + getGoal();
+            sidebar += ChatColor.GRAY + "" + ChatColor.BOLD + ChatColor.STRIKETHROUGH + getTitle() + completor.getColor() + ChatColor.BOLD + " (" + completor.getDisplayName() + ")";
         }
         
         return sidebar;

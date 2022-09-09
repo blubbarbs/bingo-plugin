@@ -1,6 +1,9 @@
 package com.gmail.blubberalls.bingo.goal;
 
+import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.Team;
+
+import com.gmail.blubberalls.bingo.Bingo;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -13,11 +16,6 @@ import net.md_5.bungee.api.chat.hover.content.Text;
 public abstract class CapturableGoal extends Goal {
 
     public abstract boolean teamCheck(Team t);
-
-    @Override
-    public boolean shouldLoadEvents() {
-        return true;
-    }
 
     public boolean willTeamComplete(Team t) {
         Team currentCompletor = getWhoCompleted();
@@ -56,8 +54,7 @@ public abstract class CapturableGoal extends Goal {
     @Override
     public String getSidebarTitleFor(Team t) {        
         Team completor = getWhoCompleted();
-        String titlePrefix = completor == null ? difficulty.getColor() + "" : difficulty.getColor() + "" + ChatColor.STRIKETHROUGH;
-        String sidebar = titlePrefix + ChatColor.BOLD + getTitle();
+        String sidebar = difficulty.getColor() + "" + ChatColor.BOLD + getTitle();
 
         if (completor != null) {
             sidebar += ChatColor.RESET + "\n" + "> Current Holder: " + completor.getColor() + completor.getDisplayName();
@@ -93,4 +90,10 @@ public abstract class CapturableGoal extends Goal {
         game.broadcastMessage(completionMessage.create());
         game.update();
     }
+
+    @Override
+    public void load() {
+        Bukkit.getPluginManager().registerEvents(this, Bingo.getInstance());
+    }
+
 }

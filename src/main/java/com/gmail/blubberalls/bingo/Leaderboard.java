@@ -60,17 +60,27 @@ public class Leaderboard<K, V extends Comparable<? super V>> implements Map<K, V
         return entries;
     }
 
+    public K getKeyAt(int index) {
+        Node node = root;
+
+        for (int i = 0; i < index && node != null; i++) {
+            node = node.next;
+        }
+
+        return node != null ? node.key : null;
+    }
+
     public Collection<K> getKeysWithValue(V value) {
         if (root == null) return Collections.emptyList();
 
         ArrayList<K> keys = new ArrayList<K>();
-        Node nodeWithValue = root.find(value);
+        Node nodeWithValue = root.findNode(value);
 
         if (nodeWithValue == null) return Collections.emptyList();
 
-        while (nodeWithValue != null) {
+        while (nodeWithValue != null && nodeWithValue.value.equals(value)) {
             keys.add(nodeWithValue.key);            
-            nodeWithValue = nodeWithValue.find(value);
+            nodeWithValue = nodeWithValue.next;
         }
 
         return keys;
@@ -112,9 +122,10 @@ public class Leaderboard<K, V extends Comparable<? super V>> implements Map<K, V
 
     public V remove(Object key) {
         if (!nodes.containsKey(key)) return null;
+        
         Node node = nodes.get(key);
-
-        node.delete();
+        
+        root.deleteNode(node);
         nodes.remove(key);
 
         return node.value;
@@ -127,26 +138,25 @@ public class Leaderboard<K, V extends Comparable<? super V>> implements Map<K, V
             
             return value;
         }
-
-        if (nodes.containsKey(key)) {
+        else if (nodes.containsKey(key)) {
             Node node = nodes.get(key);
 
-            node.delete();
+            root.deleteNode(node);
             node.value = value;
-
-            if (root != null) {
-                root.addNode(node);
-            }
-            else {
+            
+            if (root == null) {
                 root = node;
             }
+            else {
+                root.addNode(node);
+            }
 
-            return null;
+            return value;
         }
         else {
             Node node = new Node(key, value);
-
             nodes.put(key, node);
+
             root.addNode(node);
 
             return value;
@@ -154,8 +164,8 @@ public class Leaderboard<K, V extends Comparable<? super V>> implements Map<K, V
     }
 
     public void clear() {
-        if (root != null) root.delete();
-        
+        root.forEach(node -> node.next = null);
+        root = null;
         nodes.clear();
     }
 
@@ -166,102 +176,58 @@ public class Leaderboard<K, V extends Comparable<? super V>> implements Map<K, V
     private class Node {
         K key;
         V value;
-        Node parent = null;
-        Node left = null;
-        Node right = null;
+        Node next = null;
 
         Node(K key, V value) {
             this.key = key;
             this.value = value;
         }
         
-        Node findMinimum() {
-            if (left != null)
-                return left.findMinimum();
-            if (right != null)
-                return right.findMinimum();
-
-            return this;
-        }
-
-        Node find(V value) {
-            int direction = value.compareTo(this.value);
-            
-            if (direction < 0) {
-                return left == null || left.value == value ? left : left.find(value);
+        Node findNode(V value) {
+            if (this.value.equals(value)) {
+                return this;
+            }
+            else if (next != null) {
+                return next.findNode(value);
             }
             else {
-                return right == null || right.value == value ? right : right.find(value);
+                return null;
             }
         }
 
-        void delete() {
-            Node successor = left != null || right != null ? findMinimum() : null;
-            
-            if (parent != null) {
-                if (parent.left == this) {
-                    parent.left = successor;
-                }
-                else {
-                    parent.right = successor;
-                }
+        void deleteNode(Node node) {
+            if (node == root) {
+                root = root.next;
             }
-            else {
-                root = successor;
+            else if (next == node) {
+                next = node.next;
             }
-            
-            if (successor != null) {
-                successor.delete();
-                
-                if (left != null) {
-                    left.parent = successor;
-                }
-
-                if (right != null) {
-                    right.parent = successor;
-                }
-
-                successor.parent = parent;
-                successor.left = left;
-                successor.right = right;
-                parent = null;
-                left = null;
-                right = null;
+            else if (next != null) {
+                next.deleteNode(node);
             }
         }
 
         void addNode(Node node) {                        
-            int direction = node.value.compareTo(value);
-
-            if (direction < 0) {
-                if (left == null) {
-                    left = node;
-                    node.parent = this;
-                } 
-                else {
-                    left.addNode(node);
-                }
-            } 
+            if (node.value.compareTo(root.value) > 0) {
+                node.next = root;
+                root = node;
+            }
+            else if (next == null || node.value.compareTo(next.value) > 0) {
+                node.next = next;
+                next = node;
+            }
             else {
-                if (right == null) {
-                    right = node;
-                    node.parent = this;
-                } 
-                else {
-                    right.addNode(node);
-                }
+                next.addNode(node);
             }
         }
 
-        void forEach(Consumer<Node> function) {
-            if (right != null) {
-                right.forEach(function);
-            }
+        void forEach(Consumer<Node> consumer) {
+            Node next = this.next;
 
-            function.accept(this);
+            consumer.accept(this);
             
-            if (left != null) {
-                left.forEach(function);
+            if (next != null) {
+                next.forEach(consumer);
             }
         }
     }

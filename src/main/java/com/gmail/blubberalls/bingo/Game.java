@@ -389,12 +389,6 @@ public class Game {
                 strings.addAll(Arrays.asList(g.getSidebarTitleFor(t).split("\n")));
             }
 
-            Bukkit.getLogger().info("SIZE: " + strings.size());
-
-            for (String s : strings) {
-                Bukkit.getLogger().info(s);
-            }
-
             CustomSidebar.setPlayerSidebar(p, "Bingo", strings);
         }
         else {
@@ -422,8 +416,8 @@ public class Game {
         players.forEach(player -> player.playSound(player.getLocation(), sound, 1F, 1F));
     }
 
-    public void unregisterGoalEvents() {
-        goals.values().forEach(Goal::unloadEvents);
+    public void unloadGoals() {
+        goals.values().forEach(Goal::unload);
     }
 
     public void setPlayerGoalSubscription(OfflinePlayer op, Goal g, boolean subscribed) {
@@ -458,7 +452,7 @@ public class Game {
 
         for (Goal goal : Goals.randomGoals(this, length * width)) {
             goals.put(goal.getName(), goal);
-            goal.loadEvents();
+            goal.load();
         }
 
         update();
@@ -478,9 +472,7 @@ public class Game {
             Goal g = Goals.loadGoal(this, instanceData);
 
             goals.put(g.getName(), g);
-            if (g.shouldLoadEvents()) {
-                g.loadEvents();
-            }
+            g.load();
         }
 
         update();
@@ -488,7 +480,7 @@ public class Game {
 
     public void endGame() {
         getPlayers().forEach(p -> removePlayer(p));
-        unregisterGoalEvents();
+        unloadGoals();
         goalData.clear();
         NBTUtils.clearNBT(playerData);
         NBTUtils.clearNBT(teamData);

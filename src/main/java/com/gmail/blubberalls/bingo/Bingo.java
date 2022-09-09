@@ -50,7 +50,7 @@ public class Bingo extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         GAME.saveGame();
-        GAME.unregisterGoalEvents();
+        GAME.unloadGoals();
     }
 
     @EventHandler
