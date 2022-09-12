@@ -21,7 +21,7 @@ public class KillPhantom extends Goal {
         EntityDamageByEntityEvent lastDamageEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
 
         if (!game.isPlayerPlaying(killer)
-        ||  lastDamageEvent.getDamager().getType() != EntityType.TRIDENT) return;
+        ||  lastDamageEvent.getDamager().getType() != EntityType.SPECTRAL_ARROW) return;
 
         setCompletedFor(game.getTeam(killer));
     }

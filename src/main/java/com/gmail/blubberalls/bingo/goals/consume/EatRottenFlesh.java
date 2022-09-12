@@ -14,11 +14,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.Bingo;
-import com.gmail.blubberalls.bingo.goal.NumerableGoal;
+import com.gmail.blubberalls.bingo.goal.ScoredGoal;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class EatRottenFlesh extends NumerableGoal {
+public class EatRottenFlesh extends ScoredGoal {
     HashMap<Player, BukkitRunnable> scoreTasks = new HashMap<Player, BukkitRunnable>();
     
     @Override
@@ -66,5 +66,12 @@ public class EatRottenFlesh extends NumerableGoal {
         scoreTasks.get(p).cancel();
         scoreTasks.remove(p);
         setCompletionFor(p, 0);
+    }
+
+    @Override
+    public void unload() {
+        super.unload();
+        scoreTasks.values().forEach(runnable -> runnable.cancel());
+        scoreTasks.clear();
     }
 }

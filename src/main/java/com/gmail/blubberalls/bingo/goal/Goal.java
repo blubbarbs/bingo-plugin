@@ -110,7 +110,7 @@ public abstract class Goal implements Listener, GoalData {
             return difficulty.getColor() + "" + ChatColor.BOLD + getTitle();
         }
         else {
-            return ChatColor.GRAY + "" + ChatColor.BOLD + ChatColor.STRIKETHROUGH + getTitle() + completor.getColor() + ChatColor.BOLD + " (" + completor.getDisplayName() + ")";
+            return ChatColor.GRAY + "" + ChatColor.BOLD + ChatColor.STRIKETHROUGH + getTitle() + completor.getColor() + " (" + completor.getDisplayName() + ")";
         }
     }
     

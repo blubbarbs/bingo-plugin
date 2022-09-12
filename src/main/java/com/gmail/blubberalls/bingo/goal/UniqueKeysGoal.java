@@ -1,7 +1,6 @@
 package com.gmail.blubberalls.bingo.goal;
 
 import org.bukkit.Keyed;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
@@ -9,18 +8,25 @@ import com.gmail.blubberalls.bingo.goal.goal_data.KeyedData;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class UniqueKeysGoal extends NumerableGoal implements KeyedData {
+public abstract class UniqueKeysGoal extends ScoredGoal implements KeyedData {
+    public abstract Keyed[] getValidKeys();
+    
     @Override
-    public String getProgressDescriptionFor(Team t) {
-        if (getScoreFor(t, "completion") == 0) return "";        
-        
-        String description = "Unique Keys" + ChatColor.RESET;
-        
-        for (NamespacedKey key : getKeysFor(t, "unique_keys")) {
-            description += "\n> " + ChatColor.AQUA + key.getKey() + ChatColor.RESET;
+    public int getGoal() {
+        return getValidKeys().length;
+    }
+
+    @Override
+    public String getProgressDescriptionFor(Team t) {        
+        String description = "";
+
+        for (Keyed key : getValidKeys()) {
+            description += "> ";
+            description += containsUniqueKeyFor(t, key) ? ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + key.getKey().getKey() : ChatColor.AQUA + key.getKey().getKey();
+            description += ChatColor.RESET + "\n";
         }
 
-        return description;
+        return description.trim();
     }
 
     public boolean containsUniqueKeyFor(Team t, Keyed key) {
@@ -31,8 +37,17 @@ public class UniqueKeysGoal extends NumerableGoal implements KeyedData {
         return containsUniqueKeyFor(game.getTeam(p), key);
     }
 
+    public boolean isValidKey(Keyed key) {
+        for (Keyed k : getValidKeys()) {
+            if (key.getKey().equals(k.getKey())) return true;
+        }
+
+        return false;
+    }
+
     public void addUniqueKeyFor(Team t, Keyed key) {
-        if (containsKeyedFor(t, "unique_keys", key)) return;
+        if (!isValidKey(key)
+        ||  containsUniqueKeyFor(t, key)) return;
 
         addKeyedFor(t, "unique_keys", key);
         addCompletionFor(t, 1);

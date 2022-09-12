@@ -7,19 +7,16 @@ import org.bukkit.event.inventory.CraftItemEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 
-public class CraftDiamondSword extends Goal {
-
-    @Override
-    public String getIconPath() {
-        return "bingo.icons.minecraft.diamond_sword";
-    }
-
+public class CraftNetheriteHoe extends Goal {
+ 
     @EventHandler
     public void onCraft(CraftItemEvent event) {
         if (!game.isPlayerPlaying((Player) event.getWhoClicked())
-        ||  event.getCurrentItem().getType() != Material.DIAMOND_SWORD) return;
+        ||  event.getCurrentItem().getType() != Material.NETHERITE_HOE) return;
 
         Player p = (Player) event.getWhoClicked();
+
         setCompletedFor(p);
     }
+
 }

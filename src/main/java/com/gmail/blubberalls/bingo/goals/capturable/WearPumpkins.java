@@ -3,11 +3,10 @@ package com.gmail.blubberalls.bingo.goals.capturable;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.goal.CapturableGoal;
-import com.gmail.blubberalls.custom_events.event.InventoryChangedEvent;
+import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class WearPumpkins extends CapturableGoal {
 
@@ -21,12 +20,10 @@ public class WearPumpkins extends CapturableGoal {
     }
     
     @EventHandler
-    public void onInventoryChange(InventoryChangedEvent event) {
-        if (event.getInventory().getType() != InventoryType.PLAYER
-            || !game.isPlayerPlaying((Player) event.getInventory().getHolder())) return;
+    public void onInventoryChange(PlayerInventoryChangedEvent event) {
+        if (!game.isPlayerPlaying(event.getPlayer())) return;
         
-        Player player = (Player) event.getInventory().getHolder();
-        Team t = game.getTeam(player);
+        Team t = game.getTeam(event.getPlayer());
 
         setCompletedFor(t, willTeamComplete(t));
     }

@@ -4,12 +4,11 @@ import java.util.HashSet;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.CreativeCategory;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
-import com.gmail.blubberalls.custom_events.event.InventoryChangedEvent;
+import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class EquipDifferentArmor extends Goal {
 
@@ -27,14 +26,10 @@ public class EquipDifferentArmor extends Goal {
     }
 
     @EventHandler
-    public void onInventoryChange(InventoryChangedEvent event) {
-        if (event.getInventory().getType() != InventoryType.PLAYER) return;
+    public void onInventoryChange(PlayerInventoryChangedEvent event) {        
+        if (!game.isPlayerPlaying(event.getPlayer())
+        ||  !checkDifferentArmor(event.getPlayer())) return;
 
-        Player p = (Player) event.getInventory().getHolder();
-        
-        if (!game.isPlayerPlaying(p)
-        ||  !checkDifferentArmor(p)) return;
-
-        setCompletedFor(p);
+        setCompletedFor(event.getPlayer());
     }
 }

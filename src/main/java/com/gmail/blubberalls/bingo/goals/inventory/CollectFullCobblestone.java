@@ -3,11 +3,10 @@ package com.gmail.blubberalls.bingo.goals.inventory;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
-import com.gmail.blubberalls.custom_events.event.InventoryChangedEvent;
+import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class CollectFullCobblestone extends Goal {
     
@@ -22,13 +21,10 @@ public class CollectFullCobblestone extends Goal {
     }
 
     @EventHandler
-    public void onInventoryChange(InventoryChangedEvent event) {
-        if (event.getInventory().getType() != InventoryType.PLAYER) return;
+    public void onInventoryChange(PlayerInventoryChangedEvent event) {
+        if (!game.isPlayerPlaying(event.getPlayer())
+        ||  !hasAllCobblestone(event.getPlayer())) return;
 
-        Player p = (Player) event.getInventory().getHolder();
-
-        if (!hasAllCobblestone(p)) return;
-
-        setCompletedFor(p);
+        setCompletedFor(event.getPlayer());
     }
 }

@@ -72,18 +72,16 @@ public abstract class CapturableGoal extends Goal {
         if (oldCompletor == null) {
             completionMessage.append("Team " + currentCompletor.getColor() + currentCompletor.getDisplayName() + ChatColor.RESET + " has captured ", FormatRetention.NONE);
             completionMessage.append(goalComponent, FormatRetention.NONE);
-            completionMessage.append("!", FormatRetention.NONE);
         }
         else if (currentCompletor == null) {
             completionMessage.append("Team " + oldCompletor.getColor() + oldCompletor.getDisplayName() + ChatColor.RESET + " has LOST ", FormatRetention.NONE);
             completionMessage.append(goalComponent, FormatRetention.NONE);
-            completionMessage.append("!!", FormatRetention.NONE);
         }
         else {
             completionMessage.append("Team " + currentCompletor.getColor() + currentCompletor.getDisplayName() + ChatColor.RESET + " has stolen ");
             completionMessage.append(goalComponent, FormatRetention.NONE);
             completionMessage.append(" from ", FormatRetention.NONE);
-            completionMessage.append(oldCompletor.getColor() + oldCompletor.getDisplayName() + ChatColor.RESET + "!!!");
+            completionMessage.append(oldCompletor.getColor() + oldCompletor.getDisplayName());
         }
 
         goalComponent.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getDescription())));

@@ -30,13 +30,8 @@ public interface UUIDData extends GoalData {
         return getUUIDFor(getGame().getTeam(p), key);
     }
 
-    default void setUUIDFor(Team t, String key, UUID value) {
-        UUID oldValue = getUUIDFor(t, key);
-
-        if (oldValue.equals(value)) return;
- 
+    default void setUUIDFor(Team t, String key, UUID value) { 
         getDataFor(t).setString(key, value.toString());
-        onUUIDDataChange(t, key, oldValue);
     }
 
     default void setUUIDFor(Player p, String key, UUID value) {
@@ -44,18 +39,10 @@ public interface UUIDData extends GoalData {
     }
 
     default void addUUIDFor(Team t, String key, UUID value) {
-        Collection<UUID> oldValues = getUUIDsFor(t, key);
-        
-        if (oldValues.contains(value)) return;
-
         getDataFor(t).getStringList(key).add(value.toString());
-        onUUIDListDataChange(t, key, oldValues);
     }
 
     default void addUUIDFor(Player p, String key, UUID value) {
         addUUIDFor(getGame().getTeam(p), key, value);
     }
-
-    default void onUUIDDataChange(Team t, String key, UUID oldValue) {}
-    default void onUUIDListDataChange(Team t, String key, Collection<UUID> oldValue) {}
 }

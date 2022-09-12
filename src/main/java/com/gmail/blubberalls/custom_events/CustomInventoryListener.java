@@ -5,9 +5,11 @@ import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftInventoryView;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerLoadEvent;
@@ -17,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.Bingo;
 import com.gmail.blubberalls.bingo.util.Checks;
-import com.gmail.blubberalls.custom_events.event.InventoryChangedEvent;
+import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 import com.google.common.collect.HashMultimap;
 
 import net.minecraft.world.inventory.ICrafting;
@@ -34,6 +36,9 @@ public class CustomInventoryListener implements Listener {
             if (!Bingo.getInstance().isEnabled()) return;
             
             Inventory changedInventory = nmsContainer.getBukkitView().getInventory(rawSlot);
+            
+            if (changedInventory.getType() != InventoryType.PLAYER) return;
+
             int slot = nmsContainer.getBukkitView().convertSlot(rawSlot);
             ItemStack previousStack = previousInventories.get(changedInventory)[slot];
             ItemStack newStack = changedInventory.getItem(slot);
@@ -68,7 +73,7 @@ public class CustomInventoryListener implements Listener {
                 previousInventory[i] = currentStack != null ? currentStack.clone() : null;
             }
 
-            InventoryChangedEvent updateEvent = new InventoryChangedEvent(changed, previous);
+            PlayerInventoryChangedEvent updateEvent = new PlayerInventoryChangedEvent((Player) changed.getHolder(), previous);
 
             Bukkit.getPluginManager().callEvent(updateEvent);
         }
@@ -115,14 +120,12 @@ public class CustomInventoryListener implements Listener {
     public void registerInventoryView(InventoryView view) {
         if (registeredInventoryViews.contains(view)) return;
 
-        registerInventory(view.getTopInventory());
         registerInventory(view.getBottomInventory());
         addNMSSlotListener(view);
         registeredInventoryViews.add(view);
     }
 
     public void deregisterInventoryView(InventoryView view) {
-        deregisterInventory(view.getBottomInventory());
         deregisterInventory(view.getTopInventory());
         removeNMSSlotListener(view);
         registeredInventoryViews.remove(view);
