@@ -23,7 +23,6 @@ public class BuildHerobrineAltar extends Goal {
     public boolean checkAltar(Block netherrackBlock) {
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
-
                 if (netherrackBlock.getRelative(x, -1, z).getType() != Material.GOLD_BLOCK) {
                     return false;
                 }

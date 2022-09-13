@@ -10,6 +10,7 @@ import com.gmail.blubberalls.bingo.goal.ScoredCapturableGoal;
 
 public class EatMostFood extends ScoredCapturableGoal {
 
+    // Fix. Fires with candle
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK

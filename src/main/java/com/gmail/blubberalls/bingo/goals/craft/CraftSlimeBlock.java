@@ -7,16 +7,14 @@ import org.bukkit.event.inventory.CraftItemEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 
-public class CraftNetheriteHoe extends Goal {
- 
+public class CraftSlimeBlock extends Goal {
+
     @EventHandler
     public void onCraft(CraftItemEvent event) {
         if (!game.isPlayerPlaying((Player) event.getWhoClicked())
-        ||  event.getCurrentItem().getType() != Material.NETHERITE_HOE) return;
+        ||  event.getCurrentItem().getType() != Material.SLIME_BLOCK) return;
 
         Player p = (Player) event.getWhoClicked();
-
         setCompletedFor(p);
     }
-
 }

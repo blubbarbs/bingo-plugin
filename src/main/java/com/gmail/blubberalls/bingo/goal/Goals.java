@@ -48,6 +48,7 @@ public class Goals {
         registerEasy("kill_stalagmite", KillByStalagmite::new);
         registerEasy("die_anvil", DieByFallingAnvil::new);
         registerEasy("ride_pig_with_carrot", RidePigWithCarrot::new);
+        registerEasy("shoot_tnt_flaming_arrow" , IgniteTNTFlamingArrow::new);
     }
 
     static void registerMediumGoals() {
@@ -61,8 +62,8 @@ public class Goals {
         registerMedium("kill_zombies", KillZombies::new);
         //registerMedium("kill_creeper", KillCreeperWCreeper::new);
         registerMedium("kill_phantom", KillPhantom::new);
-        registerMedium("consume_rotten_flesh", EatRottenFlesh::new);
-        registerMedium("kill_skeletons", KillSkeletons::new);
+        //registerMedium("consume_rotten_flesh", EatRottenFlesh::new);
+        //registerMedium("kill_skeletons", KillSkeletons::new);
         registerMedium("plant_trees", PlantTrees::new);
         registerMedium("destroy_diamonds", DestroyDiamonds::new);
         registerMedium("fertilize_crops", FertilizeCrops::new);
