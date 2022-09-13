@@ -18,12 +18,11 @@ public abstract class UniqueKeysGoal extends ScoredGoal implements KeyedData {
 
     @Override
     public String getProgressDescriptionFor(Team t) {        
-        String description = "";
+        String description = "Completed: " + ChatColor.AQUA + getCompletionFor(t) + "/" + getGoal();
 
         for (Keyed key : getValidKeys()) {
-            description += "> ";
-            description += containsUniqueKeyFor(t, key) ? ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + key.getKey().getKey() : ChatColor.AQUA + key.getKey().getKey();
-            description += ChatColor.RESET + "\n";
+            description += ChatColor.RESET + "\n> ";
+            description += containsUniqueKeyFor(t, key) ? ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + key.getKey().getKey() : ChatColor.DARK_AQUA + key.getKey().getKey();
         }
 
         return description.trim();
@@ -38,6 +37,8 @@ public abstract class UniqueKeysGoal extends ScoredGoal implements KeyedData {
     }
 
     public boolean isValidKey(Keyed key) {
+        if (key == null) return false;
+
         for (Keyed k : getValidKeys()) {
             if (key.getKey().equals(k.getKey())) return true;
         }

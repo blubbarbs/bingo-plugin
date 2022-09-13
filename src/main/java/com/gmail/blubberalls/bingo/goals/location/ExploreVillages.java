@@ -12,6 +12,11 @@ import com.gmail.blubberalls.custom_events.event.PlayerExistEvent;
 public class ExploreVillages extends UniqueKeysGoal {
 
     @Override
+    public int getGoal() {
+        return 3;
+    }
+
+    @Override
     public Keyed[] getValidKeys() {
         return new Keyed[] {
             Structure.VILLAGE_DESERT,

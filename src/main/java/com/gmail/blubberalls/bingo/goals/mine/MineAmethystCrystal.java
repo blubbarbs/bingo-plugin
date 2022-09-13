@@ -11,9 +11,7 @@ public class MineAmethystCrystal extends Goal {
     @EventHandler
     public void onMine(BlockDropItemEvent event) {
         if (!game.isPlayerPlaying(event.getPlayer())
-        ||  (event.getBlock().getType() != Material.AMETHYST_BLOCK 
-            &&  event.getBlock().getType() != Material.AMETHYST_SHARD 
-            &&  event.getBlock().getType() != Material.AMETHYST_CLUSTER)) return;
+        ||  event.getBlockState().getType() != Material.AMETHYST_BLOCK) return;
 
         setCompletedFor(event.getPlayer());
     }

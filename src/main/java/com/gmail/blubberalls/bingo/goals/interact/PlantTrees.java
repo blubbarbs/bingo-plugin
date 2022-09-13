@@ -33,6 +33,7 @@ public class PlantTrees extends UniqueKeysGoal {
                 return Material.BIRCH_SAPLING;
             case SMALL_JUNGLE:
             case JUNGLE:
+            case COCOA_TREE:
                 return Material.JUNGLE_SAPLING;
             case ACACIA:
                 return Material.ACACIA_SAPLING;

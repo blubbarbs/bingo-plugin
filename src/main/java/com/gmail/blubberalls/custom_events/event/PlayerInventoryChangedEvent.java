@@ -11,12 +11,14 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerInventoryChangedEvent extends PlayerEvent {
     private static final HandlerList handlers = new HandlerList();   
 
-    private HashMap<Integer, ItemStack> previous = new HashMap<Integer, ItemStack>();
+    private HashMap<Integer, ItemStack> previous;
+    private HashMap<Integer, ItemStack> current = new HashMap<Integer, ItemStack>();
 
     public PlayerInventoryChangedEvent(Player player, HashMap<Integer, ItemStack> previous) {
         super(player);
         
         this.previous = previous;
+        previous.keySet().forEach(i -> current.put(i, player.getInventory().getItem(i)));
     }
  
     public Set<Integer> getUpdatedSlots() {
@@ -29,6 +31,10 @@ public class PlayerInventoryChangedEvent extends PlayerEvent {
 
     public HashMap<Integer, ItemStack> getPrevious() {
         return previous;
+    }
+
+    public HashMap<Integer, ItemStack> getCurrent() {
+        return current;
     }
 
     @Override

@@ -21,29 +21,13 @@ public class FishAllFish extends UniqueKeysGoal {
         };
     }
 
-
-    public boolean isFish(Item i) {
-        switch(i.getItemStack().getType()) {
-            case COD:
-            case TROPICAL_FISH:
-            case SALMON:
-            case PUFFERFISH:
-                return true;
-            default:
-                return false;
-        }
-    }
-
     @EventHandler
     public void onFish(PlayerFishEvent event) {
         if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getCaught().getType() != EntityType.DROPPED_ITEM
-        ||  !isFish((Item) event.getCaught())) return;
+        ||  event.getCaught().getType() != EntityType.DROPPED_ITEM) return;
 
         Material caught = ((Item) event.getCaught()).getItemStack().getType();
 
-        if (containsUniqueKeyFor(event.getPlayer(), caught)) return;
-
-        addCompletionFor(event.getPlayer(), 1);
+        addUniqueKeyFor(event.getPlayer(), caught);
     }
 }

@@ -1,4 +1,4 @@
-package com.gmail.blubberalls.bingo.goals.kill;
+package com.gmail.blubberalls.bingo.goals.attack;
 
 import java.util.HashMap;
 
