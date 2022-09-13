@@ -10,9 +10,9 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 public class MooshroomSoup extends Goal {
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getRightClicked().getType() != EntityType.MUSHROOM_COW
-        ||  event.getPlayer().getInventory().getItem(event.getHand()).getType() != Material.BOWL) return;
+        if (event.getRightClicked().getType() != EntityType.MUSHROOM_COW
+        ||  event.getPlayer().getInventory().getItem(event.getHand()).getType() != Material.BOWL
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

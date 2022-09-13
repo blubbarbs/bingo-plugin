@@ -11,10 +11,10 @@ public class RenameSheep extends Goal {
     
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getRightClicked().getType() != EntityType.SHEEP
+        if (event.getRightClicked().getType() != EntityType.SHEEP
         ||  event.getPlayer().getInventory().getItem(event.getHand()).getType() != Material.NAME_TAG
-        ||  !event.getPlayer().getInventory().getItem(event.getHand()).getItemMeta().getDisplayName().equals("jeb_")) return;
+        ||  !event.getPlayer().getInventory().getItem(event.getHand()).getItemMeta().getDisplayName().equals("jeb_")
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

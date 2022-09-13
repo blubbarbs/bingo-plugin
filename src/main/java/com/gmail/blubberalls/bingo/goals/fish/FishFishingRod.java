@@ -12,9 +12,9 @@ public class FishFishingRod extends Goal {
     
     @EventHandler
     public void onFish(PlayerFishEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getCaught().getType() != EntityType.DROPPED_ITEM
-        || ((Item) event.getCaught()).getItemStack().getType() != Material.FISHING_ROD) return;
+        if (event.getCaught().getType() != EntityType.DROPPED_ITEM
+        || ((Item) event.getCaught()).getItemStack().getType() != Material.FISHING_ROD
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

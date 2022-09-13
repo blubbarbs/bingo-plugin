@@ -2,7 +2,6 @@ package com.gmail.blubberalls.bingo.goals.attack;
 
 import org.bukkit.Keyed;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 
@@ -20,13 +19,10 @@ public class KillSkeletons extends UniqueKeysGoal {
 
     @EventHandler
     public void onEntityKill(EntityDeathEvent event) {        
-        if (event.getEntity().getKiller() == null) return;
-
-        Player p = event.getEntity().getKiller();
+        if (event.getEntity().getKiller() == null
+        ||  !game.isPlayerPlaying(event.getEntity().getKiller())) return;
         
-        if (!game.isPlayerPlaying(p)) return;
-        
-        addUniqueKeyFor(p, event.getEntityType());
+        addUniqueKeyFor(event.getEntity().getKiller(), event.getEntityType());
     }
 
 }

@@ -11,10 +11,10 @@ public class RenameRabbit extends Goal {
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getRightClicked().getType() != EntityType.RABBIT
+        if (event.getRightClicked().getType() != EntityType.RABBIT
         ||  event.getPlayer().getInventory().getItem(event.getHand()).getType() != Material.NAME_TAG
-        ||  !event.getPlayer().getInventory().getItem(event.getHand()).getItemMeta().getDisplayName().equals("Toast")) return;
+        ||  !event.getPlayer().getInventory().getItem(event.getHand()).getItemMeta().getDisplayName().equals("Toast")
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

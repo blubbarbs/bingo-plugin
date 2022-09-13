@@ -11,10 +11,11 @@ public class CraftMagmaBlock extends Goal {
     
     @EventHandler
     public void onCraft(CraftItemEvent event) {
-        if (!game.isPlayerPlaying((Player) event.getWhoClicked())
-        ||  event.getCurrentItem().getType() != Material.MAGMA_BLOCK) return;
+        if (event.getCurrentItem().getType() != Material.MAGMA_BLOCK) return;
 
         Player p = (Player) event.getWhoClicked();
+
+        if (!game.isPlayerPlaying(p)) return;
 
         setCompletedFor(p);
     }

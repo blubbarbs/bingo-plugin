@@ -32,8 +32,8 @@ public class EquipChainmailArmor extends Goal {
 
     @EventHandler
     public void onPlayerInventoryUpdate(PlayerInventoryChangedEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  !hasEquippedChainmailArmor(event.getPlayer())) return;
+        if (!hasEquippedChainmailArmor(event.getPlayer())
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

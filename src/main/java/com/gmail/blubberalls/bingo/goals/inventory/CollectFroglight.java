@@ -8,6 +8,8 @@ import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class CollectFroglight extends Goal {    
     public boolean isFroglight(ItemStack i) {
+        if (i == null) return false;
+        
         switch(i.getType()) {
             case OCHRE_FROGLIGHT:
             case VERDANT_FROGLIGHT:
@@ -20,8 +22,8 @@ public class CollectFroglight extends Goal {
 
     @EventHandler
     public void onPlayerInventoryUpdate(PlayerInventoryChangedEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  !event.getCurrent().values().stream().anyMatch(this::isFroglight)) return;
+        if (!event.getCurrent().values().stream().anyMatch(this::isFroglight)
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

@@ -13,8 +13,8 @@ public class CraftLockedMap extends Goal {
     @EventHandler
     public void onCraft(CraftItemEvent event) {
         if (event.getInventory().getType() == InventoryType.CARTOGRAPHY
-        ||  !game.isPlayerPlaying((Player) event.getWhoClicked())
-        ||  event.getInventory().getMatrix()[1].getType() != Material.GLASS_PANE) return;
+        ||  event.getInventory().getMatrix()[1].getType() != Material.GLASS_PANE
+        ||  !game.isPlayerPlaying((Player) event.getWhoClicked())) return;
 
         setCompletedFor((Player) event.getWhoClicked());
     }

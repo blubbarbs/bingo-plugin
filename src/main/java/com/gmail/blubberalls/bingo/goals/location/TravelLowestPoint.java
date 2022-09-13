@@ -9,8 +9,8 @@ public class TravelLowestPoint extends Goal {
     
     @EventHandler
     public void onPlayerExist(PlayerExistEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getPlayer().getLocation().getY() > event.getPlayer().getWorld().getMinHeight() + 1) return;
+        if (event.getPlayer().getLocation().getY() > event.getPlayer().getWorld().getMinHeight() + 1
+        || !game.isPlayerPlaying(event.getPlayer())) return;
         
         setCompletedFor(event.getPlayer());
     }

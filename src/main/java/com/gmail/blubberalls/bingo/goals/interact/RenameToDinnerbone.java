@@ -9,9 +9,9 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 public class RenameToDinnerbone extends Goal {
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getPlayer().getInventory().getItem(event.getHand()).getType() != Material.NAME_TAG
-        ||  !event.getPlayer().getInventory().getItem(event.getHand()).getItemMeta().getDisplayName().equals("Dinnerbone")) return;
+        if (event.getPlayer().getInventory().getItem(event.getHand()).getType() != Material.NAME_TAG
+        ||  !event.getPlayer().getInventory().getItem(event.getHand()).getItemMeta().getDisplayName().equals("Dinnerbone")
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

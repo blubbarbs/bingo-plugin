@@ -18,8 +18,7 @@ public class LeatherHorseArmor extends Goal {
     public void onInventoryClick(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();
 
-        if (!game.isPlayerPlaying(clicker)
-        ||  !(event.getView().getTopInventory() instanceof HorseInventory)
+        if (!(event.getView().getTopInventory() instanceof HorseInventory)
         ||  event.getResult() == Result.DENY) return;
 
         HorseInventory horseInventory = (HorseInventory) event.getView().getTopInventory();
@@ -28,14 +27,16 @@ public class LeatherHorseArmor extends Goal {
             ItemStack stack = event.getCurrentItem();
 
             if (stack.getType() != Material.LEATHER_HORSE_ARMOR
-            ||  horseInventory.getArmor() != null) return;
+            ||  horseInventory.getArmor() != null
+            ||  !game.isPlayerPlaying(clicker)) return;
 
             setCompletedFor(clicker);
         }
         else {
             ItemStack stack = event.getCursor();
 
-            if (stack.getType() != Material.LEATHER_HORSE_ARMOR) return;
+            if (stack.getType() != Material.LEATHER_HORSE_ARMOR
+            ||  !game.isPlayerPlaying(clicker)) return;
 
             setCompletedFor(clicker);
         }

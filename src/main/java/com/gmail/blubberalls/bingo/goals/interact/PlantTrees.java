@@ -60,13 +60,12 @@ public class PlantTrees extends UniqueKeysGoal {
 
     @EventHandler
     public void onStructureGrow(StructureGrowEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  !event.isFromBonemeal()
+        if (!event.isFromBonemeal()
         ||  getSapling(event.getSpecies()) == null) return;
 
         Material sapling = getSapling(event.getSpecies());
 
-        if (containsUniqueKeyFor(event.getPlayer(), sapling)) return;
+        if (!game.isPlayerPlaying(event.getPlayer())) return;
 
         addUniqueKeyFor(event.getPlayer(), sapling);
     }

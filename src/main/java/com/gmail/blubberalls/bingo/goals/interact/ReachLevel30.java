@@ -8,8 +8,8 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 public class ReachLevel30 extends Goal {
     @EventHandler
     public void onLevelUp(PlayerExpChangeEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getPlayer().getLevel() < 30) return;
+        if (event.getPlayer().getLevel() < 30
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

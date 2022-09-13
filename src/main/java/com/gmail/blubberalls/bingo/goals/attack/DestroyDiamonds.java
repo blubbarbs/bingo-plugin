@@ -24,13 +24,10 @@ public class DestroyDiamonds extends ScoredGoal {
         ||  event.getEntity().isDead()) return;
 
         Item i = (Item) event.getEntity();
-
-        if (i.getThrower() == null
-        ||  i.getItemStack().getType() != Material.DIAMOND) return;
-
         Player p = Bukkit.getPlayer(i.getThrower());
 
-        if (!game.isPlayerPlaying(p)) return;
+        if (i.getItemStack().getType() != Material.DIAMOND
+        ||  !game.isPlayerPlaying(p)) return;
 
         i.remove();
         addCompletionFor(p, i.getItemStack().getAmount());

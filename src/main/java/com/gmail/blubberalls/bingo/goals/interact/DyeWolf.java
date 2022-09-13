@@ -52,10 +52,10 @@ public class DyeWolf extends Goal {
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getRightClicked().getType() != EntityType.WOLF
+        if (event.getRightClicked().getType() != EntityType.WOLF
         ||  !((Wolf) event.getRightClicked()).isTamed()
-        ||  getDyeColor(event.getPlayer().getInventory().getItem(event.getHand()).getType()) == null) return;
+        ||  getDyeColor(event.getPlayer().getInventory().getItem(event.getHand()).getType()) == null
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

@@ -10,11 +10,14 @@ import com.gmail.blubberalls.bingo.goals.attack.*;
 import com.gmail.blubberalls.bingo.goals.build.BuildHerobrineAltar;
 import com.gmail.blubberalls.bingo.goals.capturable.*;
 import com.gmail.blubberalls.bingo.goals.consume.*;
+import com.gmail.blubberalls.bingo.goals.craft.CraftDoors;
 import com.gmail.blubberalls.bingo.goals.fish.*;
 import com.gmail.blubberalls.bingo.goals.interact.*;
 import com.gmail.blubberalls.bingo.goals.inventory.*;
 import com.gmail.blubberalls.bingo.goals.location.ExploreVillages;
-import com.gmail.blubberalls.bingo.goals.location.PlayerVelocity;
+import com.gmail.blubberalls.bingo.goals.location.PlayerTeleportFar;
+import com.gmail.blubberalls.bingo.goals.location.PlayerVelocityFast;
+import com.gmail.blubberalls.bingo.goals.location.PlayerVelocitySlow;
 import com.gmail.blubberalls.bingo.goals.mine.MineAllOres;
 import com.gmail.blubberalls.bingo.goals.mine.MineAmethystCrystal;
 import com.google.common.collect.HashMultimap;
@@ -45,16 +48,17 @@ public class Goals {
         //registerEasy("idiot_box", BuildIdiotBox::new);
         //registerEasy("kill_blaze", KillBlaze::new);
         //registerEasy("leather_horse_armor", LeatherHorseArmor::new);
-        registerEasy("kill_stalagmite", KillByStalagmite::new);
+        //registerEasy("kill_stalagmite", KillByStalagmite::new);
         registerEasy("die_anvil", DieByFallingAnvil::new);
         registerEasy("ride_pig_with_carrot", RidePigWithCarrot::new);
         registerEasy("shoot_tnt_flaming_arrow" , IgniteTNTFlamingArrow::new);
+        registerEasy("craft_doors", CraftDoors::new);
     }
 
     static void registerMediumGoals() {
         registerMedium("rename_vindicator", RenameVindicator::new);
         registerMedium("rename_rabbit", RenameRabbit::new);
-        registerMedium("rename_sheep", RenameSheep::new);
+        //registerMedium("rename_sheep", RenameSheep::new);
         registerMedium("explore_villages", ExploreVillages::new);
         registerMedium("build_herobrine_altar", BuildHerobrineAltar::new);
         //registerMedium("craft_magma_block", CraftMagmaBlock::new);
@@ -67,13 +71,16 @@ public class Goals {
         registerMedium("plant_trees", PlantTrees::new);
         registerMedium("destroy_diamonds", DestroyDiamonds::new);
         registerMedium("fertilize_crops", FertilizeCrops::new);
-        registerMedium("go_fast", PlayerVelocity::new);
+        registerMedium("far_enderpearl", PlayerTeleportFar::new);
+        registerMedium("collect_flowers", CollectFlowers::new);
     }
 
     static void registerHardGoals() {
         registerHard("mine_grass", CollectGrass::new);
-        registerHard("tame_parrot", ParrotTame::new);
+        //registerHard("tame_parrot", ParrotTame::new);
         registerHard("mine_ores", MineAllOres::new);
+        registerHard("go_fast", PlayerVelocityFast::new);
+        registerHard("go_slow", PlayerVelocitySlow::new);
     }
 
     static void registerCapturableGoals() {

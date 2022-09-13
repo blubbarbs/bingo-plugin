@@ -19,13 +19,13 @@ public class KillCreeperWCreeper extends Goal {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEntityEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getRightClicked().getType() != EntityType.CREEPER
+        if (event.getRightClicked().getType() != EntityType.CREEPER
         ||  event.getPlayer().getInventory().getItem(event.getHand()).getType() != Material.FLINT_AND_STEEL) return;
 
         Creeper creeper = (Creeper) event.getRightClicked();
 
-        if (fuse.containsKey(creeper)) return;
+        if (fuse.containsKey(creeper)
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         fuse.put(creeper, event.getPlayer());
     }
@@ -42,6 +42,8 @@ public class KillCreeperWCreeper extends Goal {
     
         Player killer = fuse.get(lastDamageCause.getDamager());
     
+        if (!game.isPlayerPlaying(killer)) return;
+
         setCompletedFor(killer);
         fuse.remove(lastDamageCause.getDamager());
     }

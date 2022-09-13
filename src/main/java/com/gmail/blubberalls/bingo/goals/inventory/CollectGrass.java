@@ -14,8 +14,8 @@ public class CollectGrass extends Goal {
 
     @EventHandler
     public void onPlayerInventoryUpdate(PlayerInventoryChangedEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  !event.getCurrent().values().stream().anyMatch(stack -> stack.getType() == Material.GRASS_BLOCK)) return;
+        if (!event.getCurrent().values().stream().anyMatch(stack -> stack != null && stack.getType() == Material.GRASS_BLOCK)
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
     
         setCompletedFor(event.getPlayer());
     }

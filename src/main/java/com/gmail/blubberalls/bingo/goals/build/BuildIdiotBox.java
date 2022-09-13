@@ -45,10 +45,10 @@ public class BuildIdiotBox extends Goal {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {        
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getAction() != Action.PHYSICAL
+        if (event.getAction() != Action.PHYSICAL
         ||  !isPressurePlate(event.getClickedBlock().getType())
-        ||  !hasCreatedIdiotBox(event.getClickedBlock())) return;
+        ||  !hasCreatedIdiotBox(event.getClickedBlock())
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

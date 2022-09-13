@@ -13,16 +13,16 @@ public class DuplicateAllay extends Goal {
     
     @EventHandler
     public void onInteractEntity(PlayerInteractEntityEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getRightClicked().getType() != EntityType.ALLAY) return;
+        if (event.getRightClicked().getType() != EntityType.ALLAY) return;
 
         Allay allay = (Allay) event.getRightClicked();
         ItemStack rightClickedStack = event.getPlayer().getInventory().getItem(event.getHand());
 
         if (!allay.isDancing()
         ||  allay.getInventory().contains(Material.AMETHYST_SHARD)
+        ||  rightClickedStack.getType() != Material.AMETHYST_SHARD
         ||  !allay.canDuplicate()
-        ||  rightClickedStack.getType() != Material.AMETHYST_SHARD) return;
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
     
         setCompletedFor(event.getPlayer());
     }

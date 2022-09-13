@@ -26,8 +26,8 @@ public class KillCookedAnimal extends Goal{
     @EventHandler
     public void onEntityKill(EntityDeathEvent event) {
         if (!isCookable(event.getEntityType())
-        ||  event.getEntity().getKiller() == null
-        ||  event.getEntity().getFireTicks() <= 0) return;
+        ||  event.getEntity().getFireTicks() <= 0
+        ||  !game.isPlayerPlaying(event.getEntity().getKiller())) return;
 
         setCompletedFor(event.getEntity().getKiller());
     }

@@ -12,12 +12,12 @@ public class ShearPinkSheep extends Goal {
 
     @EventHandler
     public void onShear(PlayerShearEntityEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getEntity().getType() != EntityType.SHEEP) return;
+        if (event.getEntity().getType() != EntityType.SHEEP) return;
     
         Sheep sheep = (Sheep) event.getEntity();
         
-        if (sheep.getColor() != DyeColor.PINK) return;
+        if (sheep.getColor() != DyeColor.PINK
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }   

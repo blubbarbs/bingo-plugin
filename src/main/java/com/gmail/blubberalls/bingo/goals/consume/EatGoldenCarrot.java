@@ -9,8 +9,8 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 public class EatGoldenCarrot extends Goal {
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getItem().getType() != Material.GOLDEN_CARROT) return;
+        if (event.getItem().getType() != Material.GOLDEN_CARROT
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
         
         setCompletedFor(event.getPlayer());
     }

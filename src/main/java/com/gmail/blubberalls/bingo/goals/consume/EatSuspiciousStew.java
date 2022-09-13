@@ -10,8 +10,8 @@ public class EatSuspiciousStew extends Goal {
     
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getItem().getType() != Material.SUSPICIOUS_STEW) return;
+        if (event.getItem().getType() != Material.SUSPICIOUS_STEW
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
         
         setCompletedFor(event.getPlayer());
     }

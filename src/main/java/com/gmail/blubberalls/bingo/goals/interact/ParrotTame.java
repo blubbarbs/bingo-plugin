@@ -11,8 +11,7 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 public class ParrotTame extends Goal {
     @EventHandler
     public void onTame(EntityTameEvent event) {
-        if (event.getEntityType() != EntityType.PARROT
-        ||  Bukkit.getPlayer(event.getOwner().getUniqueId()) == null) return;
+        if (event.getEntityType() != EntityType.PARROT) return;
     
         Player p = Bukkit.getPlayer(event.getOwner().getUniqueId());
 

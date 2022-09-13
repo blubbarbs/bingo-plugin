@@ -38,8 +38,8 @@ public class EatRottenFlesh extends ScoredGoal {
 
     @EventHandler
     public void onPlayerConsume(PlayerItemConsumeEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getItem().getType() != Material.ROTTEN_FLESH) return;
+        if (event.getItem().getType() != Material.ROTTEN_FLESH
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
         
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
@@ -61,7 +61,8 @@ public class EatRottenFlesh extends ScoredGoal {
 
         Player p = (Player) event.getEntity();
 
-        if (!scoreTasks.containsKey(p)) return;
+        if (!scoreTasks.containsKey(p)
+        ||  !game.isPlayerPlaying(p)) return;
 
         scoreTasks.get(p).cancel();
         scoreTasks.remove(p);

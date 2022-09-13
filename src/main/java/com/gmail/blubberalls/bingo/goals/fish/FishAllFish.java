@@ -23,8 +23,8 @@ public class FishAllFish extends UniqueKeysGoal {
 
     @EventHandler
     public void onFish(PlayerFishEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getCaught().getType() != EntityType.DROPPED_ITEM) return;
+        if (event.getCaught().getType() != EntityType.DROPPED_ITEM
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         Material caught = ((Item) event.getCaught()).getItemStack().getType();
 

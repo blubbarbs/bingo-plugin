@@ -39,16 +39,16 @@ public class BuildHerobrineAltar extends Goal {
 
     @EventHandler
     public void onBlockIgnite(BlockIgniteEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getBlock().getRelative(BlockFace.DOWN).getType() != Material.NETHERRACK) return;
+        if (event.getBlock().getRelative(BlockFace.DOWN).getType() != Material.NETHERRACK) return;
 
         Block netherrack = event.getBlock().getRelative(BlockFace.DOWN);
         boolean hasAltar = checkAltar(netherrack);
 
-        if (hasAltar) {
-            event.getBlock().getWorld().strikeLightningEffect(event.getBlock().getLocation());
-            setCompletedFor(event.getPlayer());
-        }
+        if (!hasAltar
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
+
+        event.getBlock().getWorld().strikeLightningEffect(event.getBlock().getLocation());
+        setCompletedFor(event.getPlayer());
     }
 
 }

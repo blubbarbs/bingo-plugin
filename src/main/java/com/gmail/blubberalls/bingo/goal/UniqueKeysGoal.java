@@ -1,6 +1,7 @@
 package com.gmail.blubberalls.bingo.goal;
 
 import org.bukkit.Keyed;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
@@ -20,10 +21,17 @@ public abstract class UniqueKeysGoal extends ScoredGoal implements KeyedData {
     public String getProgressDescriptionFor(Team t) {        
         String description = "Completed: " + ChatColor.AQUA + getCompletionFor(t) + "/" + getGoal();
 
-        for (Keyed key : getValidKeys()) {
-            description += ChatColor.RESET + "\n> ";
-            description += containsUniqueKeyFor(t, key) ? ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + key.getKey().getKey() : ChatColor.DARK_AQUA + key.getKey().getKey();
+        if (getValidKeys().length <= 10) {
+            for (Keyed key : getValidKeys()) {
+                description += ChatColor.RESET + "\n> ";
+                description += containsUniqueKeyFor(t, key) ? ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + key.getKey().getKey() : ChatColor.DARK_AQUA + key.getKey().getKey();
+            }    
         }
+        else {
+            for (NamespacedKey key : getKeysFor(t, "unique_keys")) {
+                description += ChatColor.RESET + "\n> " + ChatColor.GRAY + ChatColor.STRIKETHROUGH + key.getKey();
+            }
+        }    
 
         return description.trim();
     }

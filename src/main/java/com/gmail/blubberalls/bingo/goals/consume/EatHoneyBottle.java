@@ -11,9 +11,9 @@ public class EatHoneyBottle extends Goal {
     
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getItem().getType() != Material.HONEY_BOTTLE
-        ||  !event.getPlayer().hasPotionEffect(PotionEffectType.POISON)) return;
+        if (event.getItem().getType() != Material.HONEY_BOTTLE
+        ||  !event.getPlayer().hasPotionEffect(PotionEffectType.POISON)
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
         
         setCompletedFor(event.getPlayer());
     }

@@ -20,8 +20,7 @@ public class LlamaCarpet extends Goal {
     public void onInventoryClick(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();
 
-        if (!game.isPlayerPlaying(clicker)
-        ||  !(event.getView().getTopInventory() instanceof LlamaInventory)
+        if (!(event.getView().getTopInventory() instanceof LlamaInventory)
         ||  event.getResult() == Result.DENY) return;
 
         LlamaInventory llamaInventory = (LlamaInventory) event.getView().getTopInventory();
@@ -30,14 +29,16 @@ public class LlamaCarpet extends Goal {
             ItemStack stack = event.getCurrentItem();
 
             if (!isCarpet(stack)
-            ||  llamaInventory.getDecor() != null) return;
+            ||  llamaInventory.getDecor() != null
+            ||  !game.isPlayerPlaying(clicker)) return;
 
             setCompletedFor(clicker);
         }
         else {
             ItemStack stack = event.getCursor();
 
-            if (!isCarpet(stack)) return;
+            if (!isCarpet(stack)
+            ||  !game.isPlayerPlaying(clicker)) return;
 
             setCompletedFor(clicker);
         }

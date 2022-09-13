@@ -22,8 +22,8 @@ public class CollectFullCobblestone extends Goal {
 
     @EventHandler
     public void onInventoryChange(PlayerInventoryChangedEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  !hasAllCobblestone(event.getPlayer())) return;
+        if (!hasAllCobblestone(event.getPlayer())
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

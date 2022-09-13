@@ -10,8 +10,8 @@ public class EnterLushCave extends Goal {
 
     @EventHandler
     public void onExist(PlayerExistEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getPlayer().getWorld().getBiome(event.getPlayer().getLocation()) != Biome.LUSH_CAVES) return;
+        if (event.getPlayer().getWorld().getBiome(event.getPlayer().getLocation()) != Biome.LUSH_CAVES
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

@@ -9,9 +9,9 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 public class MineMonsterSpawner extends Goal {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getBlock().getType() != Material.SPAWNER
-        ||  event.getExpToDrop() == 0) return;
+        if (event.getBlock().getType() != Material.SPAWNER
+        ||  event.getExpToDrop() == 0
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

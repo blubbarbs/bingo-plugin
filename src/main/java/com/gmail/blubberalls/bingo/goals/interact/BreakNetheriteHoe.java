@@ -9,8 +9,8 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 public class BreakNetheriteHoe extends Goal {
     @EventHandler
     public void onItemBreak(PlayerItemBreakEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getBrokenItem().getType() != Material.NETHERITE_HOE) return;
+        if (event.getBrokenItem().getType() != Material.NETHERITE_HOE
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
     
         setCompletedFor(event.getPlayer());
     }

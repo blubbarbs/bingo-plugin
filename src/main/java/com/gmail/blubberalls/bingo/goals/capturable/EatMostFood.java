@@ -23,8 +23,8 @@ public class EatMostFood extends ScoredCapturableGoal {
 
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  !event.getItem().getType().isEdible()) return;
+        if (!event.getItem().getType().isEdible()
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         addCompletionFor(event.getPlayer(), 1);
     }

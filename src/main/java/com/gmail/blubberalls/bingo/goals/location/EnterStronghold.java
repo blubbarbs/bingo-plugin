@@ -14,8 +14,8 @@ public class EnterStronghold extends Goal {
     public void onPlayerLocation(PlayerExistEvent event) {
         Player p = event.getPlayer();
 
-        if (!game.isPlayerPlaying(p) 
-        ||  !Checks.isLocInStructure(p.getLocation(), Structure.STRONGHOLD)) return;
+        if (!Checks.isLocInStructure(p.getLocation(), Structure.STRONGHOLD)
+        ||  !game.isPlayerPlaying(p)) return;
 
         setCompletedFor(p);
     }

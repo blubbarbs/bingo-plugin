@@ -27,8 +27,8 @@ public class EquipDifferentArmor extends Goal {
 
     @EventHandler
     public void onInventoryChange(PlayerInventoryChangedEvent event) {        
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  !checkDifferentArmor(event.getPlayer())) return;
+        if (!checkDifferentArmor(event.getPlayer())
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }

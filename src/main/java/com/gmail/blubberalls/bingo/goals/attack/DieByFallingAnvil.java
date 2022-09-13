@@ -12,8 +12,7 @@ import com.gmail.blubberalls.bingo.goal.Goal;
 public class DieByFallingAnvil extends Goal {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        if (!game.isPlayerPlaying(event.getEntity())
-        ||  !(event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent)) return;
+        if (!(event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent)) return;
 
         EntityDamageByEntityEvent lastDamage = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
 
@@ -21,7 +20,8 @@ public class DieByFallingAnvil extends Goal {
 
         FallingBlock fallingBlock = (FallingBlock) lastDamage.getDamager();
 
-        if (fallingBlock.getBlockData().getMaterial() != Material.ANVIL) return;
+        if (fallingBlock.getBlockData().getMaterial() != Material.ANVIL
+        ||  !game.isPlayerPlaying(event.getEntity())) return;
 
         setCompletedFor(event.getEntity());
     }

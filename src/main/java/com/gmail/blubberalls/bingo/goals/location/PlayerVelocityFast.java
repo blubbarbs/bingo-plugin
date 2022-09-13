@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.custom_events.event.PlayerExistEvent;
 
-public class PlayerVelocity extends Goal {
+public class PlayerVelocityFast extends Goal {
     private HashMap<Player, Location> previousLocations = new HashMap<Player, Location>();
     
     @Override
@@ -28,8 +28,8 @@ public class PlayerVelocity extends Goal {
 
     @EventHandler
     public void onExist(PlayerExistEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getPlayer().isDead()) return;
+        if (event.getPlayer().isDead()
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         Location previousLocation = previousLocations.getOrDefault(event.getPlayer(), event.getPlayer().getLocation());
         previousLocation.setY(event.getPlayer().getLocation().getY());

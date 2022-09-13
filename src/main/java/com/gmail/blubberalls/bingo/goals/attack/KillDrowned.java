@@ -7,18 +7,17 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 
-public class KillBlaze extends Goal {
-
+public class KillDrowned extends Goal {
     @EventHandler
-    public void onEntityDeath(EntityDeathEvent event) {
-        if (event.getEntity().getType() != EntityType.BLAZE
+    public void onEntityKill(EntityDeathEvent event) {
+        if (event.getEntityType() != EntityType.DROWNED
         ||  !(event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent)) return;
 
-        EntityDamageByEntityEvent lastDamageCause = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-        
-        if (lastDamageCause.getDamager().getType() != EntityType.SNOWBALL
+        EntityDamageByEntityEvent lastDamage = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+
+        if (lastDamage.getDamager().getType() != EntityType.TRIDENT
         ||  !game.isPlayerPlaying(event.getEntity().getKiller())) return;
-    
+
         setCompletedFor(event.getEntity().getKiller());
     }
 }

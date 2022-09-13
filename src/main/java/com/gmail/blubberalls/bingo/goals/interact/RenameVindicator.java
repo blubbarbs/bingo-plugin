@@ -11,10 +11,10 @@ public class RenameVindicator extends Goal {
     
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (!game.isPlayerPlaying(event.getPlayer())
-        ||  event.getRightClicked().getType() != EntityType.VINDICATOR
+        if (event.getRightClicked().getType() != EntityType.VINDICATOR
         ||  event.getPlayer().getInventory().getItem(event.getHand()).getType() != Material.NAME_TAG
-        ||  !event.getPlayer().getInventory().getItem(event.getHand()).getItemMeta().getDisplayName().equals("Johnny")) return;
+        ||  !event.getPlayer().getInventory().getItem(event.getHand()).getItemMeta().getDisplayName().equals("Johnny")
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }
