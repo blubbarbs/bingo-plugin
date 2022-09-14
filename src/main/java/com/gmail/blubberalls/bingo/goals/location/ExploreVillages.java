@@ -1,7 +1,6 @@
 package com.gmail.blubberalls.bingo.goals.location;
 
 import org.bukkit.Keyed;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.generator.structure.Structure;
 
@@ -29,12 +28,11 @@ public class ExploreVillages extends UniqueKeysGoal {
 
     @EventHandler
     public void onPlayerLocation(PlayerExistEvent event) {
-        Player p = event.getPlayer();
         Structure at = Checks.getStructureAtLoc(event.getPlayer().getLocation());
 
-        if (!game.isPlayerPlaying(p)) return;
+        if (!game.isPlayerPlaying(event.getPlayer())) return;
         
-        addUniqueKeyFor(p, at);
+        addUniqueKeyFor(event.getPlayer(), at);
     }
     
 }

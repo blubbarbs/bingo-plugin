@@ -17,7 +17,7 @@ public class CraftDoors extends UniqueKeysGoal {
 
     @Override
     public String getDescription() {
-        return "Craft all door types.";
+        return "Craft all overworld door types.";
     }
 
     @Override

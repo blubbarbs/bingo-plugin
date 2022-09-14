@@ -1,35 +1,33 @@
-package com.gmail.blubberalls.bingo.goals.interact;
+package com.gmail.blubberalls.bingo.goals.inventory;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.LlamaInventory;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 
-public class LlamaCarpet extends Goal {
-    public boolean isCarpet(ItemStack stack) {
-        return stack != null && stack.getType().name().endsWith("CARPET");
-    }
-    
+public class LeatherHorseArmor extends Goal {
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();
 
-        if (!(event.getView().getTopInventory() instanceof LlamaInventory)
+        if (!(event.getView().getTopInventory() instanceof HorseInventory)
         ||  event.getResult() == Result.DENY) return;
 
-        LlamaInventory llamaInventory = (LlamaInventory) event.getView().getTopInventory();
+        HorseInventory horseInventory = (HorseInventory) event.getView().getTopInventory();
 
         if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
             ItemStack stack = event.getCurrentItem();
 
-            if (!isCarpet(stack)
-            ||  llamaInventory.getDecor() != null
+            if (stack.getType() != Material.LEATHER_HORSE_ARMOR
+            ||  horseInventory.getArmor() != null
             ||  !game.isPlayerPlaying(clicker)) return;
 
             setCompletedFor(clicker);
@@ -37,7 +35,7 @@ public class LlamaCarpet extends Goal {
         else {
             ItemStack stack = event.getCursor();
 
-            if (!isCarpet(stack)
+            if (stack.getType() != Material.LEATHER_HORSE_ARMOR
             ||  !game.isPlayerPlaying(clicker)) return;
 
             setCompletedFor(clicker);
@@ -48,10 +46,10 @@ public class LlamaCarpet extends Goal {
     public void onInventoryDrag(InventoryDragEvent event) {
         Player clicker = (Player) event.getWhoClicked();
 
-        if (!game.isPlayerPlaying(clicker)
-        ||  !(event.getView().getTopInventory() instanceof LlamaInventory)
+        if (!(event.getView().getTopInventory() instanceof HorseInventory)
         ||  event.getResult() == Result.DENY
-        ||  !event.getNewItems().values().stream().anyMatch(stack -> isCarpet(stack))) return;
+        ||  !event.getNewItems().values().stream().anyMatch(stack -> stack.getType() == Material.LEATHER_HORSE_ARMOR)
+        ||  !game.isPlayerPlaying(clicker)) return;
     
         setCompletedFor(clicker);
     }
