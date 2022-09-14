@@ -9,13 +9,12 @@ import org.bukkit.event.player.PlayerFishEvent;
 
 import com.gmail.blubberalls.bingo.goal.UniqueKeysGoal;
 
-public class FishAllFish extends UniqueKeysGoal {
+public class FishFish extends UniqueKeysGoal {
 
     @Override
     public Keyed[] getValidKeys() {
         return new Keyed[] {
             Material.COD,
-            Material.TROPICAL_FISH,
             Material.SALMON,
             Material.PUFFERFISH
         };
@@ -23,7 +22,8 @@ public class FishAllFish extends UniqueKeysGoal {
 
     @EventHandler
     public void onFish(PlayerFishEvent event) {
-        if (event.getCaught().getType() != EntityType.DROPPED_ITEM
+        if (event.getCaught() == null
+        ||  event.getCaught().getType() != EntityType.DROPPED_ITEM
         ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         Material caught = ((Item) event.getCaught()).getItemStack().getType();

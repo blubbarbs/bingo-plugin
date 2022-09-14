@@ -32,81 +32,85 @@ public class Goals {
     }
 
     static void registerEasyGoals() {
-        registerEasy("eat_suspicious_stew", EatSuspiciousStew::new);
-        //registerEasy("kill_cooked_mob", KillCookedAnimal::new);
-        //registerEasy("get_full_cobble", CollectFullCobblestone::new);
-        //registerEasy("enter_lush_cave", EnterLushCave::new);
-        //registerEasy("idiot_box", BuildIdiotBox::new);
-        registerEasy("die_anvil", DieByFallingAnvil::new);
-        registerEasy("use_campfire", UseCampfire::new);
-        registerEasy("attack_fishing_rod", AttackPlayerWithFishingRod::new);
+        // registerEasy("eat_suspicious_stew", EatSuspiciousStew::new);
+        // registerEasy("kill_cooked_mob", KillCookedAnimal::new);
+        // registerEasy("get_full_cobble", CollectFullCobblestone::new);
+        // registerEasy("enter_lush_cave", EnterLushCave::new);
+        // registerEasy("idiot_box", BuildIdiotBox::new);
+        // registerEasy("die_anvil", DieByFallingAnvil::new);
+        // registerEasy("use_campfire", UseCampfire::new);
+        // registerEasy("attack_fishing_rod", AttackPlayerWithFishingRod::new);
         registerEasy("kill_by_arrow", SuicideByArrow::new);
         registerEasy("place_painting", PlacePainting::new);
-        registerEasy("eat_golden_carrot", EatGoldenCarrot::new);
-        registerEasy("eat_pufferfish", EatPufferfish::new);
+        // registerEasy("eat_golden_carrot", EatGoldenCarrot::new);
+        // registerEasy("eat_pufferfish", EatPufferfish::new);
         registerEasy("fish_bucket", FishWithBucket::new);
-        //registerEasy("leather_horse_armor", LeatherHorseArmor::new);
-        //registerEasy("kill_stalagmite", KillByStalagmite::new);
-        //registerEasy("llama_carpet", LlamaCarpet::new);
-        //registerMedium("dye_wolf", DyeWolf::new);
-        registerEasy("eat_honey_bottle", EatHoneyBottle::new);
+        // registerEasy("leather_horse_armor", LeatherHorseArmor::new);
+        // registerEasy("kill_stalagmite", KillByStalagmite::new);
+        // registerEasy("llama_carpet", LlamaCarpet::new);
+        // registerMedium("dye_wolf", DyeWolf::new);
+        // registerEasy("eat_honey_bottle", EatHoneyBottle::new);
         registerEasy("use_lava_as_fuel", UseLavaAsFuel::new);
+        registerEasy("fish_fish", FishFish::new);
     }
 
     static void registerMediumGoals() {
-        registerMedium("rename_vindicator", RenameVindicator::new);
-        registerMedium("rename_rabbit", RenameRabbit::new);
-        //registerMedium("rename_sheep", RenameSheep::new);
-        registerMedium("rename_dinnerbone", RenameToDinnerbone::new);
-        registerMedium("explore_villages", ExploreVillages::new);
-        registerMedium("build_herobrine_altar", BuildHerobrineAltar::new);
-        //registerMedium("craft_magma_block", CraftMagmaBlock::new);
-        //registerMedium("mine_amethyst", MineAmethystCrystal::new);
-        //registerMedium("kill_zombies", KillZombies::new);
-        //registerMedium("kill_creeper", KillCreeperWCreeper::new);
-        registerMedium("kill_phantom", KillPhantom::new);
-        //registerMedium("consume_rotten_flesh", EatRottenFlesh::new);
-        //registerMedium("kill_skeletons", KillSkeletons::new);
-        registerMedium("fertilize_crops", FertilizeCrops::new);
-        registerMedium("collect_flowers", CollectFlowers::new);
-        registerMedium("craft_doors", CraftDoors::new);
-        registerMedium("ride_pig_with_carrot", RidePigWithCarrot::new);
-        registerMedium("shoot_tnt_flaming_arrow" , IgniteTNTFlamingArrow::new);
-        //registerMedium("kill_blaze", KillBlaze::new);
-        //registerMedium("kill_arthropods", KillBoA::new);
-        //registerMedium("kill_polar_bear", KillPolarBear::new);
-        registerMedium("exp_level_30", ReachLevel30::new);
-        registerMedium("shear_pink_sheep", ShearPinkSheep::new);
-        registerMedium("equip_chainmail", EquipChainmailArmor::new);
-        registerMedium("equip_different_armor", EquipDifferentArmor::new);
-        registerMedium("teleport_far", PlayerTeleportFar::new);
+        // registerMedium("rename_vindicator", RenameVindicator::new);
+        // registerMedium("rename_rabbit", RenameRabbit::new);
+        // registerMedium("rename_sheep", RenameSheep::new);
+        // registerMedium("rename_dinnerbone", RenameToDinnerbone::new);
+        // registerMedium("explore_villages", ExploreVillages::new);
+        // registerMedium("build_herobrine_altar", BuildHerobrineAltar::new);
+        // registerMedium("craft_magma_block", CraftMagmaBlock::new);
+        // registerMedium("mine_amethyst", MineAmethystCrystal::new);
+        // registerMedium("kill_zombies", KillZombies::new);
+        // registerMedium("kill_creeper", KillCreeperWCreeper::new);
+        // registerMedium("kill_phantom", KillPhantom::new);
+        // registerMedium("consume_rotten_flesh", EatRottenFlesh::new);
+        // registerMedium("kill_skeletons", KillSkeletons::new);
+        // registerMedium("fertilize_crops", FertilizeCrops::new);
+        // registerMedium("collect_flowers", CollectFlowers::new);
+        // registerMedium("craft_doors", CraftDoors::new);
+        // registerMedium("ride_pig_with_carrot", RidePigWithCarrot::new);
+        // registerMedium("shoot_tnt_flaming_arrow" , IgniteTNTFlamingArrow::new);
+        // registerMedium("kill_blaze", KillBlaze::new);
+        // registerMedium("kill_arthropods", KillBoA::new);
+        // registerMedium("kill_polar_bear", KillPolarBear::new);
+        // registerMedium("exp_level_30", ReachLevel30::new);
+        // registerMedium("shear_pink_sheep", ShearPinkSheep::new);
+        // registerMedium("equip_chainmail", EquipChainmailArmor::new);
+        // registerMedium("equip_different_armor", EquipDifferentArmor::new);
+        // registerMedium("teleport_far", PlayerTeleportFar::new);
         registerMedium("mine_spawner", MineMonsterSpawner::new);
         registerMedium("enter_shipwreck", EnterShipwreck::new);
+        registerMedium("fish_tripwire", FishTripwire::new);
+        registerMedium("trade_with_villagers", CompleteVillagerTrades::new);
     }
 
     static void registerHardGoals() {
-        registerHard("collect_grass", CollectGrass::new);
-        //registerHard("tame_parrot", ParrotTame::new);
-        registerHard("mine_ores", MineAllOres::new);
-        registerHard("go_fast", PlayerVelocityFast::new);
-        registerHard("go_slow", PlayerVelocitySlow::new);
-        registerHard("plant_trees", PlantTrees::new);
-        registerHard("destroy_diamonds", DestroyDiamonds::new);
-        registerHard("kill_drowned", KillDrowned::new);
-        registerHard("kill_endermite", KillEndermite::new);
-        registerHard("break_netherite_hoe", BreakNetheriteHoe::new);
-        registerHard("duplicate_allay", DuplicateAllay::new);
+        // registerHard("collect_grass", CollectGrass::new);
+        // registerHard("tame_parrot", ParrotTame::new);
+        // registerHard("mine_ores", MineAllOres::new);
+        // registerHard("go_fast", PlayerVelocityFast::new);
+        // registerHard("go_slow", PlayerVelocitySlow::new);
+        // registerHard("plant_trees", PlantTrees::new);
+        // registerHard("destroy_diamonds", DestroyDiamonds::new);
+        // registerHard("kill_drowned", KillDrowned::new);
+        // registerHard("kill_endermite", KillEndermite::new);
+        // registerHard("break_netherite_hoe", BreakNetheriteHoe::new);
+        // registerHard("duplicate_allay", DuplicateAllay::new);
         registerHard("mooshroom_soup", MooshroomSoup::new);
-        registerHard("fish_fishing_rod", FishFishingRod::new);
-        registerHard("collect_froglight", CollectFroglight::new);
-        registerHard("enter_stronghold", EnterStronghold::new);
+        // registerHard("fish_tropical_fish", FishTropicalFish::new);
+        // registerHard("collect_froglight", CollectFroglight::new);
+        // registerHard("enter_stronghold", EnterStronghold::new);
+        // registerHard("trade_with_wandering_trader", WanderingTraderTrade::new);
     }
 
     static void registerCapturableGoals() {
-        registerCapturable("kill_players", KillMostPlayers::new);
-        registerCapturable("wear_pumpkin", WearPumpkins::new);
-        registerCapturable("eat_food", EatMostFood::new);
-        registerCapturable("mine_blocks", MineMostBlocks::new);
+        // registerCapturable("kill_players", KillMostPlayers::new);
+        // registerCapturable("wear_pumpkin", WearPumpkins::new);
+        // registerCapturable("eat_food", EatMostFood::new);
+        // registerCapturable("mine_blocks", MineMostBlocks::new);
     }
 
     static GoalFactory registerEasy(String name, Supplier<Goal> goalConstructor) {

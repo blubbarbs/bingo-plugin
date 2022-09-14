@@ -1,21 +1,23 @@
 package com.gmail.blubberalls.bingo.goals.fish;
 
+import com.gmail.blubberalls.bingo.goal.Goal;
+
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerFishEvent;
 
-import com.gmail.blubberalls.bingo.goal.Goal;
+public class FishTropicalFish extends Goal {
 
-public class FishFishingRod extends Goal {
-    
     @EventHandler
     public void onFish(PlayerFishEvent event) {
-        if (event.getCaught().getType() != EntityType.DROPPED_ITEM
-        || ((Item) event.getCaught()).getItemStack().getType() != Material.FISHING_ROD
+        if (event.getCaught() == null
+        ||  event.getCaught().getType() != EntityType.DROPPED_ITEM
+        || ((Item) event.getCaught()).getItemStack().getType() != Material.TROPICAL_FISH
         ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
     }
+
 }
