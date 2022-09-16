@@ -47,11 +47,14 @@ public class Goals {
         registerEasy("fish_bucket", FishWithBucket::new);
         // registerEasy("leather_horse_armor", LeatherHorseArmor::new);
         // registerEasy("kill_stalagmite", KillByStalagmite::new);
-        // registerEasy("llama_carpet", LlamaCarpet::new);
+        registerEasy("llama_carpet", LlamaCarpet::new);
         // registerMedium("dye_wolf", DyeWolf::new);
         // registerEasy("eat_honey_bottle", EatHoneyBottle::new);
-        registerEasy("use_lava_as_fuel", UseLavaAsFuel::new);
         registerEasy("fish_fish", FishFish::new);
+        registerEasy("smelt_smooth_stone", SmeltSmoothStone::new);
+        registerEasy("collect_buckets", CollectBuckets::new);
+        registerEasy("use_smoker", UseSmoker::new);
+        registerEasy("tame_cat", TameCat::new);
     }
 
     static void registerMediumGoals() {
@@ -85,11 +88,12 @@ public class Goals {
         registerMedium("enter_shipwreck", EnterShipwreck::new);
         registerMedium("fish_tripwire", FishTripwire::new);
         registerMedium("trade_with_villagers", CompleteVillagerTrades::new);
+        registerMedium("instamine", Instamine::new);
     }
 
     static void registerHardGoals() {
         // registerHard("collect_grass", CollectGrass::new);
-        // registerHard("tame_parrot", ParrotTame::new);
+        // registerHard("parrot_on_shoulder", HaveParrotOnShoulder::new);
         // registerHard("mine_ores", MineAllOres::new);
         // registerHard("go_fast", PlayerVelocityFast::new);
         // registerHard("go_slow", PlayerVelocitySlow::new);
@@ -109,7 +113,7 @@ public class Goals {
     static void registerCapturableGoals() {
         // registerCapturable("kill_players", KillMostPlayers::new);
         // registerCapturable("wear_pumpkin", WearPumpkins::new);
-        // registerCapturable("eat_food", EatMostFood::new);
+        registerCapturable("eat_food", EatMostFood::new);
         // registerCapturable("mine_blocks", MineMostBlocks::new);
     }
 

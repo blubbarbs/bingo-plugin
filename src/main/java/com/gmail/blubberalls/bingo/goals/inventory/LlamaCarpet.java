@@ -6,10 +6,12 @@ import org.bukkit.event.Event.Result;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.LlamaInventory;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Checks;
 
 public class LlamaCarpet extends Goal {
     public boolean isCarpet(ItemStack stack) {
@@ -20,12 +22,15 @@ public class LlamaCarpet extends Goal {
     public void onInventoryClick(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();
 
-        if (!(event.getView().getTopInventory() instanceof LlamaInventory)
+        if (event.getClickedInventory() == null
+        ||  !(event.getView().getTopInventory() instanceof LlamaInventory)
         ||  event.getResult() == Result.DENY) return;
 
         LlamaInventory llamaInventory = (LlamaInventory) event.getView().getTopInventory();
 
-        if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+        if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
+            if (event.getAction() != InventoryAction.MOVE_TO_OTHER_INVENTORY) return;
+
             ItemStack stack = event.getCurrentItem();
 
             if (!isCarpet(stack)
@@ -35,6 +40,8 @@ public class LlamaCarpet extends Goal {
             setCompletedFor(clicker);
         }
         else {
+            if (!Checks.willPlaceInInventory(event.getAction())) return;            
+            
             ItemStack stack = event.getCursor();
 
             if (!isCarpet(stack)

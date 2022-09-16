@@ -3,7 +3,6 @@ package com.gmail.blubberalls.bingo.goals.inventory;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
-import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.goal.UniqueKeysGoal;
 import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
@@ -42,10 +41,6 @@ public class CollectFlowers extends UniqueKeysGoal {
     public void onPlayerInventoryUpdate(PlayerInventoryChangedEvent event) {
         if (!game.isPlayerPlaying(event.getPlayer())) return;
 
-        for (ItemStack stack : event.getCurrent().values()) {
-            if (stack != null) {
-                addUniqueKeyFor(event.getPlayer(), stack.getType());
-            }
-        }
+        event.getCurrent().values().forEach(stack -> addUniqueKeyFor(event.getPlayer(), stack.getType()));
     }
 }

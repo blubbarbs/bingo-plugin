@@ -7,10 +7,12 @@ import org.bukkit.event.Event.Result;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Checks;
 
 public class LeatherHorseArmor extends Goal {
 
@@ -18,12 +20,15 @@ public class LeatherHorseArmor extends Goal {
     public void onInventoryClick(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();
 
-        if (!(event.getView().getTopInventory() instanceof HorseInventory)
+        if (event.getClickedInventory() == null
+        ||  !(event.getView().getTopInventory() instanceof HorseInventory)
         ||  event.getResult() == Result.DENY) return;
 
         HorseInventory horseInventory = (HorseInventory) event.getView().getTopInventory();
 
-        if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+        if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
+            if (event.getAction() != InventoryAction.MOVE_TO_OTHER_INVENTORY) return;
+            
             ItemStack stack = event.getCurrentItem();
 
             if (stack.getType() != Material.LEATHER_HORSE_ARMOR
@@ -33,6 +38,8 @@ public class LeatherHorseArmor extends Goal {
             setCompletedFor(clicker);
         }
         else {
+            if (!Checks.willPlaceInInventory(event.getAction())) return;
+
             ItemStack stack = event.getCursor();
 
             if (stack.getType() != Material.LEATHER_HORSE_ARMOR

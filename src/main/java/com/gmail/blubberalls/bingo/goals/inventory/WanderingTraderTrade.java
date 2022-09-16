@@ -4,21 +4,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.WanderingTrader;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Event.Result;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Checks;
 
 public class WanderingTraderTrade extends Goal {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();
 
-        if (!(event.getView().getTopInventory().getHolder() instanceof WanderingTrader)
+        if (event.getClickedInventory() == null
+        ||  !(event.getClickedInventory().getHolder() instanceof WanderingTrader)
         ||  event.getSlotType() != SlotType.RESULT
         ||  event.getCurrentItem() == null
-        ||  (!event.getAction().name().startsWith("PICKUP") && event.getAction() != InventoryAction.MOVE_TO_OTHER_INVENTORY)
+        ||  !Checks.willTakeFromInventory(event.getAction())
         ||  event.getResult() == Result.DENY
         ||  !game.isPlayerPlaying(clicker)) return;
 

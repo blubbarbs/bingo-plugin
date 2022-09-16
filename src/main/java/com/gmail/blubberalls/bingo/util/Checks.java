@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.generator.strucutre.CraftStructure;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 
 import net.minecraft.core.BlockPosition;
@@ -50,5 +51,30 @@ public class Checks {
         else if (a == null && b != null) return false;
         else if (a != null && b == null) return false;
         else return a.equals(b);
+    }
+
+    public static boolean willPlaceInInventory(InventoryAction action) {
+        switch(action) {
+            case PLACE_ALL:
+            case PLACE_SOME:
+            case PLACE_ONE:
+            case SWAP_WITH_CURSOR:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean willTakeFromInventory(InventoryAction action) {
+        switch(action) {
+            case PICKUP_ALL:
+            case PICKUP_HALF:
+            case PICKUP_SOME:
+            case PICKUP_ONE:
+            case MOVE_TO_OTHER_INVENTORY:
+                return true;
+            default:
+                return false;
+        }
     }
 }

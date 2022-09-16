@@ -1,34 +1,30 @@
 package com.gmail.blubberalls.bingo.goals.inventory;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 
-import com.gmail.blubberalls.bingo.goal.ScoredGoal;
+import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.util.Checks;
 
-public class CompleteVillagerTrades extends ScoredGoal {
-    @Override
-    public int getGoal() {
-        return 10;
-    }
-    
+public class SmeltSmoothStone extends Goal {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();
 
         if (event.getClickedInventory() == null
-        ||  !(event.getClickedInventory().getHolder() instanceof Villager)
+        ||  event.getClickedInventory().getType() != InventoryType.FURNACE
         ||  event.getSlotType() != SlotType.RESULT
         ||  event.getCurrentItem() == null
+        ||  event.getCurrentItem().getType() != Material.SMOOTH_STONE
         ||  !Checks.willTakeFromInventory(event.getAction())
         ||  event.getResult() == Result.DENY
         ||  !game.isPlayerPlaying(clicker)) return;
 
-        addCompletionFor(clicker, 1);
+        setCompletedFor(clicker);
     }
-
 }

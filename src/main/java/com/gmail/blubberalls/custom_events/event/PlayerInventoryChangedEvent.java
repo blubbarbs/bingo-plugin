@@ -3,6 +3,7 @@ package com.gmail.blubberalls.custom_events.event;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
@@ -18,7 +19,12 @@ public class PlayerInventoryChangedEvent extends PlayerEvent {
         super(player);
         
         this.previous = previous;
-        previous.keySet().forEach(i -> current.put(i, player.getInventory().getItem(i)));
+        
+        for (int i : previous.keySet()) {
+            ItemStack stack = player.getInventory().getItem(i);
+
+            current.put(i, stack != null ? stack : new ItemStack(Material.AIR));
+        }
     }
  
     public Set<Integer> getUpdatedSlots() {
