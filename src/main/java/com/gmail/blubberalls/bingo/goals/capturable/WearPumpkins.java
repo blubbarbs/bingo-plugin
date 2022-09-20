@@ -6,9 +6,25 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.goal.CapturableGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class WearPumpkins extends CapturableGoal {
+
+    @Override
+    public String getTitle() {
+        return "Lantern Jack";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("carved_pumpkin");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Have your entire team wear a Carved Pumpkin.";
+    }
 
     public boolean teamCheck(Team t) {
         return game.getTeamPlayers(t).stream().allMatch(this::hasPumpkin);

@@ -4,34 +4,33 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryType;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.util.Icons;
 
-public class CraftLockedMap extends Goal {
-
+public class CraftPumpkinPie extends Goal {
+    
     @Override
     public String getTitle() {
-        return "Map to Nowhere";
+        return "The Great Pumpkin (Pie)";
     }
 
     @Override
     public String getIconPath() {
-        return Icons.ITEM("map");
+        return Icons.ITEM("pumpkin_pie");
     }
 
     @Override
     public String getDescription() {
-        return "Craft a Locked Map in a Cartography Table.";
+        return "Craft a Pumpkin Pie.";
     }
 
     @EventHandler
     public void onCraft(CraftItemEvent event) {
-        if (event.getInventory().getType() == InventoryType.CARTOGRAPHY
-        ||  event.getInventory().getMatrix()[1].getType() != Material.GLASS_PANE
+        if (event.getCurrentItem().getType() != Material.PUMPKIN_PIE
         ||  !game.isPlayerPlaying((Player) event.getWhoClicked())) return;
 
-        setCompletedFor((Player) event.getWhoClicked());
+        Player p = (Player) event.getWhoClicked();
+        setCompletedFor(p);   
     }
 }

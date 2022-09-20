@@ -6,8 +6,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.gmail.blubberalls.bingo.goal.UniqueKeysGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class KillZombies extends UniqueKeysGoal {
+
+    @Override
+    public String getTitle() {
+        return "Zombie Tour";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ENTITY("zombie");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Kill each type of Zombie.";
+    }
 
     @Override
     public Keyed[] getValidKeys() {

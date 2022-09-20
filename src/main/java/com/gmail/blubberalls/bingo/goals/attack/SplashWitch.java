@@ -1,42 +1,38 @@
 package com.gmail.blubberalls.bingo.goals.attack;
 
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.util.Icons;
 
-public class IgniteTNTFlamingArrow extends Goal {
-    
+public class SplashWitch extends Goal {
+
     @Override
     public String getTitle() {
-        return "Flamingrobin";
+        return "Bruja Hada";
     }
 
     @Override
     public String getIconPath() {
-        return Icons.ITEM("arrow");
+        return Icons.ITEM("splash_potion");
     }
 
     @Override
     public String getDescription() {
-        return "Ignite TNT with a flaming arrow.";
+        return "Hit a Witch with a Splash Potion of Harming.";
     }
 
     @EventHandler
-    public void onProjectileHit(ProjectileHitEvent event) {
-        if (event.getHitBlock() == null
-        ||  event.getHitBlock().getType() != Material.TNT
-        ||  event.getEntity().getType() != EntityType.ARROW
-        ||  event.getEntity().getFireTicks() == 0
+    public void onPotionSplash(PotionSplashEvent event) {
+        if (!event.getAffectedEntities().stream().anyMatch(entity -> entity.getType() == EntityType.WITCH)
+        ||  !event.getPotion().getEffects().stream().anyMatch(potion -> potion.getType() == PotionEffectType.HARM)
         ||  !(event.getEntity().getShooter() instanceof Player)) return;
 
         Player p = (Player) event.getEntity().getShooter();
-        
-        if (!game.isPlayerPlaying(p)) return;
 
         setCompletedFor(p);
     }

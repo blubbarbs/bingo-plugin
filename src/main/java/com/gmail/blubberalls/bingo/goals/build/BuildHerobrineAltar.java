@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockIgniteEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class BuildHerobrineAltar extends Goal {
     
@@ -17,8 +18,14 @@ public class BuildHerobrineAltar extends Goal {
 
     @Override
     public String getIconPath() {
-        return "bingo.icons.herobrine";
+        return Icons.MISC("herobrine");
     }
+
+    @Override
+    public String getDescription() {
+        return "Summon Herobrine.";
+    }
+
 
     public boolean checkAltar(Block netherrackBlock) {
         for (int x = -1; x <= 1; x++) {
@@ -50,5 +57,4 @@ public class BuildHerobrineAltar extends Goal {
         event.getBlock().getWorld().strikeLightningEffect(event.getBlock().getLocation());
         setCompletedFor(event.getPlayer());
     }
-
 }

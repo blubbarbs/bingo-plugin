@@ -6,8 +6,24 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class KillBlaze extends Goal {
+
+    @Override
+    public String getTitle() {
+        return "Snowball Blaze";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ENTITY("blaze");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Kill a Blaze with a snowball.";
+    }
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {

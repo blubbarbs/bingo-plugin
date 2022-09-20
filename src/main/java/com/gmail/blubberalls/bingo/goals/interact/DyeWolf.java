@@ -8,9 +8,25 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class DyeWolf extends Goal {
     
+    @Override
+    public String getTitle() {
+        return "Steppenwolfe";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ENTITY("wolf");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Dye a Wolf's collar.";
+    }
+
     public DyeColor getDyeColor(Material material) {
         switch (material) {
         case BONE_MEAL:

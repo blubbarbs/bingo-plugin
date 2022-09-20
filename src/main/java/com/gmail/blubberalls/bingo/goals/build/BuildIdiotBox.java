@@ -10,9 +10,25 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class BuildIdiotBox extends Goal {
-    
+
+    @Override
+    public String getTitle() {
+        return "Boxed In";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("iron_door");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Trap yourself by stepping on a pressure plate surrounded by 4 iron doors with a solid block ceiling.";
+    }
+
     public boolean isPressurePlate(Material m) {
         return m.name().endsWith("PRESSURE_PLATE");
     }

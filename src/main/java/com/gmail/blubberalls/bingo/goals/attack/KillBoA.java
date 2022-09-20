@@ -7,9 +7,26 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class KillBoA extends Goal {
     
+    @Override
+    public String getTitle() {
+        return "Shell Shocker";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("spider_eye");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Kill an Arthropod mob with the Bane of Arthropods enchantment.";
+    }
+
+
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity().getCategory() != EntityCategory.ARTHROPOD

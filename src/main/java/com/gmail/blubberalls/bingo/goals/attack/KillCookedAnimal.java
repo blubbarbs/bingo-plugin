@@ -5,8 +5,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class KillCookedAnimal extends Goal{
+
+    @Override
+    public String getTitle() {
+        return "Hot BBQ";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("cooked_beef");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Cook a mob (chicken, cow, pig, sheep, rabbit, cod, or salmon) by killing it while it is on fire.";
+    }
 
     public boolean isCookable(EntityType type) {
         switch(type) {

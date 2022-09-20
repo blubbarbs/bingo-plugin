@@ -13,9 +13,25 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class KillCreeperWCreeper extends Goal {
     HashMap<Entity, Player> fuse = new HashMap<Entity, Player>();
+
+    @Override
+    public String getTitle() {
+        return "Revenge";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ENTITY("creeper");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Kill a creeper by exploding another creeper (right click one with flint and steel to make it explode).";
+    }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEntityEvent event) {

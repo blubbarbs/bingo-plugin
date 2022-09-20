@@ -6,12 +6,23 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.CraftItemEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class CraftDiamondSword extends Goal {
 
     @Override
+    public String getTitle() {
+        return "Craft Diamond Sword";
+    }
+
+    @Override
     public String getIconPath() {
-        return "bingo.icons.minecraft.diamond_sword";
+        return Icons.ITEM("diamond_sword");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Craft a Diamond Sword.";
     }
 
     @EventHandler

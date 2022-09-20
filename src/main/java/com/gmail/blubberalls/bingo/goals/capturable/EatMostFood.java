@@ -7,8 +7,24 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
 import com.gmail.blubberalls.bingo.goal.ScoredCapturableGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class EatMostFood extends ScoredCapturableGoal {
+
+    @Override
+    public String getTitle() {
+        return "Glutton";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("potato");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Have the most food eaten.";
+    }
 
     // TODO Fix. Fires with candle
     @EventHandler

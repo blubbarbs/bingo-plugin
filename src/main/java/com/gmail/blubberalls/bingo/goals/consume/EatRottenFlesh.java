@@ -15,12 +15,28 @@ import org.bukkit.scoreboard.Team;
 
 import com.gmail.blubberalls.bingo.Bingo;
 import com.gmail.blubberalls.bingo.goal.ScoredGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 import net.md_5.bungee.api.ChatColor;
 
 public class EatRottenFlesh extends ScoredGoal {
     HashMap<Player, BukkitRunnable> scoreTasks = new HashMap<Player, BukkitRunnable>();
-    
+
+    @Override
+    public String getTitle() {
+        return "Vamp";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("rotten_flesh");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Eat 3 Rotten Flesh in a row without getting the Hunger effect.";
+    }
+
     @Override
     public int getGoal() {
         return 3;

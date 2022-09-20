@@ -8,8 +8,25 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerFishEvent;
 
 import com.gmail.blubberalls.bingo.goal.UniqueKeysGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class FishTripwire extends UniqueKeysGoal {
+    
+    @Override
+    public String getTitle() {
+        return "Fisher of Trip Traps";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("tripwire_hook");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Fish a Tripwire Hook and some String.";
+    }
+
     @Override
     public Keyed[] getValidKeys() {
         return new Keyed[] {

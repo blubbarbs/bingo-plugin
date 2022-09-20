@@ -8,9 +8,25 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class DuplicateAllay extends Goal {
     
+    @Override
+    public String getTitle() {
+        return "Hello Allay";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ENTITY("allay");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Duplicate an Allay.";
+    }
+
     @EventHandler
     public void onInteractEntity(PlayerInteractEntityEvent event) {
         if (event.getRightClicked().getType() != EntityType.ALLAY) return;

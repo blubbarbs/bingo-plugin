@@ -7,12 +7,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.CraftItemEvent;
 
 import com.gmail.blubberalls.bingo.goal.UniqueKeysGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class CraftDoors extends UniqueKeysGoal {
 
     @Override
     public String getTitle() {
         return "Door Hoarder";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("oak_door");
     }
 
     @Override

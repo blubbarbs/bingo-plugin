@@ -24,4 +24,16 @@ public class TextComponents {
 
         return iconComponent;
     }
+
+    public static String BLOCK_ICON(String name) {
+        return "bingo.icons.blocks" + name;
+    }
+
+    public static String ITEM_ICON(String name) {
+        return "bingo.icons.items" + name;
+    }
+
+    public static String MISC_ICON(String name) {
+        return "bingo.icons.misc" + name;
+    }
 }

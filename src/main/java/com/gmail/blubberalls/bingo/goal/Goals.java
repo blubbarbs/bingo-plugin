@@ -3,7 +3,7 @@ package com.gmail.blubberalls.bingo.goal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.function.Supplier;
+import java.util.List;
 
 import com.gmail.blubberalls.bingo.Game;
 import com.gmail.blubberalls.bingo.goals.attack.*;
@@ -16,13 +16,13 @@ import com.gmail.blubberalls.bingo.goals.interact.*;
 import com.gmail.blubberalls.bingo.goals.inventory.*;
 import com.gmail.blubberalls.bingo.goals.location.*;
 import com.gmail.blubberalls.bingo.goals.mine.*;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ArrayListMultimap;
 
 import de.tr7zw.nbtapi.NBTCompound;
 
 public class Goals {
     private static final HashMap<String, GoalFactory> GOAL_FACTORIES = new HashMap<String, GoalFactory>();
-    private static final HashMultimap<GoalDifficulty, GoalFactory> GOAL_FACTORIES_BY_DIFFICULTY = HashMultimap.create();
+    private static final ArrayListMultimap<GoalDifficulty, GoalFactory> GOAL_FACTORIES_BY_DIFFICULTY = ArrayListMultimap.create();
 
     static {
         registerEasyGoals();
@@ -32,111 +32,125 @@ public class Goals {
     }
 
     static void registerEasyGoals() {
-        // registerEasy("eat_suspicious_stew", EatSuspiciousStew::new);
-        // registerEasy("kill_cooked_mob", KillCookedAnimal::new);
-        // registerEasy("get_full_cobble", CollectFullCobblestone::new);
-        // registerEasy("enter_lush_cave", EnterLushCave::new);
-        // registerEasy("idiot_box", BuildIdiotBox::new);
-        // registerEasy("die_anvil", DieByFallingAnvil::new);
-        // registerEasy("use_campfire", UseCampfire::new);
-        // registerEasy("attack_fishing_rod", AttackPlayerWithFishingRod::new);
-        registerEasy("kill_by_arrow", SuicideByArrow::new);
-        registerEasy("place_painting", PlacePainting::new);
-        // registerEasy("eat_golden_carrot", EatGoldenCarrot::new);
-        // registerEasy("eat_pufferfish", EatPufferfish::new);
-        registerEasy("fish_bucket", FishWithBucket::new);
-        // registerEasy("leather_horse_armor", LeatherHorseArmor::new);
-        // registerEasy("kill_stalagmite", KillByStalagmite::new);
-        registerEasy("llama_carpet", LlamaCarpet::new);
-        // registerMedium("dye_wolf", DyeWolf::new);
-        // registerEasy("eat_honey_bottle", EatHoneyBottle::new);
-        registerEasy("fish_fish", FishFish::new);
-        registerEasy("smelt_smooth_stone", SmeltSmoothStone::new);
-        registerEasy("collect_buckets", CollectBuckets::new);
-        registerEasy("use_smoker", UseSmoker::new);
-        registerEasy("tame_cat", TameCat::new);
+        registerEasy(EatSuspiciousStew.class);
+        registerEasy(KillCookedAnimal.class);
+        registerEasy(CollectFullCobblestone.class);
+        registerEasy(EnterLushCave.class);
+        registerEasy(BuildIdiotBox.class);
+        registerEasy(DieByFallingAnvil.class);
+        registerEasy(UseCampfire.class);
+        registerEasy(AttackPlayerWithFishingRod.class);
+        registerEasy(SuicideByArrow.class);
+        registerEasy(PlacePainting.class);
+        registerEasy(EatGoldenCarrot.class);
+        registerEasy(EatPufferfish.class);
+        registerEasy(FishWithBucket.class);
+        registerEasy(LeatherHorseArmor.class);
+        registerEasy(KillByStalagmite.class);
+        registerEasy(LlamaCarpet.class);
+        registerEasy(DyeWolf.class);
+        registerEasy(EatHoneyBottle.class);
+        registerEasy(FishFish.class);
+        registerEasy(SmeltSmoothStone.class);
+        registerEasy(CollectBuckets.class);
+        registerEasy(UseSmoker.class);
+        registerEasy(TameCat.class);
+        registerEasy(CauldronWash.class);
+        registerEasy(CraftPumpkinPie.class);
+        registerEasy(CraftDriedKelpBlock.class);
+        registerEasy(EatBreadAndFish.class);
+        registerEasy(KillZombieWithShovel.class);
+        registerEasy(PlaceCandleOnCake.class);
+        registerEasy(DyeSign.class);
     }
 
     static void registerMediumGoals() {
-        // registerMedium("rename_vindicator", RenameVindicator::new);
-        // registerMedium("rename_rabbit", RenameRabbit::new);
-        // registerMedium("rename_sheep", RenameSheep::new);
-        // registerMedium("rename_dinnerbone", RenameToDinnerbone::new);
-        // registerMedium("explore_villages", ExploreVillages::new);
-        // registerMedium("build_herobrine_altar", BuildHerobrineAltar::new);
-        // registerMedium("craft_magma_block", CraftMagmaBlock::new);
-        // registerMedium("mine_amethyst", MineAmethystCrystal::new);
-        // registerMedium("kill_zombies", KillZombies::new);
-        // registerMedium("kill_creeper", KillCreeperWCreeper::new);
-        // registerMedium("kill_phantom", KillPhantom::new);
-        // registerMedium("consume_rotten_flesh", EatRottenFlesh::new);
-        // registerMedium("kill_skeletons", KillSkeletons::new);
-        // registerMedium("fertilize_crops", FertilizeCrops::new);
-        // registerMedium("collect_flowers", CollectFlowers::new);
-        // registerMedium("craft_doors", CraftDoors::new);
-        // registerMedium("ride_pig_with_carrot", RidePigWithCarrot::new);
-        // registerMedium("shoot_tnt_flaming_arrow" , IgniteTNTFlamingArrow::new);
-        // registerMedium("kill_blaze", KillBlaze::new);
-        // registerMedium("kill_arthropods", KillBoA::new);
-        // registerMedium("kill_polar_bear", KillPolarBear::new);
-        // registerMedium("exp_level_30", ReachLevel30::new);
-        // registerMedium("shear_pink_sheep", ShearPinkSheep::new);
-        // registerMedium("equip_chainmail", EquipChainmailArmor::new);
-        // registerMedium("equip_different_armor", EquipDifferentArmor::new);
-        // registerMedium("teleport_far", PlayerTeleportFar::new);
-        registerMedium("mine_spawner", MineMonsterSpawner::new);
-        registerMedium("enter_shipwreck", EnterShipwreck::new);
-        registerMedium("fish_tripwire", FishTripwire::new);
-        registerMedium("trade_with_villagers", CompleteVillagerTrades::new);
-        registerMedium("instamine", Instamine::new);
+        registerMedium(RenameVindicator.class);
+        registerMedium(RenameRabbit.class);
+        registerMedium(RenameSheep.class);
+        registerMedium(RenameToDinnerbone.class);
+        registerMedium(ExploreVillages.class);
+        registerMedium(BuildHerobrineAltar.class);
+        registerMedium(MineAmethystCrystal.class);
+        registerMedium(KillZombies.class);
+        registerMedium(KillCreeperWCreeper.class);
+        registerMedium(KillPhantom.class);
+        registerMedium(EatRottenFlesh.class);
+        registerMedium(KillSkeletons.class);
+        registerMedium(FertilizeCrops.class);
+        registerMedium(CollectFlowers.class);
+        registerMedium(CraftDoors.class);
+        registerMedium(RidePigWithCarrot.class);
+        registerMedium(IgniteTNTFlamingArrow.class);
+        registerMedium(KillBlaze.class);
+        registerMedium(KillBoA.class);
+        registerMedium(KillPolarBear.class);
+        registerMedium(ReachLevel30.class);
+        registerMedium(ShearPinkSheep.class);
+        registerMedium(EquipChainmailArmor.class);
+        registerMedium(EquipDifferentArmor.class);
+        registerMedium(PlayerTeleportFar.class);
+        registerMedium(MineMonsterSpawner.class);
+        registerMedium(EnterShipwreck.class);
+        registerMedium(FishTripwire.class);
+        registerMedium(CompleteVillagerTrades.class);
+        registerMedium(Instamine.class);
+        registerMedium(TradeWithPiglins.class);
+        registerMedium(CollectTorches.class);
     }
 
     static void registerHardGoals() {
-        // registerHard("collect_grass", CollectGrass::new);
-        // registerHard("parrot_on_shoulder", HaveParrotOnShoulder::new);
-        // registerHard("mine_ores", MineAllOres::new);
-        // registerHard("go_fast", PlayerVelocityFast::new);
-        // registerHard("go_slow", PlayerVelocitySlow::new);
-        // registerHard("plant_trees", PlantTrees::new);
-        // registerHard("destroy_diamonds", DestroyDiamonds::new);
-        // registerHard("kill_drowned", KillDrowned::new);
-        // registerHard("kill_endermite", KillEndermite::new);
-        // registerHard("break_netherite_hoe", BreakNetheriteHoe::new);
-        // registerHard("duplicate_allay", DuplicateAllay::new);
-        registerHard("mooshroom_soup", MooshroomSoup::new);
-        // registerHard("fish_tropical_fish", FishTropicalFish::new);
-        // registerHard("collect_froglight", CollectFroglight::new);
-        // registerHard("enter_stronghold", EnterStronghold::new);
-        // registerHard("trade_with_wandering_trader", WanderingTraderTrade::new);
+        registerHard(CollectGrass.class);
+        registerHard(HaveParrotOnShoulder.class);
+        registerHard(MineAllOres.class);
+        registerHard(PlayerVelocityFast.class);
+        registerHard(PlayerVelocitySlow.class);
+        registerHard(PlantTrees.class);
+        registerHard(DestroyDiamonds.class);
+        registerHard(KillDrowned.class);
+        registerHard(KillEndermite.class);
+        registerHard(BreakNetheriteHoe.class);
+        registerHard(DuplicateAllay.class);
+        registerHard(MooshroomSoup.class);
+        registerHard(FishTropicalFish.class);
+        registerHard(CollectFroglight.class);
+        registerHard(EnterStronghold.class);
+        registerHard(WanderingTraderTrade.class);
+        registerHard(KillZoglin.class);
+        registerHard(CraftMagmaBlock.class);
+        registerHard(BreedMule.class);
+        registerHard(PlaceWetSponge.class);
+        registerHard(SplashWitch.class);
+        registerHard(StartRaid.class);
     }
 
     static void registerCapturableGoals() {
-        // registerCapturable("kill_players", KillMostPlayers::new);
-        // registerCapturable("wear_pumpkin", WearPumpkins::new);
-        registerCapturable("eat_food", EatMostFood::new);
-        // registerCapturable("mine_blocks", MineMostBlocks::new);
+        registerCapturable(KillMostPlayers.class);
+        registerCapturable(WearPumpkins.class);
+        registerCapturable(EatMostFood.class);
+        registerCapturable(MineMostBlocks.class);
     }
 
-    static GoalFactory registerEasy(String name, Supplier<Goal> goalConstructor) {
-        return register(name, goalConstructor, GoalDifficulty.EASY);
+    static GoalFactory registerEasy(Class<? extends Goal> goalClass) {
+        return register(goalClass, GoalDifficulty.EASY);
     }
 
-    static GoalFactory registerMedium(String name, Supplier<Goal> goalConstructor) {
-        return register(name, goalConstructor, GoalDifficulty.MEDIUM);
+    static GoalFactory registerMedium(Class<? extends Goal> goalClass) {
+        return register(goalClass, GoalDifficulty.MEDIUM);
     }
 
-    static GoalFactory registerHard(String name, Supplier<Goal> goalConstructor) {
-        return register(name, goalConstructor, GoalDifficulty.HARD);
+    static GoalFactory registerHard(Class<? extends Goal> goalClass) {
+        return register(goalClass, GoalDifficulty.HARD);
     }
 
-    static GoalFactory registerCapturable(String name, Supplier<Goal> goalConstructor) {
-        return register(name, goalConstructor, GoalDifficulty.CAPTURABLE);
+    static GoalFactory registerCapturable(Class<? extends Goal> goalClass) {
+        return register(goalClass, GoalDifficulty.CAPTURABLE);
     }
 
-    static GoalFactory register(String name, Supplier<Goal> goalConstructor, GoalDifficulty difficulty) {
-        GoalFactory factory = new GoalFactory(name, goalConstructor, difficulty);
+    static GoalFactory register(Class<? extends Goal> goalClass, GoalDifficulty difficulty) {
+        GoalFactory factory = new GoalFactory(goalClass, difficulty);
         
-        GOAL_FACTORIES.put(name, factory);
+        GOAL_FACTORIES.put(factory.getName(), factory);
         GOAL_FACTORIES_BY_DIFFICULTY.put(difficulty, factory);
 
         return factory;
@@ -149,47 +163,98 @@ public class Goals {
     }
 
     public static Collection<Goal> randomGoals(Game game, int amount) {
+        List<GoalFactory> easyGoals = GOAL_FACTORIES_BY_DIFFICULTY.get(GoalDifficulty.EASY);
+        List<GoalFactory> medGoals = GOAL_FACTORIES_BY_DIFFICULTY.get(GoalDifficulty.MEDIUM);
+        List<GoalFactory> hardGoals = GOAL_FACTORIES_BY_DIFFICULTY.get(GoalDifficulty.HARD);
+        List<GoalFactory> captGoals = GOAL_FACTORIES_BY_DIFFICULTY.get(GoalDifficulty.CAPTURABLE);
         ArrayList<Goal> goals = new ArrayList<Goal>();
 
-        GOAL_FACTORIES.values().forEach(factory -> goals.add(factory.newGoal(game)));
+        for (int i = 0; i < 8; i++) {
+            GoalFactory f = easyGoals.get(game.getRandom().nextInt(easyGoals.size()));
+
+            goals.add(f.newGoal(game));
+            easyGoals.remove(f);
+        }
+
+        for (int i = 0; i < 8; i++) {
+            GoalFactory f = medGoals.get(game.getRandom().nextInt(medGoals.size()));
+
+            goals.add(f.newGoal(game));
+            medGoals.remove(f);
+        }
+
+        for (int i = 0; i < 8; i++) {
+            GoalFactory f = hardGoals.get(game.getRandom().nextInt(hardGoals.size()));
+
+            goals.add(f.newGoal(game));
+            hardGoals.remove(f);
+        }
+
+        for (int i = 0; i < 1; i++) {
+            GoalFactory f = captGoals.get(game.getRandom().nextInt(captGoals.size()));
+
+            goals.add(f.newGoal(game));
+            captGoals.remove(f);
+        }
 
         return goals;
     }
 
     public static class GoalFactory {
-        private String name;
+        private Class<? extends Goal> goalClass;
         private GoalDifficulty difficulty = GoalDifficulty.EASY;
-        private Supplier<Goal> goalConstructor;
 
-        public GoalFactory(String name, Supplier<Goal> goalConstructor, GoalDifficulty difficulty) {
-            this.name = name;
+        public GoalFactory(Class<? extends Goal> goalClass, GoalDifficulty difficulty) {
+            this.goalClass = goalClass;
             this.difficulty = difficulty;
-            this.goalConstructor = goalConstructor;
         }
 
         public String getName() {
+            String name = "";
+            String className = goalClass.getSimpleName();
+
+            for (int i = 0; i < className.length(); i++) {
+                char c = className.charAt(i);
+
+                name += Character.isUpperCase(c) && i > 0 ? '_' + Character.toString(Character.toLowerCase(c)) : Character.toString(Character.toLowerCase(c));
+            }
+
             return name;
         }
 
         public Goal newGoal(Game game) {
-            Goal goal = goalConstructor.get();
+            try {
+                Goal goal = goalClass.getConstructor().newInstance();
 
-            goal.game = game;
-            goal.difficulty = difficulty;
-            goal.savedData = game.getGoalData().addCompound();
-            goal.savedData.setString("name", name);
+                goal.game = game;
+                goal.difficulty = difficulty;
+                goal.savedData = game.getGoalData().addCompound();
+                goal.savedData.setString("name", getName());
+    
+                return goal;                    
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            return goal;
+            return null;
         }
 
         public Goal loadGoal(Game game, NBTCompound savedData) {            
-            Goal goal = goalConstructor.get();
-            
-            goal.game = game;
-            goal.difficulty = difficulty;
-            goal.savedData = savedData;
+            try {
+                Goal goal = goalClass.getConstructor().newInstance();
 
-            return goal;
+                goal.game = game;
+                goal.difficulty = difficulty;
+                goal.savedData = savedData;
+        
+                return goal;                    
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
         }
     }
 }

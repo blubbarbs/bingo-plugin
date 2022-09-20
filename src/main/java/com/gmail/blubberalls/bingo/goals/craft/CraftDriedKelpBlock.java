@@ -4,34 +4,33 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryType;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.util.Icons;
 
-public class CraftLockedMap extends Goal {
-
+public class CraftDriedKelpBlock extends Goal {
+    
     @Override
     public String getTitle() {
-        return "Map to Nowhere";
+        return "Healthy Kelp Meal";
     }
 
     @Override
     public String getIconPath() {
-        return Icons.ITEM("map");
+        return Icons.BLOCK("dried_kelp_block");
     }
 
     @Override
     public String getDescription() {
-        return "Craft a Locked Map in a Cartography Table.";
+        return "Craft a Dried Kelp Block.";
     }
 
     @EventHandler
     public void onCraft(CraftItemEvent event) {
-        if (event.getInventory().getType() == InventoryType.CARTOGRAPHY
-        ||  event.getInventory().getMatrix()[1].getType() != Material.GLASS_PANE
+        if (event.getCurrentItem().getType() != Material.DRIED_KELP_BLOCK
         ||  !game.isPlayerPlaying((Player) event.getWhoClicked())) return;
 
-        setCompletedFor((Player) event.getWhoClicked());
+        Player p = (Player) event.getWhoClicked();
+        setCompletedFor(p);
     }
 }

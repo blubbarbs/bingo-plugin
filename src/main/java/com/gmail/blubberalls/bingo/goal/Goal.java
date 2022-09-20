@@ -9,7 +9,6 @@ import com.gmail.blubberalls.bingo.Bingo;
 import com.gmail.blubberalls.bingo.Game;
 import com.gmail.blubberalls.bingo.goal.goal_data.GoalData;
 import com.gmail.blubberalls.bingo.util.TextComponents;
-import com.gmail.blubberalls.bingo.util.TextUtils;
 
 import de.tr7zw.nbtapi.NBTCompound;
 import net.md_5.bungee.api.ChatColor;
@@ -28,24 +27,16 @@ public abstract class Goal implements Listener, GoalData {
     protected GoalDifficulty difficulty;
     protected NBTCompound savedData;
 
+    public abstract String getTitle();
+    public abstract String getIconPath();
+    public abstract String getDescription();
+
     public Game getGame() {
         return game;
     }
     
     public NBTCompound getSavedData() {
         return savedData;
-    }
-
-    public String getIconPath() {
-        return "bingo.icons.original_test";
-    }
-    
-    public String getDescription() {
-        return "Default description";
-    }
-
-    public String getTitle() {
-        return TextUtils.capitalizeFirstLetters(getName(), "_", " ");
     }
 
     public GoalDifficulty getDifficulty() {

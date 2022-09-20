@@ -8,8 +8,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerFishEvent;
 
 import com.gmail.blubberalls.bingo.goal.UniqueKeysGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class FishFish extends UniqueKeysGoal {
+
+    @Override
+    public String getTitle() {
+        return "Fisher of Fish";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("cod");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Fish the 3 main types of fish.";
+    }
 
     @Override
     public Keyed[] getValidKeys() {

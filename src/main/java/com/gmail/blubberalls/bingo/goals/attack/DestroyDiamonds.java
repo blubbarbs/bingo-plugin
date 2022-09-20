@@ -10,11 +10,28 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.gmail.blubberalls.bingo.goal.ScoredGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class DestroyDiamonds extends ScoredGoal {
+    
+    @Override
+    public String getTitle() {
+        return "Blood Diamonds";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("diamond");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Throw 8 diamonds into lava. :)";
+    }
+
     @Override
     public int getGoal() {
-        return 32;
+        return 8;
     }
     
     @EventHandler
