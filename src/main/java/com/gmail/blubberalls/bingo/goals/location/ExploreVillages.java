@@ -6,9 +6,25 @@ import org.bukkit.generator.structure.Structure;
 
 import com.gmail.blubberalls.bingo.goal.UniqueKeysGoal;
 import com.gmail.blubberalls.bingo.util.Checks;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerExistEvent;
 
 public class ExploreVillages extends UniqueKeysGoal {
+
+    @Override
+    public String getTitle() {
+        return "Squidville";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.MISC("village");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Enter 3 types of Villages.";
+    }
 
     @Override
     public int getGoal() {

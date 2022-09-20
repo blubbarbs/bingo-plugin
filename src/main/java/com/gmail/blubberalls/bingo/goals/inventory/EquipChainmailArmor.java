@@ -5,9 +5,26 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class EquipChainmailArmor extends Goal {
+
+    @Override
+    public String getTitle() {
+        return "Chained Down";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("chainmail_chestplate");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Wear any piece of Chainmail armor.";
+    }
+
     public boolean isChainmailArmor(ItemStack stack) {
         switch(stack.getType()) {
             case CHAINMAIL_BOOTS:

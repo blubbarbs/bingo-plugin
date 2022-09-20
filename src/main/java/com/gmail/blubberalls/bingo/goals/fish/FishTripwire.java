@@ -19,7 +19,7 @@ public class FishTripwire extends UniqueKeysGoal {
 
     @Override
     public String getIconPath() {
-        return Icons.ITEM("tripwire_hook");
+        return Icons.ITEM("string");
     }
 
     @Override

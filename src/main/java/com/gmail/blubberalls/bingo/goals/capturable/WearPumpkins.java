@@ -18,7 +18,7 @@ public class WearPumpkins extends CapturableGoal {
 
     @Override
     public String getIconPath() {
-        return Icons.ITEM("carved_pumpkin");
+        return Icons.BLOCK("carved_pumpkin");
     }
 
     @Override

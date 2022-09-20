@@ -4,12 +4,24 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class CollectGrass extends Goal {
+    
     @Override
     public String getTitle() {
         return "Touch Grass";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.BLOCK("grass_block");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Obtain a Grass Block";
     }
 
     @EventHandler

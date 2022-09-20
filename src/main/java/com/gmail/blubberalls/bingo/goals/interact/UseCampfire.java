@@ -7,8 +7,25 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class UseCampfire extends Goal {
+    
+    @Override
+    public String getTitle() {
+        return "Gone Camping";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.BLOCK("campfire");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Place a piece of food on a Campfire.";
+    }
+
     public boolean isRawFood(Material material) {
         switch(material) {
             case BEEF:

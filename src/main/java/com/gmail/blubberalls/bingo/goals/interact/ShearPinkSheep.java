@@ -7,8 +7,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class ShearPinkSheep extends Goal {
+
+    @Override
+    public String getTitle() {
+        return "In The Pink";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ENTITY("pink_sheep");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Shear a Pink Sheep.";
+    }
 
     @EventHandler
     public void onShear(PlayerShearEntityEvent event) {
@@ -20,5 +36,5 @@ public class ShearPinkSheep extends Goal {
         ||  !game.isPlayerPlaying(event.getPlayer())) return;
 
         setCompletedFor(event.getPlayer());
-    }   
+    }
 }

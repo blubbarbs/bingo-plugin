@@ -6,13 +6,25 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockDropItemEvent;
 
 import com.gmail.blubberalls.bingo.goal.UniqueKeysGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class MineAllOres extends UniqueKeysGoal {
+
+    @Override
+    public String getTitle() {
+        return "Ores Galore";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.BLOCK("iron_ore");
+    }
 
     @Override
     public String getDescription() {
         return "Mine all ores in the game.";
     }
+
 
     @Override
     public Keyed[] getValidKeys() {

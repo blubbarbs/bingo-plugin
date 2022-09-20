@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerExistEvent;
 
 public class PlayerVelocityFast extends Goal {
@@ -18,7 +19,12 @@ public class PlayerVelocityFast extends Goal {
     
     @Override
     public String getTitle() {
-        return "Faster than Fast, Quicker than Quick";
+        return "Quicker than Quick";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.MISC("fast");
     }
 
     @Override

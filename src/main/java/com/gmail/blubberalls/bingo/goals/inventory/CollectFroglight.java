@@ -4,9 +4,26 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class CollectFroglight extends Goal {    
+    
+    @Override
+    public String getTitle() {
+        return "Frogger";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.BLOCK("pearlescent_froglight");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Obtain a Froglight.";
+    }
+    
     public boolean isFroglight(ItemStack i) {
         if (i == null) return false;
         

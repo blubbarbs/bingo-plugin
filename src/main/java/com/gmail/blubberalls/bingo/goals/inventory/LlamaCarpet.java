@@ -12,8 +12,25 @@ import org.bukkit.inventory.LlamaInventory;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.util.Checks;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class LlamaCarpet extends Goal {
+    
+    @Override
+    public String getTitle() {
+        return "New Groove";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.BLOCK("white_carpet");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Place a carpet on a Llama.";
+    }
+
     public boolean isCarpet(ItemStack stack) {
         return stack != null && stack.getType().name().endsWith("CARPET");
     }

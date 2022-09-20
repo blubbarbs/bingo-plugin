@@ -16,7 +16,7 @@ public class KillEndermite extends Goal {
 
     @Override
     public String getIconPath() {
-        return Icons.ITEM("ender_pearl");
+        return Icons.DEFAULT;
     }
 
     @Override

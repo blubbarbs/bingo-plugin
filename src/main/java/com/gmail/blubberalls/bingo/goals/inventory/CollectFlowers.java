@@ -5,9 +5,25 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 
 import com.gmail.blubberalls.bingo.goal.UniqueKeysGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class CollectFlowers extends UniqueKeysGoal {
+
+    @Override
+    public String getTitle() {
+        return "Serenity";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.BLOCK("poppy");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Collect 10 different types of Flowers.";
+    }
 
     @Override
     public Keyed[] getValidKeys() {

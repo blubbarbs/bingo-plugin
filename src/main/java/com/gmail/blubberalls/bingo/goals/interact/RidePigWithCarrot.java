@@ -9,9 +9,26 @@ import org.bukkit.inventory.ItemStack;
 import org.spigotmc.event.entity.EntityMountEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class RidePigWithCarrot extends Goal {
+ 
+    @Override
+    public String getTitle() {
+        return "Fit for A King";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("carrot_on_a_stick");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Ride a Pig with a Carrot on a Stick in hand.";
+    }
+
     @EventHandler
     public void onRide(EntityMountEvent event) {
         if (event.getEntity().getType() != EntityType.PLAYER

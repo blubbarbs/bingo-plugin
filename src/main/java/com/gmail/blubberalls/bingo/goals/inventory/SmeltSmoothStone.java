@@ -10,8 +10,25 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.util.Checks;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class SmeltSmoothStone extends Goal {
+    
+    @Override
+    public String getTitle() {
+        return "Smooth";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.BLOCK("smooth_stone");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Smelt Smooth Stone.";
+    }
+    
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();

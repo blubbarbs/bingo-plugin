@@ -13,8 +13,24 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.util.Checks;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class LeatherHorseArmor extends Goal {
+
+    @Override
+    public String getTitle() {
+        return "Leatherface";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("leather_horse_armor");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Equip a Horse with Leather Horse Armor.";
+    }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {

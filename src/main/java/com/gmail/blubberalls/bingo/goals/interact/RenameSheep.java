@@ -6,9 +6,25 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class RenameSheep extends Goal {
     
+    @Override
+    public String getTitle() {
+        return "Taste The Rainbow";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("name_tag");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Rename a Sheep to \"jeb_\".";
+    }
+
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
         if (event.getRightClicked().getType() != EntityType.SHEEP

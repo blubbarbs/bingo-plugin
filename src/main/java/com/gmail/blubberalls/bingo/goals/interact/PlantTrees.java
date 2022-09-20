@@ -7,9 +7,25 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.world.StructureGrowEvent;
 
 import com.gmail.blubberalls.bingo.goal.UniqueKeysGoal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class PlantTrees extends UniqueKeysGoal {
-    
+
+    @Override
+    public String getTitle() {
+        return "Tree Hugger";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.BLOCK("oak_sapling");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Plant and grow all of the sapling types with bone meal.";
+    }    
+
     public Keyed[] getValidKeys() {
         return new Keyed[] {
             Material.OAK_SAPLING,
@@ -46,16 +62,6 @@ public class PlantTrees extends UniqueKeysGoal {
             default:
                 return null;
         }
-    }
-
-    @Override
-    public String getTitle() {
-        return "Tree Hugger";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Plant and grow all of the sapling types with bone meal.";
     }
 
     @EventHandler

@@ -4,9 +4,25 @@ import org.bukkit.block.Biome;
 import org.bukkit.event.EventHandler;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerExistEvent;
 
 public class EnterLushCave extends Goal {
+
+    @Override
+    public String getTitle() {
+        return "Underground Lush";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.BLOCK("flowering_azalea_leaves");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Enter a Lush Cave";
+    }
 
     @EventHandler
     public void onExist(PlayerExistEvent event) {

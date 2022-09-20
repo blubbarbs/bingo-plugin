@@ -9,8 +9,25 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
 import com.gmail.blubberalls.bingo.util.Checks;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class WanderingTraderTrade extends Goal {
+    
+    @Override
+    public String getTitle() {
+        return "Wander over Yonder";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ENTITY("wandering_trader");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Trade with a Wandering Trader.";
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();

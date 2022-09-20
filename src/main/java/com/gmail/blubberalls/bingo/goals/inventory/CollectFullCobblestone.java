@@ -6,10 +6,26 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class CollectFullCobblestone extends Goal {
-    
+
+    @Override
+    public String getTitle() {
+        return "The Cobbler";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.BLOCK("cobblestone");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Fill your inventory with all Cobblestone.";
+    }
+
     public boolean hasAllCobblestone(Player p) {
         for (ItemStack i : p.getInventory().getStorageContents()) {
             if (i == null 

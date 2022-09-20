@@ -8,9 +8,25 @@ import org.bukkit.inventory.CreativeCategory;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 import com.gmail.blubberalls.custom_events.event.PlayerInventoryChangedEvent;
 
 public class EquipDifferentArmor extends Goal {
+
+    @Override
+    public String getTitle() {
+        return "Trend Setter";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("empty_armor_slot_chestplate");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Wear 4 different types of armor.";
+    }
 
     public boolean checkDifferentArmor(Player p) {
         HashSet<String> differentArmorTypes = new HashSet<String>();

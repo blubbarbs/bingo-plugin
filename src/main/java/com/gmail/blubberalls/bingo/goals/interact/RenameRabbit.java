@@ -6,8 +6,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import com.gmail.blubberalls.bingo.goal.Goal;
+import com.gmail.blubberalls.bingo.util.Icons;
 
 public class RenameRabbit extends Goal {
+
+    @Override
+    public String getTitle() {
+        return "All Toasters Toast";
+    }
+
+    @Override
+    public String getIconPath() {
+        return Icons.ITEM("name_tag");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Rename a Rabbit to \"Toast\".";
+    }
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
