@@ -436,12 +436,16 @@ public class Game {
     public void update() {
         if (!hasStarted()) return;
 
-        getPlayers().forEach(this::updatePlayerSidebar);
-
         Collection<Team> winners = getWinners();
 
         if (winners != null) {
             endGame(winners);
+        }
+        else {
+            for (Player p : getPlayers()) {
+                updatePlayerSidebar(p);
+                p.spigot().sendMessage(getBoard(p));
+            }
         }
     }
 

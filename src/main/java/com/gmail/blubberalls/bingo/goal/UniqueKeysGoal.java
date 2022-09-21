@@ -8,6 +8,8 @@ import org.bukkit.scoreboard.Team;
 import com.gmail.blubberalls.bingo.goal.goal_data.KeyedData;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 
 public abstract class UniqueKeysGoal extends ScoredGoal implements KeyedData {
     public abstract Keyed[] getValidKeys();
@@ -58,6 +60,11 @@ public abstract class UniqueKeysGoal extends ScoredGoal implements KeyedData {
         if (!isValidKey(key)
         ||  containsUniqueKeyFor(t, key)) return;
 
+        ComponentBuilder completionMessage = new ComponentBuilder();
+
+        completionMessage.append(t.getColor() + "Your " + "team " + ChatColor.RESET + "has attained " + ChatColor.AQUA + key.toString().toLowerCase() + ChatColor.RESET + " for ", FormatRetention.NONE);
+        completionMessage.append(getTextComponent());
+        game.broadcastMessage(game.getTeamPlayers(t), completionMessage.create());
         addKeyedFor(t, "unique_keys", key);
         addCompletionFor(t, 1);
     }

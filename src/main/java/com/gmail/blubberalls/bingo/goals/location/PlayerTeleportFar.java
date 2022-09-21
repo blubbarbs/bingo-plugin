@@ -34,8 +34,6 @@ public class PlayerTeleportFar extends Goal {
         fromNormalizedY.setY(event.getTo().getY());
         double distance = event.getTo().distance(fromNormalizedY);
 
-        Bukkit.getLogger().info("distance: " + distance);
-
         if (distance < 100
         ||  !game.isPlayerPlaying(event.getPlayer())) return;
 

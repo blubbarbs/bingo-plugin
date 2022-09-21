@@ -94,6 +94,13 @@ public abstract class Goal implements Listener, GoalData {
         return clickbox;
     }
 
+    public TextComponent getTextComponent() {
+        TextComponent goalComponent = new TextComponent(difficulty.getColor() + "[" + getTitle() + "]");
+
+        goalComponent.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getDescription())));
+        return goalComponent;
+    }
+
     public String getSidebarTitleFor(Team t) {        
         Team completor = getWhoCompleted();
         
@@ -121,14 +128,13 @@ public abstract class Goal implements Listener, GoalData {
 
         if (currentCompletor == null) return; 
 
-        TextComponent goalComponent = new TextComponent(difficulty.getColor() + "[" + getTitle() + "]");
         ComponentBuilder completionMessage = new ComponentBuilder();
 
         completionMessage.append("Team " + currentCompletor.getColor() + currentCompletor.getDisplayName() + ChatColor.RESET + " has completed ", FormatRetention.NONE);
-        completionMessage.append(goalComponent);
-        goalComponent.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new Text(getDescription())));
-        game.broadcastMessage(completionMessage.create());
+        completionMessage.append(getTextComponent());
+        game.getAllPlayers().forEach(op -> game.setPlayerGoalSubscription(op, this, false));
         game.update();
+        game.broadcastMessage(completionMessage.create());
         unload();
     }
 

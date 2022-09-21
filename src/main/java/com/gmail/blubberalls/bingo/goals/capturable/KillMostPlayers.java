@@ -1,7 +1,7 @@
 package com.gmail.blubberalls.bingo.goals.capturable;
 
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.gmail.blubberalls.bingo.goal.ScoredCapturableGoal;
 import com.gmail.blubberalls.bingo.util.Icons;
@@ -24,8 +24,9 @@ public class KillMostPlayers extends ScoredCapturableGoal {
     }
     
     @EventHandler
-    public void onEntityDeath(EntityDeathEvent event) {
-        if (!game.isPlayerPlaying(event.getEntity().getKiller())) return;
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        if (!game.isPlayerPlaying(event.getEntity())
+        ||  !game.isPlayerPlaying(event.getEntity().getKiller())) return;
 
         addCompletionFor(event.getEntity().getKiller(), 1);
     }

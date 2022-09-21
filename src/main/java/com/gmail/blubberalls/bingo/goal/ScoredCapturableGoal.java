@@ -17,6 +17,9 @@ public abstract class ScoredCapturableGoal extends CapturableGoal implements Sco
         if (highestTeam == null) return false;
 
         int highestScore = scores.get(highestTeam);
+        
+        if (scores.getKeysWithValue(highestScore).size() > 1) return false;
+
         int teamScore = getCompletionFor(t);
         
         return teamScore >= highestScore;
@@ -68,7 +71,7 @@ public abstract class ScoredCapturableGoal extends CapturableGoal implements Sco
         scores.put(t, completion);
 
         super.setCompletedFor(t, willTeamComplete(t));
-        game.update();
+        game.getPlayers().forEach(game::updatePlayerSidebar);
     }
 
     public void setCompletionFor(Player p, int completion) {

@@ -1,5 +1,6 @@
 package com.gmail.blubberalls.bingo.goals.mine;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -66,8 +67,9 @@ public class MineAllOres extends UniqueKeysGoal {
     }
 
     @EventHandler
-    public void onBlockBreak(BlockDropItemEvent event) {        
-        if (!game.isPlayerPlaying(event.getPlayer())) return;
+    public void onBlockDropItem(BlockDropItemEvent event) {                
+        if (event.getItems().size() == 0
+        ||  !game.isPlayerPlaying(event.getPlayer())) return;
         
         addUniqueKeyFor(event.getPlayer(), getOre(event.getBlockState().getType()));
     }

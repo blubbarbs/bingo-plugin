@@ -97,6 +97,8 @@ public class Goals {
         registerMedium(Instamine.class);
         registerMedium(TradeWithPiglins.class);
         registerMedium(CollectTorches.class);
+        registerMedium(EnterMesaBiome.class);
+        registerMedium(EnterMineshaft.class);
     }
 
     static void registerHardGoals() {
