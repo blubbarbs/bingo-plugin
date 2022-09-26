@@ -45,7 +45,7 @@ public class BingoCommands {
         String message = ChatColor.UNDERLINE + "Leaderboard\n";
 
         for (Team t : Bingo.getGame().getTeams()) {
-            message += t.getColor() + t.getDisplayName() + ChatColor.RESET + ": " + ChatColor.AQUA + leaderboard.get(t);
+            message += t.getColor() + t.getDisplayName() + ChatColor.RESET + ": " + ChatColor.AQUA + leaderboard.getOrDefault(t, 0);
             message += "\n";
         }
 
