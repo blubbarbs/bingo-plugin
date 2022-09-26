@@ -13,7 +13,7 @@ public class HaveParrotOnShoulder extends Goal {
 
     @Override
     public String getTitle() {
-        return "Just Like A Pirate";
+        return "You are a Pirate";
     }
 
     @Override

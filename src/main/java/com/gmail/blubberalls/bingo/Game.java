@@ -328,6 +328,8 @@ public class Game {
         ComponentBuilder builder = new ComponentBuilder();
         Iterator<Goal> goalIterator = goals.values().iterator();
 
+        builder.append(ChatColor.UNDERLINE + "Board\n");
+
         for (int y = 0; y < getWidth() && goalIterator.hasNext(); y++) {            
             ArrayList<Goal> goalRow = new ArrayList<Goal>();
             

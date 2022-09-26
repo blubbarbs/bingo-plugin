@@ -56,7 +56,7 @@ public class EatBreadAndFish extends Goal implements ScoreData {
 
         if (completor == null) {
             sidebar += ChatColor.RESET +"\n> Bread Eaten: " + ChatColor.AQUA + getBreadScoreFor(t) + "/" + getBreadGoal();
-            sidebar += ChatColor.RESET + "\n> Fish Eaten: " + ChatColor.AQUA + getFishScoreFor(t) + "/" + getFishGoal();
+            sidebar += ChatColor.RESET + "\n> Cod Eaten: " + ChatColor.AQUA + getFishScoreFor(t) + "/" + getFishGoal();
         }
         
         return sidebar;

@@ -11,7 +11,7 @@ public class KillZoglin extends Goal {
     
     @Override
     public String getTitle() {
-        return "Kill Zoglin";
+        return "Buhara's Request";
     }
 
     @Override

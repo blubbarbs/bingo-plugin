@@ -22,7 +22,7 @@ public class AttackPlayerWithFishingRod extends Goal {
 
     @Override
     public String getDescription() {
-        return "Hit a player with a Fishing Rod.";
+        return "Hook a Player (not on your team) with a Fishing Rod.";
     }
 
     @EventHandler

@@ -13,7 +13,7 @@ public class WearPumpkins extends CapturableGoal {
 
     @Override
     public String getTitle() {
-        return "Lantern Jack";
+        return "Lantern Jack Fanclub";
     }
 
     @Override

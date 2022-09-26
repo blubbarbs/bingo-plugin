@@ -12,7 +12,7 @@ public class DyeSign extends Goal {
     
     @Override
     public String getTitle() {
-        return "Neon Signer";
+        return "Sign Language";
     }
 
     @Override
