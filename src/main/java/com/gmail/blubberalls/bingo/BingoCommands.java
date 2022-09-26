@@ -26,7 +26,30 @@ public class BingoCommands {
     
     @Subcommand("board")
     public static void sendBoard(Player p) {
+        if (!Bingo.getGame().isPlayerPlaying(p)) {
+            p.sendMessage(ChatColor.RED + "You are not currently playing in any game!");
+            return;
+        } 
+
         p.spigot().sendMessage(Bingo.getGame().getBoard(p));
+    }
+
+    @Subcommand("leaderboard")
+    public static void sendLeaderboard(Player p) {
+        if (!Bingo.getGame().isPlayerPlaying(p)) {
+            p.sendMessage(ChatColor.RED + "You are not currently playing in any game!");
+            return;
+        } 
+
+        Leaderboard<Team, Integer> leaderboard = Bingo.getGame().getLeaderboard();
+        String message = ChatColor.UNDERLINE + "Leaderboard\n";
+
+        for (Team t : Bingo.getGame().getTeams()) {
+            message += t.getColor() + t.getDisplayName() + ChatColor.RESET + ": " + ChatColor.AQUA + leaderboard.get(t);
+            message += "\n";
+        }
+
+        p.sendMessage(message.trim());
     }
 
     @Subcommand("newgame") 

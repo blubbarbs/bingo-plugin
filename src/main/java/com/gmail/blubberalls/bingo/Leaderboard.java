@@ -120,6 +120,10 @@ public class Leaderboard<K, V extends Comparable<? super V>> implements Map<K, V
         return nodes.containsKey(key) ? nodes.get(key).value : null;
     }
 
+    public V getOrDefault(Object key, V defaultValue) {
+        return containsKey(key) ? get(key) : defaultValue;
+    }
+
     public V remove(Object key) {
         if (!nodes.containsKey(key)) return null;
         

@@ -1,6 +1,5 @@
 package com.gmail.blubberalls.bingo.goals.mine;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
