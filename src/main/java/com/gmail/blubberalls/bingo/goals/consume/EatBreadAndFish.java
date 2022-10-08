@@ -65,7 +65,7 @@ public class EatBreadAndFish extends Goal implements ScoreData {
     @Override
     public String getProgressDescriptionFor(Team t) {
         String desc = ChatColor.RESET +"> Bread Eaten: " + ChatColor.AQUA + getBreadScoreFor(t) + "/" + getBreadGoal();
-        desc += ChatColor.RESET + "\n> Fish Eaten: " + ChatColor.AQUA + getFishScoreFor(t) + "/" + getFishGoal();
+        desc += ChatColor.RESET + "\n> Cod Eaten: " + ChatColor.AQUA + getFishScoreFor(t) + "/" + getFishGoal();
 
         return desc;
     }

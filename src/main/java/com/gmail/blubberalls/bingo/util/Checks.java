@@ -46,10 +46,11 @@ public class Checks {
         return null;
     }
 
+    @SuppressWarnings("null")
     public static boolean areItemStacksEqual(ItemStack a, ItemStack b) {
         if (a == b) return true;
         else if (a == null && b != null) return false;
-        else if (a != null && b == null) return false;
+        else if (b == null && a != null) return false;
         else return a.equals(b);
     }
 

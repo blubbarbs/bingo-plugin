@@ -8,6 +8,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.gmail.blubberalls.bingo.commands.BoardCommand;
+import com.gmail.blubberalls.bingo.commands.LeaderboardCommand;
 import com.gmail.blubberalls.custom_events.CustomExistListener;
 import com.gmail.blubberalls.custom_events.CustomInventoryListener;
 
@@ -33,6 +35,8 @@ public class Bingo extends JavaPlugin implements Listener {
     @Override
     public void onLoad() {
         CommandAPI.registerCommand(BingoCommands.class);
+        CommandAPI.registerCommand(BoardCommand.class);
+        CommandAPI.registerCommand(LeaderboardCommand.class);
     }
 
     @Override
